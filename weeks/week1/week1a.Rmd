@@ -3,7 +3,9 @@ title:  |
     | Microeconometrics (Causal Inference)
     | Week 1 - Introduction
 author:
-  - Joshua D. Merfeld
+  |
+    | Joshua D. Merfeld
+    | KDI School
 date: "`r Sys.Date()`"
 
 # Output type and options (no TOC and yes fig captions)

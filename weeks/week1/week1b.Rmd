@@ -3,7 +3,9 @@ title:  |
     | Microeconometrics (Causal Inference)
     | Week 1 - Introduction to R
 author:
-  - Joshua D. Merfeld
+   |
+    | Joshua D. Merfeld
+    | KDI School
 date: "`r Sys.Date()`"
 
 # Output type and options (no TOC and yes fig captions)
@@ -36,6 +38,11 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 
 - We will be using a small dataset to get you familiar with the program
   - Class website
+\vfill
+
+- Much of the material covered today comes from two (free!) sources:
+  - [\textcolor{kdisgreen}{R for Data Science}](https://r4ds.had.co.nz/)
+  - [\textcolor{kdisgreen}{R Markdown: The Definitive Guide}](https://bookdown.org/yihui/rmarkdown/)
 \vfill
 
 

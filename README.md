@@ -2,7 +2,7 @@
 
 ## Weekly slides
 
-You can find the slides for each week under their respective folders (weeks/).
+You can find the slides (and any data we will be using) for each week under their respective folders (weeks/).
 
 - Week 1: Week 1 has two slides. 
   - You can find the slides for the first class [here](weeks/week1/week1a.pdf).
