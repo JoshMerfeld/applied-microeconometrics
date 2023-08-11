@@ -1,4 +1,4 @@
-# Applied Microeconometrics - KDI School Fall 2023
+# Applied Microeconometrics\nKDI School Fall 2023
 
 ## Weekly slides
 
