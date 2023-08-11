@@ -1,4 +1,4 @@
-# Applied Microeconometrics\\\Josh Merfeld\\\KDI School Fall 2023
+# Applied Microeconometrics<br />Josh Merfeld<br />KDI School Fall 2023
 
 ## Weekly slides
 
