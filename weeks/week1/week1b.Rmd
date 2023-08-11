@@ -1,0 +1,189 @@
+---
+title:  |
+    | Microeconometrics (Causal Inference)
+    | Week 1 - Introduction to R
+author:
+  - Joshua D. Merfeld
+date: "`r Sys.Date()`"
+
+# Output type and options (no TOC and yes fig captions)
+output: 
+  beamer_presentation:
+    theme: Montpellier
+classoption: "aspectratio=169"
+
+# This includes latex arguments
+header-includes:
+  - \AtBeginDocument{\title[Week 1 - Introduction to R]{Microeconometrics (Causal Inference) \\ Week 1 - Introduction}}
+  - \input{header.tex}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+
+
+```
+
+# Introduction
+
+## Goal for today
+\vfill
+
+- The goal for today is to give you a brief introduction to R
+\vfill
+
+- We will be using a small dataset to get you familiar with the program
+  - Class website
+\vfill
+
+
+
+## Course Overview
+
+\vfill
+- Microeconometrics in R
+\vfill
+
+- Major themes:
+  - Regression analysis review
+    - Including maximum likelihood estimation
+    - Inference and uncertainty (e.g. bootstrapping)
+  - Causal inference
+  - Machine learning
+  - **Reproducible research**
+    - You will be doing assignments in R Markdown
+\vfill
+
+
+## Course Overview
+
+\vfill
+- Today will just be a short introduction
+\vfill
+
+- For next class, please come with R and R Studio installed on your computer
+  - You can find instructions on the syllabus
+  - You **must** bring a laptop to class. If you cannot do this, please speak with me.
+\vfill
+
+- Course website: https://github.com/JoshMerfeld/applied-microeconometrics
+  - You can find slides, assignments, and other materials here
+\vfill
+
+
+
+## Course Overview
+
+- This is a brand new class, so I will likely be making changes as we go
+
+- Please check the course website regularly for updates
+
+
+
+## Detailed outline (tentative)
+
+\vfill
+1. Linear regression (week 2)
+   - Inference (confidence intervals, hypothesis testing, bootstrapping, etc.)
+\vfill
+  
+2. Maximum likelihood estimation (week 3)
+   - Discrete choice (logit, probit, multinomial logit, etc.)
+\vfill
+  
+3. Introduction to causality (week 4)
+   - Potential outcomes framework
+   - Problems with simple regression
+   - Why randomization works
+\vfill
+
+
+
+## Detailed outline (tentative)
+
+\vfill
+4. Differences-in-differences (weeks 5 and 6)
+   - Fixed effects, including two-way fixed effects
+   - Event studies
+   - Synthetic control
+\vfill
+
+5. Instrumental variables (weeks 7 and 8)
+   - Assumptions
+   - IVs in RCTs (LATE)
+   - Some examples
+   - Weak instruments
+   - Bartik (shift-share) instruments
+\vfill
+
+
+
+## Detailed outline (tentative)
+
+\vfill
+6. Regression discontinuity (week 9)
+   - Canonical regression discontinuity
+   - Parametric vs. non-parametric
+\vfill
+
+7. Machine learning in economics (week 10)
+   - ML for prediction (lasso, ridge, elastic net)
+   - Cross validation
+   - Heterogeneous treatment effects
+   - Brief introductionto other supervised ML (time dependent)
+\vfill
+
+
+
+## Grading
+
+1. Homework - coding tasks (55\%)
+
+- The homeworks form the main grading component of the course
+- The goal is to get you comfortable with coding *and writing* in R
+  - I will also ask you to interpret things to make sure you understand what you are doing statistically
+- I expect you to do your homeworks in R Markdown and turn in the code along with a pdf output$^1$]
+- I expect you will have four or five homeworks throughout the semester
+- For those of you without a background in R, the first few weeks will take a bit of effort. It will get easier, I promise.
+
+\footnotesize$^1$ Note: If you have a strong preference for using a different language (e.g. Python), please let me know and we can discuss it. However, you **must** be able to produce a pdf output with your code and results. Using Word is a no-go.
+
+
+
+## Grading
+
+1. Final exam (35\%)
+
+- This will be a take-home exam with a mix of theory and coding.
+
+
+2. Participation (10\%)
+
+- I expect everyone to participate in class. That means asking questions, answering questions, and participating in discussions.
+
+
+
+## Questions?
+
+- Any questions about the course?
+
+
+
+## Next class
+
+\vfill
+- For next class, please come with R and R Studio installed
+  - Another code editor is also acceptable. I use VS Code -- not R Studio -- for example.
+\vfill
+- Course website: https://github.com/JoshMerfeld/applied-microeconometrics
+\vfill
+
+
+
+
+
+
+
+
