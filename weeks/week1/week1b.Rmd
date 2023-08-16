@@ -55,8 +55,12 @@ data <- read_csv("data.csv")
 - The goal for today is to give you a brief introduction to R and R Markdown
 \vfill
 
-- We will be using a small dataset to get you familiar with the program
+- We will be using two small datasets to get you familiar with the program
   - Class website
+\vfill
+
+- A note: if you are completely new to R, the first few weeks will be a slog
+  - It will get better, I promise
 \vfill
 
 - Much of the material covered today comes from two (free!) sources:
@@ -1409,10 +1413,12 @@ kable(summat, caption = "Averages by origin (minutes)",
 
 - Assignment for next week (due one week from today):
   - Create a simple markdown document
-  - 
-  - You can find the assignment [\textcolor{kdisgreen}{here}](https://joshmerfeld.github.io/assets/assignments/assignment1.pdf) (https://joshmerfeld.github.io/assets/assignments/assignment1.pdf)
+  - You can find the assignment [\textcolor{kdisgreen}{here}](https://github.com/JoshMerfeld/applied-microeconometrics/blob/main/assignments/assignment1/assignment1.pdf) (on the [\textcolor{kdisgreen}{course GitHub page}](https://github.com/JoshMerfeld/applied-microeconometrics))
 
-
+- Next week, you will turn in on e-KDIS:
+  - R script (if there is one)
+  - R Markdown script
+  - pdf of the R Markdown document
 
 
 
