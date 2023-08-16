@@ -2,7 +2,7 @@
 
 ## Weekly slides
 
-You can find the slides (and any data we will be using) for each week under their respective folders (weeks/). Most weeks will have just a single slide deck.
+You can find the slides (and any data we will be using) for each week under their respective folders (weeks/). Most weeks will have just a single slide deck. Note that in each week's folder, you can also find the raw .Rmd file that I used to create the slides. You might find these helpful, though you are by no means required to look at them.
 
 - Week 1: Week 1 has two slides. 
   - You can find the slides for the first class [here](weeks/week1/week1a.pdf).
