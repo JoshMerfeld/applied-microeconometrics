@@ -1,0 +1,18 @@
+---
+title: |
+        | Assignment 1
+        | Ph.D. Applied Microeconometrics
+        | KDI School Fall 2023
+date: "`r Sys.Date()`"
+# Output type and options (no TOC and yes fig captions)
+output:
+  bookdown::pdf_document2: 
+    toc: false
+    fig_caption: yes
+    # This also keeps the .tex file that is used to make the output (we will eventually need this for publication)
+    keep_tex: yes
+
+---
+
+The goal of this assignment is just to get you coding in R (well, RStudio) and R Markdown. 
+

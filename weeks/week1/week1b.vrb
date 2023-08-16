@@ -1,0 +1,28 @@
+\frametitle{One more change!}
+\protect\hypertarget{one-more-change}{}
+\tiny
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{summat }\OtherTok{\textless{}{-}}\NormalTok{ flights }\SpecialCharTok{\%\textgreater{}\%}
+            \CommentTok{\# this groups ROWS based on their origin value}
+            \FunctionTok{group\_by}\NormalTok{(origin) }\SpecialCharTok{\%\textgreater{}\%}
+            \CommentTok{\# create means by group, ROUNDING to two decimal places}
+            \FunctionTok{summarize}\NormalTok{(}\AttributeTok{avg\_dep\_delay =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(dep\_delay, }\AttributeTok{na.rm =}\NormalTok{ T), }\DecValTok{2}\NormalTok{),}
+                      \AttributeTok{avg\_arr\_delay =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(arr\_delay, }\AttributeTok{na.rm =}\NormalTok{ T), }\DecValTok{2}\NormalTok{),}
+                      \AttributeTok{avg\_air\_time =} \FunctionTok{round}\NormalTok{(}\FunctionTok{mean}\NormalTok{(air\_time, }\AttributeTok{na.rm =}\NormalTok{ T), }\DecValTok{2}\NormalTok{),}
+                      \AttributeTok{flights =} \FunctionTok{n}\NormalTok{())}
+\NormalTok{summat}\SpecialCharTok{$}\NormalTok{flights }\OtherTok{\textless{}{-}} \FunctionTok{format}\NormalTok{(summat}\SpecialCharTok{$}\NormalTok{flights, }\AttributeTok{big.mark =} \StringTok{","}\NormalTok{, }\AttributeTok{scientific =} \ConstantTok{FALSE}\NormalTok{)}
+\CommentTok{\# rename columns}
+\FunctionTok{colnames}\NormalTok{(summat) }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(}\StringTok{"Origin"}\NormalTok{, }\StringTok{"Departure Delay"}\NormalTok{, }\StringTok{"Arrival Delay"}\NormalTok{, }\StringTok{"Flight Time"}\NormalTok{, }\StringTok{"Flights"}\NormalTok{)}
+\NormalTok{summat }\OtherTok{\textless{}{-}} \FunctionTok{t}\NormalTok{(summat)}
+\CommentTok{\# output }
+\FunctionTok{kable}\NormalTok{(summat, }\AttributeTok{caption =} \StringTok{"Averages by origin (minutes)"}\NormalTok{,}
+      \AttributeTok{align =} \StringTok{"ccc"}\NormalTok{, }\AttributeTok{linesep =} \StringTok{""}\NormalTok{, }
+      \AttributeTok{booktabs =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# this is from kablextra. You don\textquotesingle{}t have to use it, but I like it.}
+      \FunctionTok{row\_spec}\NormalTok{(}\FunctionTok{c}\NormalTok{(}\DecValTok{1}\NormalTok{, }\DecValTok{4}\NormalTok{), }\AttributeTok{hline\_after =} \ConstantTok{TRUE}\NormalTok{) }\SpecialCharTok{\%\textgreater{}\%} \CommentTok{\# this is also from kablextra}
+      \FunctionTok{kable\_classic\_2}\NormalTok{() }\CommentTok{\# this is also from kablextra}
+\end{Highlighting}
+\end{Shaded}
+
+\normalsize

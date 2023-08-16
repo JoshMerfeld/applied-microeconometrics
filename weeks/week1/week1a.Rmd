@@ -167,6 +167,14 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 
 
 
+## TA sections
+\vfill
+- The goal of TA sections is to help you with R and R Markdown
+\vfill
+- For help with the actual material, please come to my office hours
+\vfill
+
+
 ## Questions?
 
 - Any questions about the course?
