@@ -1,4 +1,4 @@
-# Applied Microeconometrics<br />Professor Josh Merfeld<br />KDI School Fall 2023
+# Ph.D. Applied Microeconometrics<br />KDI School Fall 2023<br />Professor Josh Merfeld
 
 ## Weekly slides
 
