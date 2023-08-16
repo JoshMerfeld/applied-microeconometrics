@@ -14,5 +14,5 @@ You can find the slides (and any data we will be using) for each week under thei
 I will also post your assignments here, under the [assignments folder](assignments/).
 
 - Assignment 1: Due during week 2.
-  - You can find the assignment in the [assignment1 folder](assignments/assignment1/)
+  - You can find the assignment in the [assignment 1 folder](assignments/assignment1/)
 
