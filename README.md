@@ -2,7 +2,7 @@
 
 ## Course websites
 1. [https://github.com/JoshMerfeld/applied-microeconometrics](https://github.com/JoshMerfeld/applied-microeconometrics)
-2. [ekdis.ac.kr](ekdis.ac.kr) (KDIS students only) (you will turn in your assignments here; everything else is hosted on GitHub)
+2. [ekdis.ac.kr](ekdis.ac.kr) (KDIS students only -- you will turn in your assignments here, but everything else is hosted on GitHub)
 
 ## Course description
 
