@@ -8,7 +8,7 @@
 
 This course has two main aims, both of which aim to prepare you to do applied micro-econometric research. First and foremost, we will discuss the theory behind modern empirical methods. While most of the focus will be on causal inference, we will also -- time dependent -- spend time on other topics, like bootstrapping and penalized regression. 
 
-Second, by the end of the course, you will be expected to be comfortable using the statistical package R (through RStudio). There are three main statistical languages used in applied econometrics today: Stata, R, and Python, with the first two being substantially more popular than the third. While it is perfectly acceptable to use any of these languages, I have chosen to teach this course with R. In addition to learning R, you will also turn in assignments created using [R Markdown](https://rmarkdown.rstudio.com/).
+Second, by the end of the course, you will be expected to be comfortable using the statistical package R (through RStudio). There are three main statistical languages used in applied econometrics today: Stata, R, and Python, with the first two being more popular than the third. While it is perfectly acceptable to use any of these languages, I have chosen to teach this course with R. In addition to learning R, you will also turn in assignments created using [R Markdown](https://rmarkdown.rstudio.com/).
 
 By learning the techniques and the language needed to implement these techniques, you should be equipped to start doing your own research.
 
