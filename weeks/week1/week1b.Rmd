@@ -401,7 +401,6 @@ knitr::include_graphics(
 \vfill
 - We can also see the names of the columns like this:
 \vfill
-<font size = "2">
 ```{r colnames, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
 
 colnames(data)

@@ -1,0 +1,25 @@
+\frametitle{Using the bootstrap vector for confidence intervals}
+\protect\hypertarget{using-the-bootstrap-vector-for-confidence-intervals-1}{}
+\vfill
+
+\tiny
+
+\begin{center}\includegraphics[width=0.55\linewidth]{week2_files/figure-beamer/bs9-1} \end{center}
+
+\normalsize
+
+\tiny
+
+\begin{verbatim}
+## [1] "Mean: -10.2"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "Lower: -11.9"
+\end{verbatim}
+
+\begin{verbatim}
+## [1] "Upper: -8.75"
+\end{verbatim}
+
+\normalsize \vfill

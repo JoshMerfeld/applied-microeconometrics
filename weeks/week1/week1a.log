@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  11 AUG 2023 14:16
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  17 AUG 2023 14:52
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -864,10 +864,10 @@ Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \multirow@cntb=\count359
 \multirow@dima=\skip72
 \bigstrutjot=\dimen339
-))
+)
 (/usr/local/texlive/2022/texmf-dist/tex/latex/appendixnumberbeamer/appendixnumb
-erbeamer.sty) (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bookmark.s
-ty
+erbeamer.sty)) (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bookmark.
+sty
 Package: bookmark 2020-11-06 v1.29 PDF bookmarks (HO)
 (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
 File: bkm-pdftex.def 2020-11-06 v1.29 bookmark driver for pdfTeX (HO)
@@ -1066,10 +1066,9 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             `lmss' (encoding: T1).
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
-(./week1a.nav) [1{/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdf
-tex.map}
+(./week1a.nav) [1
 
-]
+{/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
 124.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/ot1lmss.fd
@@ -1164,6 +1163,8 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
 
 ] [12
 
+] [13
+
 ]
 \tf@nav=\write5
 \openout5 = `week1a.nav'.
@@ -1176,13 +1177,13 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
 
 (./week1a.aux) ) 
 Here is how much of TeX's memory you used:
- 27109 strings out of 478268
- 532432 string characters out of 5846347
- 896864 words of memory out of 5000000
- 44552 multiletter control sequences out of 15000+600000
+ 27086 strings out of 478268
+ 531594 string characters out of 5846347
+ 890411 words of memory out of 5000000
+ 44526 multiletter control sequences out of 15000+600000
  554377 words of font info for 143 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,19n,122p,1003b,802s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,13n,122p,1003b,660s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ec.en
 c}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/lo
 cal/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texliv
@@ -1191,10 +1192,10 @@ f-dist/fonts/type1/public/lm/lmss9.pfb></usr/local/texlive/2022/texmf-dist/font
 s/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/
 public/lm/lmsso10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/am
 sfonts/symbols/msam10.pfb>
-Output written on week1a.pdf (12 pages, 154672 bytes).
+Output written on week1a.pdf (13 pages, 150991 bytes).
 PDF statistics:
- 316 PDF objects out of 1000 (max. 8388607)
- 265 compressed objects within 3 object streams
- 37 named destinations out of 1000 (max. 500000)
+ 167 PDF objects out of 1000 (max. 8388607)
+ 128 compressed objects within 2 object streams
+ 40 named destinations out of 1000 (max. 500000)
  51257 words of extra memory for PDF output out of 51595 (max. 10000000)
 
