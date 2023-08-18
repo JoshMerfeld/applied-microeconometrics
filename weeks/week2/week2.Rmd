@@ -8,7 +8,7 @@ author:
     | KDI School of Public Policy and Management
 date: "`r Sys.Date()`"
 
-# Output type and options (no TOC and yes fig captions)
+# Output type and options
 output: 
   beamer_presentation:
     theme: Montpellier
