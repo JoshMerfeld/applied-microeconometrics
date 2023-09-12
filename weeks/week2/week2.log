@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  12 SEP 2023 16:20
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  12 SEP 2023 16:26
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1576,7 +1576,7 @@ LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <10> not available
 \openout4 = `week2.vrb'.
 
 (./week2.vrb
-<week2_files/figure-beamer/bs9-1.png, id=747, 712.6625pt x 493.845pt>
+<week2_files/figure-beamer/bs9-1.png, id=749, 712.6625pt x 493.845pt>
 File: week2_files/figure-beamer/bs9-1.png Graphic file (type png)
 <use week2_files/figure-beamer/bs9-1.png>
 Package pdftex.def Info: week2_files/figure-beamer/bs9-1.png  used on input lin
@@ -1602,13 +1602,13 @@ e 7.
 
 (./week2.aux) ) 
 Here is how much of TeX's memory you used:
- 28571 strings out of 478268
- 557662 string characters out of 5846347
+ 28605 strings out of 478268
+ 558478 string characters out of 5846347
  913487 words of memory out of 5000000
- 45570 multiletter control sequences out of 15000+600000
+ 45604 multiletter control sequences out of 15000+600000
  620938 words of font info for 233 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,18n,122p,1002b,616s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,18n,122p,1002b,661s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-mathit
 .enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/lo
 cal/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/20
@@ -1638,10 +1638,10 @@ ype1/public/lm/lmtt8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public
 /lm/lmtti10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts
 /symbols/msam10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsf
 onts/symbols/msbm10.pfb>
-Output written on week2.pdf (95 pages, 857309 bytes).
+Output written on week2.pdf (95 pages, 858157 bytes).
 PDF statistics:
- 990 PDF objects out of 1000 (max. 8388607)
- 789 compressed objects within 8 object streams
+ 992 PDF objects out of 1000 (max. 8388607)
+ 790 compressed objects within 8 object streams
  290 named destinations out of 1000 (max. 500000)
- 92361 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 92367 words of extra memory for PDF output out of 106986 (max. 10000000)
 
