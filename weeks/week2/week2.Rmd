@@ -442,7 +442,7 @@ ggplot() +
   - The Central Limit Theorem (CLT) is about the **distribution**
 \vfill
 - The CLT says that as the sample size increases, the distribution of the sample mean will converge to a normal distribution
-  - In other words, as $n \rightarrow \infty$, $\bar{x} \sim N(\mu, \sigma^2/n)$
+  - In other words, as $n \rightarrow \infty$, $\bar{x} \sim N(\mu, \sqrt{\sigma^2/n})$
   - where $\mu$ is the true population mean and $\sigma^2$ is the true population variance
 \vfill
 
@@ -931,7 +931,7 @@ print(paste0("Coverage rate is defined as the proportion of samples for which th
 \vfill
 - Common example with a regression coefficient:
   - $H_0: \beta = 0$
-  - $H_1: \beta = 0$
+  - $H_1: \beta \neq 0$
 \vfill
 - NOTE: We are testing for the POPULATION parameter, not the sample statistics
 \vfill

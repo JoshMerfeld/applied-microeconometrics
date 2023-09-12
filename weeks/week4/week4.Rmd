@@ -1,0 +1,805 @@
+---
+title:  |
+    | Microeconometrics (Causal Inference)
+    | Week 4 - Introduction to causality
+author:
+  |
+    | Joshua D. Merfeld
+    | KDI School of Public Policy and Management
+date: "`r Sys.Date()`"
+
+# Output type and options
+output: 
+  beamer_presentation:
+    theme: Montpellier
+classoption: "aspectratio=169"
+
+# This includes latex arguments
+header-includes:
+  - \AtBeginDocument{\title[Week 4 - Introduction to causality]{Microeconometrics (Causal Inference) \\ Week 4 - Introduction to causality}}
+  - \AtBeginDocument{\author[Josh Merfeld - KDI School]{Joshua D. Merfeld \\ KDI School of Public Policy and Management}}
+  - \input{header.tex}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+
+
+library(tidyverse)
+library(kableExtra)
+library(fixest)
+library(ggpubr)
+library(RColorBrewer)
+library(haven)
+library(mfx)
+library(nnet)
+library(survival)
+library(survminer)
+library(medicaldata)
+  
+licresults <- feols(pacu30min_throatPain ~ treat, data = licorice_gargle)
+
+```
+
+
+
+# Introduction
+
+## What are we doing today?
+\vfill
+
+- This week we will discuss causation
+\vfill
+
+- For example, what prevents us from saying that something is a causal effect?
+\vfill
+
+- Then:
+  - How do RCTs help?
+  - Propensity scores
+\vfill
+
+
+
+
+## What are we doing today?
+or...\pause
+\vfill
+\center \textit{Correlation is not (necessarily) causation}
+\vfill
+
+
+
+
+## Let me start with an example
+
+\vfill
+- I used to live in Atlanta
+  - There was a large hospital in downtown: Grady
+\vfill
+- Grady was a trauma center
+  - It was the only one in the immediate area
+\vfill
+
+
+
+
+## Let me start with an example
+\vfill
+- Something I once heard: Mortality rates at Grady are so much higher than at other hospitals. Is it a bad hospital?
+\vfill
+- What do you think? Is Grady necessarily a worse hospital?
+\vfill
+
+
+
+
+
+
+
+# Potential outcomes
+
+## Potential outcomes framework
+\vfill
+- Let's introduce one of the most common ways to think about causality (in economics): the potential outcomes framework
+  - This framework is also known as the Rubin Causal Model
+\vfill
+- The potential outcomes framework is a way to think about causality
+  - It is not the only way
+  - It is not necessarily the best way
+  - But it's what we're going to use
+\vfill
+
+
+
+
+
+
+## Potential outcomes framework
+\vfill
+- Suppose someone is in a car accident
+  - They could be taken to Grady or another hospital
+\vfill
+- Grady is the treatment:
+  - $D = 1$ if they go to Grady
+  - $D = 0$ if they go to another hospital
+\vfill
+- We can think of the outcome of interest as the person's health
+  - We can think of this as a \textit{potential outcome}
+  - We can think of the person's health if they go to Grady as $Y_{1}$
+  - We can think of the person's health if they go to another hospital as $Y_{0}$
+\vfill
+
+
+
+
+
+
+## Potential outcomes framework
+\vfill
+- Let's write this all out, imagining different possible people, indexed by $i$:
+\vfill
+\begin{gather} \text{Potential outcomes} = \Biggl\{ \begin{array}{ll} Y_{1i} & \text{if } D_i=1 \\ Y_{0i} & \text{if } D_i=0 \end{array} \end{gather}
+\vfill
+
+- $Y_{1i}$ is the outcome for person $i$ if they go to Grady
+- $Y_{0i}$ is the outcome for *the same person at the same time* if they go to another hospital
+\vfill
+
+
+
+
+
+## What's the problem?
+\vfill
+\begin{gather} \text{Potential outcomes} = \Biggl\{ \begin{array}{ll} Y_{1i} & \text{if } D_i=1 \\ Y_{0i} & \text{if } D_i=0 \end{array} \end{gather}
+\vfill
+
+- $Y_{1i}$ is the outcome for person $i$ if they go to Grady
+- $Y_{0i}$ is the outcome for *the same person at the same time* if they go to another hospital
+\vfill
+
+- What's the problem we have?
+\vfill
+
+
+
+
+
+## What's the problem?
+\vfill
+\center
+\textit{We never observe the same person at the same time in two different states of nature \\ (i.e. going to Grady AND going to another hospital at the same time)}
+\vfill
+
+
+
+
+
+## Let's just compare those who go to Grady with those who don't?
+- Actual causal effect:
+$$\mathbb{E}(Y_{1i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=0)$$
+\vfill
+- Comparing across individuals:
+$$\mathbb{E}(Y_{i}|D_i=1) - \mathbb{E}(Y_{i}|D_i=0)$$
+\vfill
+- Note that this is *not* the same thing. We are comparing different people.
+
+
+
+
+
+## Let's just compare those who go to Grady with those who don't?
+- We can break down this comparison into two separate terms:
+\begin{align}\mathbb{E}(Y_{i}|D_i=1) - \mathbb{E}(Y_{i}|D_i=0) =& \nonumber \\
+              &\left[\mathbb{E}(Y_{1i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=1)\right]  \\
+               +&\left[\mathbb{E}(Y_{0i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=0)\right] \end{align}
+
+
+
+
+
+## Let's just compare those who go to Grady with those who don't?
+\begin{align}\mathbb{E}(Y_{i}|D_i=1) - \mathbb{E}(Y_{i}|D_i=0) =& \nonumber \\
+              &\left[\mathbb{E}(Y_{1i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=1)\right] \tag{3} \\
+               +&\left[\mathbb{E}(Y_{0i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=0)\right] \tag{4} \end{align}
+
+- Line 3 is the causal effect we're interested in: 
+$$\mathbb{E}(Y_{1i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=1) = \mathbb{E}(Y_{1i}-Y_{0i}|D_i=1)$$
+
+  - This is the *treatment effect of going to Grady on those who went to Grady*
+  - Their actual outcome minus their counterfactual outcome
+
+
+
+
+
+## Let's just compare those who go to Grady with those who don't?
+\begin{align}\mathbb{E}(Y_{i}|D_i=1) - \mathbb{E}(Y_{i}|D_i=0) =& \nonumber \\
+              &\left[\mathbb{E}(Y_{1i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=1)\right] \tag{3} \\
+               +&\left[\mathbb{E}(Y_{0i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=0)\right] \tag{4} \end{align}
+
+- Line 4 is the real problem. This is *selection bias*.
+  - This is the difference between the potential outcomes for those who went to Grady and those who didn't.
+  - The question: What might be the *difference* between people who go to Grady and people who go to another hospital?
+  - If you ever hear an economist say "selection", this is what they're talking about: the systematic differences between the two groups.
+
+
+
+
+
+## Who goes to Grady?
+\center
+\includegraphics[width = 0.6\columnwidth]{assets/grady1.png}
+
+
+
+
+
+## Who goes to Grady?
+\center
+\includegraphics[width = 0.6\columnwidth]{assets/grady2.png}
+
+
+
+
+
+## Who goes to Grady?
+\center
+\includegraphics[width = 0.6\columnwidth]{assets/grady3.png}
+
+
+
+
+
+## Who goes to Grady?
+\vfill  
+- So if people with much worse injuries are going to Grady, then we might expect that the people who go to Grady have worse outcomes...
+\vfill  
+- Even if Grady is better at treating bad injuries!
+\vfill  
+
+
+
+
+
+
+
+# RCTs
+
+## So what to do?
+\vfill
+- The rest of this course is about ways to address this problem
+\vfill
+- Let's start with the "gold standard": randomized controlled trials (RCTs)
+\vfill
+
+
+
+
+
+## RCTs
+\vfill
+- So how do RCTs help?
+\vfill 
+- RCTs can't help with the fact that we can never observe the same unit in both treatment states at the same time
+\vfill
+- Instead, RCTs rely on groups
+\vfill
+
+
+
+
+
+## RCTs
+\vfill
+- Let's go back to our diabetes/retinopathy example from last week
+\vfill
+- Why wouldn't we want to simply compare individuals who received a new laser eye treatment for retinopathy to people who don't?
+\vfill
+
+
+
+
+
+## Random assignment and selection
+\vfill
+- The key is random assignment
+\vfill
+- Random assignment means that, *on average*, those who receive treatment and those who do not are the same!
+\vfill
+- Our selection bias equation is:
+\begin{gather} \mathbb{E}(Y_{0i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=0) \end{gather}
+\vfill
+
+- Guess what this equals when we have random assignment?
+\vfill
+
+
+
+
+
+## Random assignment and selection
+\newcommand{\indep}{\perp \!\!\! \perp}
+- Mathematically, random assignment means that potential outcomes are *independent* of treatment assignment:
+\begin{gather} \{Y_{1i}, Y_{0i}\} \indep D_i \end{gather}
+
+- This allows us to do the following:
+\begin{align} \text{selection} &= \mathbb{E}(Y_{0i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=0) \\
+                               &= \mathbb{E}(Y_{0i}|D_i=1) - \mathbb{E}(Y_{0i}|D_i=1)  \end{align}
+
+- The last line is zero! In expectation, there is no selection bias when treatment is randomized.
+
+
+
+
+
+
+## RCTs
+
+- We're going to use a new dataset to illustrate the analysis of RCTs.
+  - We need to download the package from GitHub!
+\vfill
+```{r rct1, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+install.packages("remotes") # install package remotes
+remotes::install_github("higgi13425/medicaldata") # download datasets from github repo
+# repo here: https://higgi13425.github.io/medicaldata/
+library(medicaldata) # load datasets
+```
+
+\vfill
+
+
+
+
+
+
+## RCTs
+
+\includegraphics[width = \columnwidth]{assets/rct1.png}
+\vfill
+```{r rct2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+colnames(licorice_gargle)
+```
+
+
+
+
+
+
+
+
+## Analyzing RCTs
+\vfill
+- Analyzing RCTs with simple randomization is easy!
+\vfill
+- We can simply compare the average outcome for those who received treatment to the average outcome for those who did not:
+$$ y_{i} = \beta_{0} + \beta_{1}D_{i} + \epsilon_{i}, $$
+where $y_{i}$ is the outcome of interest and $D_{i}$ is a dummy variable for treatment.
+\vfill
+
+
+
+
+
+
+## Effect of licorice gargle on sore throat
+
+```{r rct3, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+licresults <- feols(pacu30min_throatPain ~ treat, data = licorice_gargle)
+summary(licresults)
+etable(licresults, licresults, 
+      vcov = list("iid", "HC1"),
+      digits = 3,
+      headers = c("sore throat", "sore throat"),
+      depvar = FALSE)
+```
+
+
+
+
+
+
+## Make it a pretty table
+
+```{r rct4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+etable(licresults, licresults, 
+      vcov = list("iid", "HC1"),
+      digits = 3,
+      se.below = TRUE, # add SEs BELOW coefficients (the norm)
+      depvar = FALSE)
+```
+
+
+
+
+
+
+## Even nicer
+
+```{r rct5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+table <- etable(licresults, licresults, 
+          vcov = list("iid", "HC1"),
+          digits = 3, digits.stats = 3,
+          se.below = TRUE, # add SEs BELOW coefficients (the norm)
+          depvar = FALSE) # don't list dep var at top
+table <- table[-c(5:6, 9:11), ]
+colnames(table) <- c("", "(1)", "(2)")
+kable(table,
+          caption = "Effect of licorice gargle on sore throat",
+          booktabs = TRUE, align = "lcc", linesep = "", escape = FALSE, row.names = FALSE) %>%
+          footnote("* p<0.1 ** p<0.05 *** p<0.01", general_title = "", footnote_as_chunk = TRUE) %>%
+          row_spec(4, hline_after = TRUE) %>%
+          kable_classic_2()
+          
+```
+
+
+
+
+
+
+
+
+
+
+## Controlling for variables
+\vfill
+- We often have baseline values of the outcome of interest
+  - For example, in an intervention about income, we have a baseline measure of income
+\vfill
+- It is quite common to use baseline values as controls in regressions
+  - Why? It helps improve power!
+\vfill
+- ANCOVA, but it's really just simple OLS regression
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Some complications in analyzing RCTs
+\vfill
+- What if we have multiple treatment groups?
+\vfill
+- What if randomization is at an aggregate level?
+\vfill
+- What if we have multiple outcomes?
+\vfill
+- What if randomization depends on other variables?
+\vfill
+
+
+
+
+
+
+## Multiple treatment groups
+\vfill
+- Suppose we have three groups:
+  - $D_{i} = 0$ if control
+  - $D_{i} = 1$ if treatment 1
+  - $D_{i} = 2$ if treatment 2
+\vfill
+- This is pretty common
+  - Sometimes there are multiple treatments
+  - Sometimes treatments are layered on top of one another
+\vfill
+
+
+
+
+
+
+## Fischer et al. (2023)
+\center
+	\includegraphics[width=0.8\columnwidth]{assets/fischer1}
+
+
+
+
+
+
+## Note that they randomize *villages*, not households
+\center
+  \includegraphics[width=0.8\columnwidth]{assets/fischer2}
+
+
+
+
+
+
+## Analyzing multiple treatment groups
+\vfill
+- We can still use the same equation:
+$$ y_{i} = \beta_{0} + \sum_{k=1}^K\beta_{k}D_{k} + \epsilon_{i}, $$
+where $y_{i}$ is the outcome of interest and $k$ indexes the different treatment groups.
+\vfill
+- In the simplest case, we can simply compare the average outcome for each treatment group to the average outcome for the control group.
+\vfill
+- We can also compare the average outcome for each treatment group to the average outcome for each other treatment group.
+  - Note that we use an F-test for this: we are testing whether some of the $\beta_{k}$ are equal to *one another*, which is a coefficient restriction.
+\vfill
+
+
+
+
+
+
+## Aggregate randomization
+\vfill
+- We've talked about individual randomization
+  - But in this example, randomization is at the village level
+\vfill
+- So how do we take this into account?
+\vfill\pause
+- Cluster standard errors at the level of randomization!
+  - In this case, cluster standard errors at the village level
+  - If you randomize schools, you would cluster at the school level
+  - Etc.
+\vfill
+
+
+
+
+
+
+## Aggregate randomization: clustered standard errors
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/fischer3}
+
+
+
+
+
+
+## Note the use of the F-test here
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/fischer4}
+
+
+
+
+
+
+
+## Complication two: multiple outcomes
+\vfill
+- Suppose we have many outcomes
+  - For argument's sake, let's say we have 10 outcomes
+\vfill
+- A single p-value can be misleading
+  - If we have 10 outcomes and two treatments, we expect one of them to be significant at the 5\% level by chance alone!
+  - The more outcomes you have, the more likely you are to find significant effects, *even if there are none*!
+\vfill
+
+
+
+
+
+
+
+## Relevant xkcd (882)
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/xkcd1}
+
+
+
+
+
+
+
+## Relevant xkcd (882)
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/xkcd2}
+
+
+
+
+
+
+
+## Relevant xkcd (882)
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/xkcd3}
+
+
+
+
+
+
+
+## Relevant xkcd (882)
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/xkcd4}
+
+
+
+
+
+
+
+## Relevant xkcd (882)
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/xkcd5}
+
+
+
+
+
+
+
+## Relevant xkcd (882)
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/xkcd6}
+
+
+
+
+
+
+
+
+
+
+## The problem, mathematically
+\vfill
+- Suppose you have one outcome
+  - Suppose the null hypothesis is true
+  - What is the probability of finding a significant effect at the 5\% level? What is the probability of not finding a significant effect?\pause
+  - 5\% and 95\%, respectively
+\vfill
+- Suppose you have 20 outcomes
+  - Suppose all null hypotheses are true
+  - What is the probability of finding NO significant effects, assuming independence across outcomes?\pause
+  - $0.95^{20} = 0.358$
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Correcting for multiple outcomes
+\vfill
+- Bonferroni correction
+  - This is the simplest correction
+  - If you have 10 outcomes, you multiply your p-value by 10
+  - If you have 20 outcomes, you multiply your p-value by 20 (cap p-values at 1.000)
+\vfill
+- This is very rare nowadays in applied microeconometrics
+  - It's too conservative
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Correcting for multiple outcomes
+\vfill
+- Sharpened q-values (Benjamini, Krieger, and Yekutieli, 2006; Anderson, 2008)
+  - R package ``qvalue``
+    - Just requires a vector of p-values
+  - An advantage is their comparison to p-values
+  - A disadvantage is that it does not take into account correlations across outcomes
+\vfill 
+- This is related to the False Discovery Rate (FDR)
+  - Read more here: https://blogs.worldbank.org/impactevaluations/overview-multiple-hypothesis-testing-commands-stata
+\vfill
+
+
+
+
+
+
+
+
+
+
+## From Anderson (2008)
+\center
+\includegraphics[width = 0.8\columnwidth]{assets/q1}
+
+
+
+
+
+
+
+
+
+
+## List et al. (2016)
+\vfill
+- List et al. (2016) is a good example of how to deal with multiple outcomes
+  - Their procedure allows for p-values to be correlated
+    - This is about familywise error rates (FWER)
+  - Much more conservative as you add outcomes, because it is about avoiding *any* false positives (type one errors)
+\vfill
+- Unfortunately, I haven't found an R package for this yet, and we aren't going to do this by hand
+  - In Stata: ``ssc install mhtexp``
+\vfill
+- For this class, you can use q-values
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Stratification
+\vfill
+- Final complication: what if randomization depends on other variables?
+\vfill
+- Stratification
+  - People in different "strata" have differential probability of being treated
+  - Example:
+    - Probability of male-owned firm being selected is 0.5
+    - Probability of female-owned firm being selected is 0.75
+    - In this case, we can say that selection is stratified by gender
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Stratification
+\vfill
+- How do we deal with stratification?
+  - By including dummy variables for the strata!
+$$ y_{i} = \beta_{0} + \beta_{1}D_{i} + \sum_{s=2}^SI(G_s) + \epsilon_{i}, $$
+where $s$ is the stratum number, $I(G_s)$ is an indicator for being in stratum $s$, and $S$ is the number of strata. (Note that we don't include a dummy for the first stratum.)
+\vfill
+
+
+
+
+
+
+
+# Propensity scores
+
+
+
+
+
+
+
+
+
+
+
+

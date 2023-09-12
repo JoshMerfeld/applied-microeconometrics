@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  18 AUG 2023 19:48
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  12 SEP 2023 16:20
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -881,8 +881,10 @@ Package: multirow 2021/03/15 v2.8 Span multiple rows of a table
 \bigstrutjot=\dimen343
 )
 (/usr/local/texlive/2022/texmf-dist/tex/latex/appendixnumberbeamer/appendixnumb
-erbeamer.sty)) (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bookmark.
-sty
+erbeamer.sty) (/usr/local/texlive/2022/texmf-dist/tex/latex/doublestroke/dsfont
+.sty
+Package: dsfont 1995/08/01 v0.1 Double stroke roman fonts
+)) (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bookmark.sty
 Package: bookmark 2020-11-06 v1.29 PDF bookmarks (HO)
 (/usr/local/texlive/2022/texmf-dist/tex/latex/bookmark/bkm-pdftex.def
 File: bkm-pdftex.def 2020-11-06 v1.29 bookmark driver for pdfTeX (HO)
@@ -1600,10 +1602,10 @@ e 7.
 
 (./week2.aux) ) 
 Here is how much of TeX's memory you used:
- 28544 strings out of 478268
- 556932 string characters out of 5846347
- 913378 words of memory out of 5000000
- 45547 multiletter control sequences out of 15000+600000
+ 28571 strings out of 478268
+ 557662 string characters out of 5846347
+ 913487 words of memory out of 5000000
+ 45570 multiletter control sequences out of 15000+600000
  620938 words of font info for 233 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,18n,122p,1002b,616s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1636,7 +1638,7 @@ ype1/public/lm/lmtt8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public
 /lm/lmtti10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts
 /symbols/msam10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsf
 onts/symbols/msbm10.pfb>
-Output written on week2.pdf (95 pages, 857100 bytes).
+Output written on week2.pdf (95 pages, 857309 bytes).
 PDF statistics:
  990 PDF objects out of 1000 (max. 8388607)
  789 compressed objects within 8 object streams

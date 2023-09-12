@@ -1,9 +1,9 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  11 SEP 2023 13:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  12 SEP 2023 14:17
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
-**week3.tex
-(./week3.tex
+**week4.tex
+(./week4.tex
 LaTeX2e <2021-11-15> patch level 1
 L3 programming layer <2022-02-24> (/usr/local/texlive/2022/texmf-dist/tex/latex
 /beamer/beamer.cls
@@ -903,8 +903,8 @@ LaTeX Font Info:    Trying to load font information for T1+lmss on input line 1
 43.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/t1lmss.fd
 File: t1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-) (./week3.aux)
-\openout1 = `week3.aux'.
+) (./week4.aux)
+\openout1 = `week4.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 143.
 LaTeX Font Info:    ... okay on input line 143.
@@ -1090,11 +1090,11 @@ Package microtype Info: Loading generic protrusion settings for font family
 Package hyperref Warning: Option `pdfauthor' has already been used,
 (hyperref)                setting the option has no effect on input line 143.
 
-(./week3.nav) [1
+(./week4.nav) [1
 
 {/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
 LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
-173.
+170.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/ot1lmss.fd
 File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1103,34 +1103,34 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-73.
+70.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-173.
+170.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-173.
+170.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 173.
+(Font)              <10.95> on input line 170.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 173.
+(Font)              <8> on input line 170.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 173.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 173
+(Font)              <6> on input line 170.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 170
 .
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 173
+LaTeX Font Info:    Trying to load font information for U+msb on input line 170
 .
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
@@ -1138,33 +1138,39 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
 LaTeX Font Info:    Trying to load font information for U+rsfs on input line 17
-3.
+0.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 173.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 173.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 173.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 173.
+(Font)              <10> on input line 170.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 173.
+(Font)              <7> on input line 170.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 173.
+(Font)              <5> on input line 170.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 173.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <7> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 173.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 173.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 170.
 [2
 
 ] [3
 
-] [4
+]
+pdfTeX warning (ext4): destination with the same identifier (name{what-are-we-d
+oing-today-1}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.176 \end{frame}
+                  [4
 
 ] [5
 
@@ -1172,450 +1178,302 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
 
 ] [7
 
-]
-\openout4 = `week3.vrb'.
+] [8
 
-(./week3.vrb
-LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 8
-.
-(/usr/local/texlive/2022/texmf-dist/tex/latex/lm/t1lmtt.fd
-File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)
-LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <6> not available
-(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 11.
-<week3_files/figure-beamer/scatter2-1.png, id=78, 712.6625pt x 496.85625pt>
-File: week3_files/figure-beamer/scatter2-1.png Graphic file (type png)
-<use week3_files/figure-beamer/scatter2-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/scatter2-1.png  used on inpu
-t line 29.
-(pdftex.def)             Requested size: 191.20082pt x 133.29628pt.
-) [8
+] [9
 
- <./week3_files/figure-beamer/scatter2-1.png>]
-\openout4 = `week3.vrb'.
+] [10
 
-(./week3.vrb
-<week3_files/figure-beamer/scatter4-1.png, id=89, 712.6625pt x 496.85625pt>
-File: week3_files/figure-beamer/scatter4-1.png Graphic file (type png)
-<use week3_files/figure-beamer/scatter4-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/scatter4-1.png  used on inpu
-t line 29.
-(pdftex.def)             Requested size: 191.20082pt x 133.29628pt.
-) [9
+] [11
 
- <./week3_files/figure-beamer/scatter4-1.png>]
-\openout4 = `week3.vrb'.
+] [12
 
-(./week3.vrb
-LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-31.
-(/usr/local/texlive/2022/texmf-dist/tex/latex/lm/ts1lmtt.fd
-File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
-)) [10
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [11
-
-]
-LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 507.
-LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 507.
-[12
-
-]
-LaTeX Font Info:    Trying to load font information for U+bbm on input line 528
-.
-(/usr/local/texlive/2022/texmf-dist/tex/latex/bbm-macros/ubbm.fd
-File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
-) [13
+] [13
 
 ] [14
 
 ] [15
 
-] [16
+]
+<assets/grady1.png, id=134, 805.0075pt x 644.4075pt>
+File: assets/grady1.png Graphic file (type png)
+<use assets/grady1.png>
+Package pdftex.def Info: assets/grady1.png  used on input line 421.
+(pdftex.def)             Requested size: 239.00558pt x 191.31784pt.
+[16
 
-] [17
+ <./assets/grady1.png>]
+<assets/grady2.png, id=144, 805.0075pt x 644.4075pt>
+File: assets/grady2.png Graphic file (type png)
+<use assets/grady2.png>
+Package pdftex.def Info: assets/grady2.png  used on input line 428.
+(pdftex.def)             Requested size: 239.00558pt x 191.31784pt.
+[17
 
-] [18
+ <./assets/grady2.png>]
+<assets/grady3.png, id=154, 805.0075pt x 644.4075pt>
+File: assets/grady3.png Graphic file (type png)
+<use assets/grady3.png>
+Package pdftex.def Info: assets/grady3.png  used on input line 435.
+(pdftex.def)             Requested size: 239.00558pt x 191.31784pt.
+[18
 
-] [19
+ <./assets/grady3.png>] [19
 
 ] [20
 
-]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [21
+] [21
+
+] [22
+
+] [23
+
+] [24
 
 ]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [22
+\openout4 = `week4.vrb'.
+
+(./week4.vrb
+LaTeX Font Info:    Trying to load font information for T1+lmtt on input line 1
+8.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/lm/t1lmtt.fd
+File: t1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+)
+LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <6> not available
+(Font)              Font shape `T1/lmtt/b/n' tried instead on input line 19.
+) [25
 
 ]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [23
+\openout4 = `week4.vrb'.
+
+(./week4.vrb
+<assets/rct1.png, id=219, 1420.30624pt x 465.74pt>
+File: assets/rct1.png Graphic file (type png)
+<use assets/rct1.png>
+Package pdftex.def Info: assets/rct1.png  used on input line 3.
+(pdftex.def)             Requested size: 398.3386pt x 130.6195pt.
+) [26
+
+ <./assets/rct1.png>] [27
 
 ]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [24
+\openout4 = `week4.vrb'.
+
+(./week4.vrb
+LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
+22.
+(/usr/local/texlive/2022/texmf-dist/tex/latex/lm/ts1lmtt.fd
+File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+))
+Overfull \vbox (0.15018pt too high) detected at line 659
+ []
+
+[28
 
 ]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [25
+\openout4 = `week4.vrb'.
 
-] [26
+(./week4.vrb) [29
 
 ]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-2}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.769 \end{frame}
-                  [27
+\openout4 = `week4.vrb'.
 
-]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-2}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.769 \end{frame}
-                  [28
-
-] [29
-
-] [30
+(./week4.vrb) [30
 
 ] [31
 
 ] [32
 
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [33
+] [33
 
 ]
-\openout4 = `week3.vrb'.
+<assets/fischer1.png, id=282, 1267.73625pt x 470.75874pt>
+File: assets/fischer1.png Graphic file (type png)
+<use assets/fischer1.png>
+Package pdftex.def Info: assets/fischer1.png  used on input line 819.
+(pdftex.def)             Requested size: 318.67209pt x 118.33588pt.
+[34
 
-(./week3.vrb) [34
+ <./assets/fischer1.png>]
+<assets/fischer2.png, id=291, 1274.7625pt x 396.48125pt>
+File: assets/fischer2.png Graphic file (type png)
+<use assets/fischer2.png>
+Package pdftex.def Info: assets/fischer2.png  used on input line 826.
+(pdftex.def)             Requested size: 318.67209pt x 99.11401pt.
+LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <10> not available
+(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 826.
 
-] [35
+[35
 
-] [36
+ <./assets/fischer2.png>] [36
 
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [37
-
-] [38
-
-] [39
-
-] [40
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [41
+] [37
 
 ]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [42
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [43
+pdfTeX warning (ext4): destination with the same identifier (name{aggregate-ran
+domization}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.886 \end{frame}
+                  [38
 
 ]
-<week3_files/figure-beamer/probit2-1.png, id=347, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit2-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit2-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit2-1.png  used on input
- line 1251.
-(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
+<assets/fischer3.png, id=323, 1252.68pt x 744.7825pt>
+File: assets/fischer3.png Graphic file (type png)
+<use assets/fischer3.png>
+Package pdftex.def Info: assets/fischer3.png  used on input line 893.
+(pdftex.def)             Requested size: 318.67209pt x 189.46812pt.
+[39
+
+ <./assets/fischer3.png>]
+<assets/fischer4.png, id=332, 1252.68pt x 744.7825pt>
+File: assets/fischer4.png Graphic file (type png)
+<use assets/fischer4.png>
+Package pdftex.def Info: assets/fischer4.png  used on input line 900.
+(pdftex.def)             Requested size: 318.67209pt x 189.46812pt.
+[40
+
+ <./assets/fischer4.png>] [41
+
+]
+<assets/xkcd1.png, id=348, 945.5325pt x 485.815pt>
+File: assets/xkcd1.png Graphic file (type png)
+<use assets/xkcd1.png>
+Package pdftex.def Info: assets/xkcd1.png  used on input line 936.
+(pdftex.def)             Requested size: 318.67209pt x 163.7368pt.
+[42
+
+ <./assets/xkcd1.png>]
+<assets/xkcd2.png, id=357, 918.43124pt x 307.1475pt>
+File: assets/xkcd2.png Graphic file (type png)
+<use assets/xkcd2.png>
+Package pdftex.def Info: assets/xkcd2.png  used on input line 943.
+(pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
+[43
+
+ <./assets/xkcd2.png>]
+<assets/xkcd3.png, id=367, 918.43124pt x 307.1475pt>
+File: assets/xkcd3.png Graphic file (type png)
+<use assets/xkcd3.png>
+Package pdftex.def Info: assets/xkcd3.png  used on input line 950.
+(pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
 [44
 
- <./week3_files/figure-beamer/probit2-1.png>]
-<week3_files/figure-beamer/probit3-1.png, id=357, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit3-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit3-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit3-1.png  used on input
- line 1274.
-(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
+ <./assets/xkcd3.png>]
+<assets/xkcd4.png, id=376, 918.43124pt x 307.1475pt>
+File: assets/xkcd4.png Graphic file (type png)
+<use assets/xkcd4.png>
+Package pdftex.def Info: assets/xkcd4.png  used on input line 957.
+(pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
 [45
 
- <./week3_files/figure-beamer/probit3-1.png>]
-\openout4 = `week3.vrb'.
+ <./assets/xkcd4.png>]
+<assets/xkcd5.png, id=385, 918.43124pt x 307.1475pt>
+File: assets/xkcd5.png Graphic file (type png)
+<use assets/xkcd5.png>
+Package pdftex.def Info: assets/xkcd5.png  used on input line 964.
+(pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
+[46
 
-(./week3.vrb) [46
-
-]
-<week3_files/figure-beamer/probit5-1.png, id=373, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit5-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit5-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit5-1.png  used on input
- line 1310.
-(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
+ <./assets/xkcd5.png>]
+<assets/xkcd6.png, id=394, 1086.0575pt x 563.10374pt>
+File: assets/xkcd6.png Graphic file (type png)
+<use assets/xkcd6.png>
+Package pdftex.def Info: assets/xkcd6.png  used on input line 971.
+(pdftex.def)             Requested size: 318.67209pt x 165.22916pt.
 [47
 
- <./week3_files/figure-beamer/probit5-1.png>]
-<week3_files/figure-beamer/probit6-1.png, id=382, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit6-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit6-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit6-1.png  used on input
- line 1328.
-(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
-[48
-
- <./week3_files/figure-beamer/probit6-1.png>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [49
+ <./assets/xkcd6.png>] [48
 
 ]
-\openout4 = `week3.vrb'.
+pdfTeX warning (ext4): destination with the same identifier (name{the-problem-m
+athematically}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1007 \end{frame}
+                   [49
 
-(./week3.vrb) [50
+]
+pdfTeX warning (ext4): destination with the same identifier (name{the-problem-m
+athematically}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.1007 \end{frame}
+                   [50
 
 ] [51
 
 ]
-\openout4 = `week3.vrb'.
+\openout4 = `week4.vrb'.
 
-(./week3.vrb
-<week3_files/figure-beamer/ologit1-1.png, id=415, 712.6625pt x 496.85625pt>
-File: week3_files/figure-beamer/ologit1-1.png Graphic file (type png)
-<use week3_files/figure-beamer/ologit1-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/ologit1-1.png  used on input
- line 16.
-(pdftex.def)             Requested size: 219.08743pt x 152.74258pt.
+(./week4.vrb
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 19.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 19.
 ) [52
 
- <./week3_files/figure-beamer/ologit1-1.png>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [53
-
-] [54
-
 ]
-\openout4 = `week3.vrb'.
+<assets/q1.png, id=442, 986.68625pt x 554.07pt>
+File: assets/q1.png Graphic file (type png)
+<use assets/q1.png>
+Package pdftex.def Info: assets/q1.png  used on input line 1083.
+(pdftex.def)             Requested size: 318.67209pt x 178.94618pt.
+[53
 
-(./week3.vrb)
-Overfull \vbox (1.96347pt too high) detected at line 1595
- []
+ <./assets/q1.png>]
+\openout4 = `week4.vrb'.
 
-[55
+(./week4.vrb) [54
+
+] [55
 
 ] [56
 
 ]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [57
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [58
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [59
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [60
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [61
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [62
-
-] [63
-
-] [64
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [65
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [66
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [67
-
-] [68
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [69
-
-] [70
-
-] [71
-
-]
-<assets/covidhazard.png, id=563, 1606.0pt x 955.57pt>
-File: assets/covidhazard.png Graphic file (type png)
-<use assets/covidhazard.png>
-Package pdftex.def Info: assets/covidhazard.png  used on input line 2326.
-(pdftex.def)             Requested size: 318.67209pt x 189.6088pt.
-[72
-
- <./assets/covidhazard.png (PNG copy)>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [73
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [74
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb
-<week3_files/figure-beamer/surv4-1.png, id=586, 690.58pt x 432.61626pt>
-File: week3_files/figure-beamer/surv4-1.png Graphic file (type png)
-<use week3_files/figure-beamer/surv4-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/surv4-1.png  used on input l
-ine 14.
-(pdftex.def)             Requested size: 219.08743pt x 137.24521pt.
-) [75
-
- <./week3_files/figure-beamer/surv4-1.png>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb
-<week3_files/figure-beamer/surv5-1.png, id=594, 712.6625pt x 487.8225pt>
-File: week3_files/figure-beamer/surv5-1.png Graphic file (type png)
-<use week3_files/figure-beamer/surv5-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/surv5-1.png  used on input l
-ine 23.
-(pdftex.def)             Requested size: 219.08743pt x 149.96544pt.
-) [76
-
- <./week3_files/figure-beamer/surv5-1.png>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb
-<week3_files/figure-beamer/surv6-1.png, id=603, 712.6625pt x 495.8525pt>
-File: week3_files/figure-beamer/surv6-1.png Graphic file (type png)
-<use week3_files/figure-beamer/surv6-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/surv6-1.png  used on input l
-ine 17.
-(pdftex.def)             Requested size: 219.08743pt x 152.434pt.
-) [77
-
- <./week3_files/figure-beamer/surv6-1.png>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [78
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [79
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [80
-
-] [81
-
-] [82
-
-]
 \tf@nav=\write6
-\openout6 = `week3.nav'.
+\openout6 = `week4.nav'.
 
 \tf@toc=\write7
-\openout7 = `week3.toc'.
+\openout7 = `week4.toc'.
 
 \tf@snm=\write8
-\openout8 = `week3.snm'.
+\openout8 = `week4.snm'.
 
-(./week3.aux) ) 
+(./week4.aux) ) 
 Here is how much of TeX's memory you used:
- 28289 strings out of 478268
- 552250 string characters out of 5846347
- 908189 words of memory out of 5000000
- 45385 multiletter control sequences out of 15000+600000
- 558439 words of font info for 167 fonts, out of 8000000 for 9000
+ 28126 strings out of 478268
+ 548147 string characters out of 5846347
+ 909363 words of memory out of 5000000
+ 45368 multiletter control sequences out of 15000+600000
+ 557002 words of font info for 155 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,17n,122p,1002b,782s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,17n,122p,1002b,638s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc
-}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/
-texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/20
-22/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2022/texmf-d
-ist/fonts/enc/dvips/lm/lm-rm.enc} </Users/Josh/Library/texlive/2022/texmf-var/f
-onts/pk/ljfour/public/bbm/bbm10.657pk>{/usr/local/texlive/2022/texmf-dist/fonts
-/enc/dvips/lm/lm-mathex.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/pub
-lic/lm/lmex10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmm
-i10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi5.pfb></u
-sr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/te
-xlive/2022/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/local/texlive/2022
-/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2022/texmf-dis
-t/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2022/texmf-dist/fonts/typ
-e1/public/lm/lmss9.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/l
-m/lmssbx10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso1
-0.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></us
-r/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/te
-xlive/2022/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></usr/local/texlive/2022/
-texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2022/texmf-dist/
-fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1
-/public/lm/lmtk10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm
-/lmtt10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt8.pfb
-></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/lo
-cal/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></us
-r/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on week3.pdf (82 pages, 747724 bytes).
+}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/t
+exlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/2022/t
+exmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive/2022/texmf-dist/
+fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/
+dvips/lm/lm-mathex.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/l
+m/lmex10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi10.p
+fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/l
+ocal/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texli
+ve/2022/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2022/tex
+mf-dist/fonts/type1/public/lm/lmss9.pfb></usr/local/texlive/2022/texmf-dist/fon
+ts/type1/public/lm/lmssbo10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1
+/public/lm/lmssbx10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/
+lm/lmsso10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso8
+.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr
+/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtk10.pfb></usr/local/tex
+live/2022/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/local/texlive/2022/
+texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2022/texmf-dist/
+fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2022/texmf-dist/fonts/typ
+e1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2022/texmf-dist/fonts
+/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on week4.pdf (56 pages, 3970741 bytes).
 PDF statistics:
- 826 PDF objects out of 1000 (max. 8388607)
- 663 compressed objects within 7 object streams
- 244 named destinations out of 1000 (max. 500000)
- 51338 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 605 PDF objects out of 1000 (max. 8388607)
+ 467 compressed objects within 5 object streams
+ 168 named destinations out of 1000 (max. 500000)
+ 51342 words of extra memory for PDF output out of 51595 (max. 10000000)
 
