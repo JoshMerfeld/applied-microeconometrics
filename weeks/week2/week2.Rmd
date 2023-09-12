@@ -1324,6 +1324,7 @@ etable(reg1, reg2,
 \vfill
 Have you seen these before?
 \vfill
+
 1. **Linearity:** the relationship between the outcome and covariates is linear
 2. **Full rank:** the matrix $\mathbf{X}$ has full rank
    - Another way to say this: no perfect collinearity
