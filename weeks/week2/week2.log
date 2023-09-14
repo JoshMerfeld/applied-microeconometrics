@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  12 SEP 2023 16:26
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  12 SEP 2023 17:49
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1590,6 +1590,42 @@ e 7.
 
 ] [95
 
+] [96
+
+]
+\openout4 = `week2.vrb'.
+
+(./week2.vrb
+<week2_files/figure-beamer/bs11-1.png, id=786, 712.6625pt x 496.85625pt>
+File: week2_files/figure-beamer/bs11-1.png Graphic file (type png)
+<use week2_files/figure-beamer/bs11-1.png>
+Package pdftex.def Info: week2_files/figure-beamer/bs11-1.png  used on input li
+ne 14.
+(pdftex.def)             Requested size: 219.08743pt x 152.74258pt.
+) [97
+
+ <./week2_files/figure-beamer/bs11-1.png>]
+\openout4 = `week2.vrb'.
+
+(./week2.vrb) [98
+
+]
+\openout4 = `week2.vrb'.
+
+(./week2.vrb) [99
+
+] [100
+
+]
+\openout4 = `week2.vrb'.
+
+(./week2.vrb) [101
+
+]
+\openout4 = `week2.vrb'.
+
+(./week2.vrb) [102
+
 ]
 \tf@nav=\write6
 \openout6 = `week2.nav'.
@@ -1602,17 +1638,17 @@ e 7.
 
 (./week2.aux) ) 
 Here is how much of TeX's memory you used:
- 28605 strings out of 478268
- 558478 string characters out of 5846347
- 913487 words of memory out of 5000000
- 45604 multiletter control sequences out of 15000+600000
- 620938 words of font info for 233 fonts, out of 8000000 for 9000
+ 28664 strings out of 478268
+ 559492 string characters out of 5846347
+ 913489 words of memory out of 5000000
+ 45630 multiletter control sequences out of 15000+600000
+ 621257 words of font info for 234 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,18n,122p,1002b,661s stack positions out of 10000i,1000n,20000p,200000b,200000s
-{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-mathit
-.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/lo
-cal/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/20
-22/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc}{/usr/local/texlive/2022/texmf-dist/
+{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc
+}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/loc
+al/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ts1.enc}{/usr/local/texlive/20
+22/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr/local/texlive/2022/texmf-dist/
 fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/
 dvips/lm/lm-mathex.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/l
 m/lmex10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi10.p
@@ -1634,14 +1670,15 @@ msso9.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsy10.pfb>
 /texlive/2022/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/20
 22/texmf-dist/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2022/texmf-di
 st/fonts/type1/public/lm/lmtk10.pfb></usr/local/texlive/2022/texmf-dist/fonts/t
-ype1/public/lm/lmtt8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public
-/lm/lmtti10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts
-/symbols/msam10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsf
-onts/symbols/msbm10.pfb>
-Output written on week2.pdf (95 pages, 858157 bytes).
+ype1/public/lm/lmtt10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/publi
+c/lm/lmtt8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti1
+0.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/m
+sam10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbo
+ls/msbm10.pfb>
+Output written on week2.pdf (102 pages, 902090 bytes).
 PDF statistics:
- 992 PDF objects out of 1000 (max. 8388607)
- 790 compressed objects within 8 object streams
- 290 named destinations out of 1000 (max. 500000)
- 92367 words of extra memory for PDF output out of 106986 (max. 10000000)
+ 1052 PDF objects out of 1200 (max. 8388607)
+ 839 compressed objects within 9 object streams
+ 311 named destinations out of 1000 (max. 500000)
+ 92372 words of extra memory for PDF output out of 106986 (max. 10000000)
 

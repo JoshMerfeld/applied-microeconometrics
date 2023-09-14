@@ -40,6 +40,7 @@ library(kableExtra)
 library(fixest)
 library(ggpubr)
 library(RColorBrewer)
+library(fitdistrplus)
 
 data <- read_csv("data.csv")
 data <- data %>%
@@ -1465,8 +1466,8 @@ df
 
 ## Bootstrapping to estimate variance
 \vfill
-- Suppose we are interested in the variance of a coefficient estimate, $\hat{beta}_1$
-  - We can use bootstrapping to estimate the variance of $\hat{beta}_1$
+- Suppose we are interested in the variance of a coefficient estimate, $\hat{\beta}_1$
+  - We can use bootstrapping to estimate the variance of $\hat{\beta}_1$
   - Keeping it simple, here is our regression:
 \begin{gather} y_i = \beta_0 + \beta_1x_{1,i} + \beta_2x_{2,i} + \beta_3x_{3,i} + \beta_4x_{4,i} + \epsilon_i \end{gather}
 \vfill
@@ -1589,7 +1590,6 @@ sqrt(var)
 ## Clustered bootstrap
 \vfill
 ```{r bs6, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
-# empty container to hold the estimates
 feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data, cluster = "country")
 ```
 \vfill
@@ -1641,7 +1641,7 @@ print(paste0("Standard error: ", format(sqrt(var), digits = 3)))
 - We can use our bootstrap vector to calculate confidence intervals
   - We can use the 2.5th and 97.5th percentiles of the bootstrap vector to get a 95\% confidence interval:
 \vfill
-\begin{gather} CI = \left( \hat{\theta}_{\alpha/2}, \hat{\theta}_{\alpha/2} \right) \end{gather}
+\begin{gather} CI = \left( \hat{\theta}_{\alpha/2}, \hat{\theta}_{1-\alpha/2} \right) \end{gather}
 \vfill
 
 
@@ -1720,6 +1720,153 @@ print(paste0("Upper: ", format(sort(bootvecsave)[round(length(bootvecsave)*0.975
   - Household panel data, so clustered bootstrap at the household level
 \vfill
 
+
+
+
+
+
+
+## The parametric bootstrap
+\vfill
+- There is another type of bootstrap called the parametric bootstrap
+  - This is where we assume a distribution for the data
+  - We then sample from that distribution
+\vfill
+- Essentially, we draw random values from the assumed distribution and add these to the original data
+  - We then re-estimate the model
+  - We do this many times
+  - We then calculate the variance of the coefficient of interest
+\vfill
+
+
+
+
+
+
+
+
+## The parametric bootstrap
+```{r bs11, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+ggplot() + 
+  geom_density(aes(x = reg1$residuals)) +
+  theme_minimal()
+```
+\vfill
+
+
+
+
+
+
+
+## The parametric bootstrap
+\vfill
+- Seems *relatively* normal. Let's assume a normal distribution!
+\vfill
+```{r bs12, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+dist <- fitdistr(reg1$residuals, "normal")
+dist
+```
+\vfill
+
+
+
+
+
+
+
+## The parametric bootstrap
+```{r bs13, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# NOTE: This assume homoskedasticity!
+# Heteroskedasticity would require allowing the variance to change. This is a simple example.
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+dist <- fitdistr(reg1$residuals, "normal")
+
+bootvec <- c()
+for (b in 1:1000){
+  brep <- data
+  # draw from distribution
+  brep$agemployment <- brep$agemployment + rnorm(nrow(brep), mean = dist$estimate[1], sd = dist$estimate[2])
+  # re-estimate
+  reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = brep)
+  # add to container
+  bootvec <- c(bootvec, reg1$coefficients[2])
+}
+# coefficient was -10.112581
+mean(bootvec)
+# standard error of homoskedastic model was 0.239763
+sd(bootvec)
+```
+
+
+
+
+
+
+
+## The parametric bootstrap in my work
+\vfill
+- The parametric bootstrap is actually integral to some of the work I do with the UN and World Bank on estimating outcomes
+\vfill
+- Small area estimation:
+$$y_{isa} = \beta_0 + \beta X_{isa} + \upsilon_{sa} + \epsilon_{isa},$$
+
+where $\upsilon_{isa}$ is a *random effect*. We use a parametric bootstrap to draw from TWO distributions:
+- The distribution of the random effect
+- The distribution of the error term
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Class exercise
+\vfill
+- I'd like you all to try bootstrapping!
+  - This is a useful exercise because it lets you practice quite a few important skills in R
+\vfill
+- The task:
+  - Download ``bootstrapdata`` from GitHub. This data has just one variable in it: ``x``
+  - Calculate the 75th percentile of ``x`` using the function ``quantile()``
+  - Find the 95\% confidence interval for the 75th percentile using the (non-parametric) bootstrap
+\vfill
+- I'll give you 10 minutes to work on this. I'll be around to help.
+  - One way to do this on next slide. But don't look at it!
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Class exercise solution (one of many)
+```{r bs14, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+bootstrapdata <- read_csv("bootstrapdata.csv")
+quantile(bootstrapdata$x, 0.75)
+
+bootvec <- c()
+for (b in 1:1000){
+  # random sample
+  sample <- bootstrapdata$x[sample(1:nrow(bootstrapdata), nrow(bootstrapdata), replace = TRUE)]
+  # add quantile to container
+  bootvec <- c(bootvec, quantile(sample, 0.75))
+}
+# 2.5th percentile
+quantile(bootvec, 0.025)
+# 97.5th percentile
+quantile(bootvec, 0.975)
+```
 
 
 

@@ -1,25 +1,48 @@
-\frametitle{Using the bootstrap vector for confidence intervals}
-\protect\hypertarget{using-the-bootstrap-vector-for-confidence-intervals-1}{}
-\vfill
-
+\frametitle{Class exercise solution (one of many)}
+\protect\hypertarget{class-exercise-solution-one-of-many}{}
 \tiny
 
-\begin{center}\includegraphics[width=0.55\linewidth]{week2_files/figure-beamer/bs9-1} \end{center}
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bootstrapdata }\OtherTok{\textless{}{-}} \FunctionTok{read\_csv}\NormalTok{(}\StringTok{"bootstrapdata.csv"}\NormalTok{)}
+\FunctionTok{quantile}\NormalTok{(bootstrapdata}\SpecialCharTok{$}\NormalTok{x, }\FloatTok{0.75}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##      75%
+## 2.690306
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\NormalTok{bootvec }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{()}
+\ControlFlowTok{for}\NormalTok{ (b }\ControlFlowTok{in} \DecValTok{1}\SpecialCharTok{:}\DecValTok{1000}\NormalTok{)\{}
+  \CommentTok{\# random sample}
+\NormalTok{  sample }\OtherTok{\textless{}{-}}\NormalTok{ bootstrapdata}\SpecialCharTok{$}\NormalTok{x[}\FunctionTok{sample}\NormalTok{(}\DecValTok{1}\SpecialCharTok{:}\FunctionTok{nrow}\NormalTok{(bootstrapdata), }\FunctionTok{nrow}\NormalTok{(bootstrapdata), }\AttributeTok{replace =} \ConstantTok{TRUE}\NormalTok{)]}
+  \CommentTok{\# add quantile to container}
+\NormalTok{  bootvec }\OtherTok{\textless{}{-}} \FunctionTok{c}\NormalTok{(bootvec, }\FunctionTok{quantile}\NormalTok{(sample, }\FloatTok{0.75}\NormalTok{))}
+\NormalTok{\}}
+\CommentTok{\# 2.5th percentile}
+\FunctionTok{quantile}\NormalTok{(bootvec, }\FloatTok{0.025}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##     2.5%
+## 2.488951
+\end{verbatim}
+
+\begin{Shaded}
+\begin{Highlighting}[]
+\CommentTok{\# 97.5th percentile}
+\FunctionTok{quantile}\NormalTok{(bootvec, }\FloatTok{0.975}\NormalTok{)}
+\end{Highlighting}
+\end{Shaded}
+
+\begin{verbatim}
+##    97.5%
+## 2.998896
+\end{verbatim}
 
 \normalsize
-
-\tiny
-
-\begin{verbatim}
-## [1] "Mean: -10.2"
-\end{verbatim}
-
-\begin{verbatim}
-## [1] "Lower: -11.9"
-\end{verbatim}
-
-\begin{verbatim}
-## [1] "Upper: -8.75"
-\end{verbatim}
-
-\normalsize \vfill
