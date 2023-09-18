@@ -46,8 +46,12 @@ library(nnet)
 library(survival)
 library(survminer)
 library(medicaldata)
+library(MatchIt)
   
 licresults <- feols(pacu30min_throatPain ~ treat, data = licorice_gargle)
+
+df <- read_csv("matchingdata.csv")
+
 
 ```
 
@@ -791,6 +795,202 @@ where $s$ is the stratum number, $I(G_s)$ is an indicator for being in stratum $
 
 
 # Propensity scores
+
+## Propensity scores
+\vfill
+- Let's talk about propensity scores!
+\vfill
+- Propensity scores are a way to deal with selection bias, provided some assumptions are met
+\vfill
+- This section draws heavily from Elizabeth Stuart's slides: \textcolor{kdisgreen}{http://www.preventionresearch.org/wp-content/uploads/2011/07/SPR-Propensity-pc-workshop-slides.pdf}
+  - We will use one of her packages: MatchIt (`install.packages("MatchIt")`), note the capitalization!
+  - https://kosukeimai.github.io/MatchIt/index.html
+\vfill
+
+
+
+
+
+
+## Let's first talk about matching
+\vfill
+- The idea behind matching is to approach the experimental idea:
+  - The treatment group and the control group are approximately the same
+\vfill
+- The catch: we can only do this for *observables*
+  - While RCTs also match on unobservables, we can't do that here
+\vfill 
+
+
+
+
+
+
+## Consider the following example
+\vfill
+- We are interested in the effect of gender on wages
+  - `matchingdata.csv`, data from South Africa's LFS
+\vfill
+
+```{r match1, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+sums <- df %>%
+        group_by(female) %>%
+        summarise(meanwage = mean(hourlyincome), 
+                  agemployment = mean(agemp),
+                  african = mean(groupafrican), 
+                  coloured = mean(groupcoloured),
+                  married = mean(married),
+                  age = mean(age),
+                  noschooling = mean(no_schooling),
+                  secondary = mean(secondary),
+                  hhchildsuppgrant = mean(hhchildsuppgrant),
+                  urban = mean(urb))
+sumst <- as_vector(sums[1,])
+sumst <- as.matrix(sumst, col = 1)
+sumst <- cbind(sumst, as_vector(sums[2,]))
+sumst <- sumst[-1,]
+colnames(sumst) <- c("male", "female")
+kable(sumst,
+          booktabs = TRUE, align = "cc", linesep = "", escape = FALSE, row.names = TRUE, digits = 3) %>%
+          kable_classic_2()       
+```
+
+
+
+
+
+
+## Exact matching
+\vfill
+- One option is to match exactly on observables
+  - For example, we could match on age, education, and marital status
+\vfill
+- This is straightforward with just a couple variables
+\vfill
+
+
+
+
+
+
+## Exact matching
+```{r match2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+match <- matchit(female ~ married + secondary, data = df, exact = c("married", "secondary"), replace = TRUE)  
+summary(match)
+```
+
+
+
+
+
+
+## Propensity scores
+\vfill
+- This becomes problematic when we have *many* covariates
+  - It is often impossible to find exact matches across all covariates
+\vfill
+- Enter: the propensity score
+  - The propensity score is the probability of being treated, conditional on covariates
+  - The key: we can match on the propensity score, rather than on the covariates themselves
+\vfill
+- Rosenbaum and Rubin (1983), Dehejia and Wahba (2002)
+\vfill
+
+
+
+
+
+
+## Propensity scores
+```{r match3, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+match <- matchit(female ~ married + secondary + age + hhchildsuppgrant + no_schooling + groupafrican + groupcoloured + agemp, 
+                data = df, replace = TRUE, method = "nearest")  
+```
+
+
+
+
+
+
+## Propensity scores - All observations
+```{r match4, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+match <- summary(matchit(female ~ married + secondary + age + hhchildsuppgrant + no_schooling + groupafrican + groupcoloured + agemp, 
+                data = df, replace = TRUE, method = "nearest"))
+match$sum.all[,1:3]
+```
+
+
+
+
+
+
+## Propensity scores - Matched observations
+```{r match5, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+match <- summary(matchit(female ~ married + secondary + age + hhchildsuppgrant + no_schooling + groupafrican + groupcoloured + agemp, 
+                data = df, replace = TRUE, method = "nearest"))
+match$sum.matched[,1:3]
+```
+
+
+
+
+
+
+## Plotting
+```{r match6, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+match <- summary(matchit(female ~ married + secondary + age + hhchildsuppgrant + no_schooling + groupafrican + groupcoloured + agemp, 
+                data = df, replace = TRUE, method = "nearest"))
+plot(match)
+```
+
+
+
+
+
+
+## Using the propensity scores
+\vfill
+- You can then use the propensity score in different ways
+\vfill
+- Examples:
+  - Can match treatment units to control units based on propensity scores
+  - Can control for the propensity score in a regression
+  - Can match and then use something like differences-in-differences
+\vfill
+- We won't go into detail, as this is just something I want you to *know* about
+\vfill
+
+
+
+
+
+
+## Checking common support
+```{r match7, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+match <- matchit(female ~ married + secondary + age + hhchildsuppgrant + no_schooling + groupafrican + groupcoloured + agemp, 
+                data = df, method = "nearest")
+plot(match, type = "jitter", interactive = FALSE)
+```
+
+
+
+
+# In-class practice
+
+## In-class practice
+\vfill
+- Let's now do some in-class practice
+\vfill
+- Goals:
+  - Practice regression
+  - Practice creating tables
+\vfill
+- Data: deserrannoetal.dta (on GitHub)
+\vfill
+ 
+
+
+
 
 
 

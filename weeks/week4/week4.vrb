@@ -1,0 +1,18 @@
+\frametitle{Propensity scores - Matched observations}
+\protect\hypertarget{propensity-scores---matched-observations}{}
+\tiny
+
+\begin{verbatim}
+##                  Means Treated Means Control Std. Mean Diff.
+## distance            0.46066320    0.46066152    1.333037e-05
+## married             0.43711299    0.43558160    3.087304e-03
+## secondary           0.24056195    0.23510220    1.277360e-02
+## age                37.30574605   37.17870697    1.211145e-02
+## hhchildsuppgrant    0.09374792    0.08702310    2.307146e-02
+## no_schooling        0.09940742    0.09368134    1.913744e-02
+## groupafrican        0.71975498    0.71289700    1.526986e-02
+## groupcoloured       0.18023836    0.18336773   -8.141219e-03
+## agemp               0.12437579    0.12264465    5.245725e-03
+\end{verbatim}
+
+\normalsize

@@ -1,0 +1,67 @@
+---
+title:  |
+    | Microeconometrics (Causal Inference)
+    | Week 5 - Differences-in-differences I
+author:
+  |
+    | Joshua D. Merfeld
+    | KDI School of Public Policy and Management
+date: "`r Sys.Date()`"
+
+# Output type and options
+output: 
+  beamer_presentation:
+    theme: Montpellier
+classoption: "aspectratio=169"
+
+# This includes latex arguments
+header-includes:
+  - \AtBeginDocument{\title[Week 5 - DiD I]{Microeconometrics (Causal Inference) \\ Week 5 - Differences-in-differences I}}
+  - \AtBeginDocument{\author[Josh Merfeld - KDI School]{Joshua D. Merfeld \\ KDI School of Public Policy and Management}}
+  - \input{header.tex}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+
+
+library(tidyverse)
+library(kableExtra)
+library(fixest)
+library(ggpubr)
+library(RColorBrewer)
+library(haven)
+library(mfx)
+library(nnet)
+library(survival)
+library(survminer)
+library(medicaldata)
+  
+licresults <- feols(pacu30min_throatPain ~ treat, data = licorice_gargle)
+
+```
+
+
+
+# Introduction
+
+## What are we doing today?
+\vfill
+
+
+
+
+
+
+
+
