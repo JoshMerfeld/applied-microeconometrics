@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  11 SEP 2023 13:08
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  19 SEP 2023 13:06
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1208,7 +1208,7 @@ t line 29.
 
 (./week3.vrb
 LaTeX Font Info:    Trying to load font information for TS1+lmtt on input line 
-31.
+36.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/ts1lmtt.fd
 File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )) [10
@@ -1220,80 +1220,84 @@ File: ts1lmtt.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 
 ]
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <9> on input line 507.
+(Font)              <9> on input line 512.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 507.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 512.
 [12
 
 ]
-LaTeX Font Info:    Trying to load font information for U+bbm on input line 528
+pdfTeX warning (ext4): destination with the same identifier (name{linear-probab
+ility-model-lpm-2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.512 \end{frame}
+                  [13
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{linear-probab
+ility-model-lpm-2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.512 \end{frame}
+                  [14
+
+]
+LaTeX Font Info:    Trying to load font information for U+bbm on input line 533
 .
 (/usr/local/texlive/2022/texmf-dist/tex/latex/bbm-macros/ubbm.fd
 File: ubbm.fd 1999/03/15 V 1.2 Font definition for bbm font - TH
-) [13
-
-] [14
-
-] [15
+) [15
 
 ] [16
 
-] [17
+]
+<assets/cdfwiki.png, id=149, 1927.2pt x 1541.76pt>
+File: assets/cdfwiki.png Graphic file (type png)
+<use assets/cdfwiki.png>
+Package pdftex.def Info: assets/cdfwiki.png  used on input line 570.
+(pdftex.def)             Requested size: 278.83578pt x 223.0672pt.
 
-] [18
+Overfull \vbox (7.90152pt too high) detected at line 570
+ []
+
+[17
+
+ <./assets/cdfwiki.png>] [18
 
 ] [19
 
 ] [20
 
-]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [21
+] [21
 
-]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [22
+] [22
 
-]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [23
+] [23
 
-]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [24
-
-]
-pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
-ihood-estimation-1}) has been already used, duplicate ignored
-<to be read again> 
-                   \relax 
-l.726 \end{frame}
-                  [25
-
-] [26
+] [24
 
 ]
 pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
 ihood-estimation-2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.769 \end{frame}
+l.759 \end{frame}
+                  [25
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
+ihood-estimation-2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.759 \end{frame}
+                  [26
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
+ihood-estimation-2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.759 \end{frame}
                   [27
 
 ]
@@ -1301,26 +1305,38 @@ pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
 ihood-estimation-2}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.769 \end{frame}
+l.759 \end{frame}
                   [28
 
-] [29
+]
+pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
+ihood-estimation-2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.759 \end{frame}
+                  [29
 
 ] [30
 
-] [31
-
-] [32
+]
+pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
+ihood-estimation-3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.802 \end{frame}
+                  [31
 
 ]
-\openout4 = `week3.vrb'.
+pdfTeX warning (ext4): destination with the same identifier (name{maximum-likel
+ihood-estimation-3}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.802 \end{frame}
+                  [32
 
-(./week3.vrb) [33
+] [33
 
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [34
+] [34
 
 ] [35
 
@@ -1331,7 +1347,10 @@ l.769 \end{frame}
 
 (./week3.vrb) [37
 
-] [38
+]
+\openout4 = `week3.vrb'.
+
+(./week3.vrb) [38
 
 ] [39
 
@@ -1342,118 +1361,109 @@ l.769 \end{frame}
 
 (./week3.vrb) [41
 
+] [42
+
+] [43
+
+] [44
+
 ]
 \openout4 = `week3.vrb'.
 
-(./week3.vrb) [42
+(./week3.vrb) [45
 
 ]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [43
-
-]
-<week3_files/figure-beamer/probit2-1.png, id=347, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit2-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit2-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit2-1.png  used on input
- line 1251.
-(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
-[44
-
- <./week3_files/figure-beamer/probit2-1.png>]
-<week3_files/figure-beamer/probit3-1.png, id=357, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit3-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit3-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit3-1.png  used on input
- line 1274.
-(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
-[45
-
- <./week3_files/figure-beamer/probit3-1.png>]
 \openout4 = `week3.vrb'.
 
 (./week3.vrb) [46
 
 ]
-<week3_files/figure-beamer/probit5-1.png, id=373, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit5-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit5-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit5-1.png  used on input
- line 1310.
-(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
-[47
+\openout4 = `week3.vrb'.
 
- <./week3_files/figure-beamer/probit5-1.png>]
-<week3_files/figure-beamer/probit6-1.png, id=382, 712.6625pt x 493.845pt>
-File: week3_files/figure-beamer/probit6-1.png Graphic file (type png)
-<use week3_files/figure-beamer/probit6-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/probit6-1.png  used on input
- line 1328.
+(./week3.vrb) [47
+
+]
+<week3_files/figure-beamer/probit2-1.png, id=377, 712.6625pt x 493.845pt>
+File: week3_files/figure-beamer/probit2-1.png Graphic file (type png)
+<use week3_files/figure-beamer/probit2-1.png>
+Package pdftex.def Info: week3_files/figure-beamer/probit2-1.png  used on input
+ line 1285.
 (pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
 [48
 
- <./week3_files/figure-beamer/probit6-1.png>]
-\openout4 = `week3.vrb'.
+ <./week3_files/figure-beamer/probit2-1.png>]
+<week3_files/figure-beamer/probit3-1.png, id=386, 712.6625pt x 493.845pt>
+File: week3_files/figure-beamer/probit3-1.png Graphic file (type png)
+<use week3_files/figure-beamer/probit3-1.png>
+Package pdftex.def Info: week3_files/figure-beamer/probit3-1.png  used on input
+ line 1308.
+(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
+[49
 
-(./week3.vrb) [49
-
-]
+ <./week3_files/figure-beamer/probit3-1.png>]
 \openout4 = `week3.vrb'.
 
 (./week3.vrb) [50
 
-] [51
+]
+<week3_files/figure-beamer/probit5-1.png, id=403, 712.6625pt x 493.845pt>
+File: week3_files/figure-beamer/probit5-1.png Graphic file (type png)
+<use week3_files/figure-beamer/probit5-1.png>
+Package pdftex.def Info: week3_files/figure-beamer/probit5-1.png  used on input
+ line 1344.
+(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
+[51
+
+ <./week3_files/figure-beamer/probit5-1.png>]
+<week3_files/figure-beamer/probit6-1.png, id=413, 712.6625pt x 493.845pt>
+File: week3_files/figure-beamer/probit6-1.png Graphic file (type png)
+<use week3_files/figure-beamer/probit6-1.png>
+Package pdftex.def Info: week3_files/figure-beamer/probit6-1.png  used on input
+ line 1362.
+(pdftex.def)             Requested size: 219.08743pt x 151.81686pt.
+[52
+
+ <./week3_files/figure-beamer/probit6-1.png>]
+\openout4 = `week3.vrb'.
+
+(./week3.vrb) [53
+
+]
+\openout4 = `week3.vrb'.
+
+(./week3.vrb) [54
+
+] [55
 
 ]
 \openout4 = `week3.vrb'.
 
 (./week3.vrb
-<week3_files/figure-beamer/ologit1-1.png, id=415, 712.6625pt x 496.85625pt>
+<week3_files/figure-beamer/ologit1-1.png, id=445, 712.6625pt x 496.85625pt>
 File: week3_files/figure-beamer/ologit1-1.png Graphic file (type png)
 <use week3_files/figure-beamer/ologit1-1.png>
 Package pdftex.def Info: week3_files/figure-beamer/ologit1-1.png  used on input
  line 16.
 (pdftex.def)             Requested size: 219.08743pt x 152.74258pt.
-) [52
+) [56
 
  <./week3_files/figure-beamer/ologit1-1.png>]
 \openout4 = `week3.vrb'.
 
-(./week3.vrb) [53
+(./week3.vrb) [57
 
-] [54
+] [58
 
 ]
 \openout4 = `week3.vrb'.
 
 (./week3.vrb)
-Overfull \vbox (1.96347pt too high) detected at line 1595
+Overfull \vbox (1.96347pt too high) detected at line 1629
  []
 
-[55
+[59
 
-] [56
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [57
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [58
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [59
-
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [60
+] [60
 
 ]
 \openout4 = `week3.vrb'.
@@ -1465,9 +1475,15 @@ Overfull \vbox (1.96347pt too high) detected at line 1595
 
 (./week3.vrb) [62
 
-] [63
+]
+\openout4 = `week3.vrb'.
 
-] [64
+(./week3.vrb) [63
+
+]
+\openout4 = `week3.vrb'.
+
+(./week3.vrb) [64
 
 ]
 \openout4 = `week3.vrb'.
@@ -1479,10 +1495,7 @@ Overfull \vbox (1.96347pt too high) detected at line 1595
 
 (./week3.vrb) [66
 
-]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb) [67
+] [67
 
 ] [68
 
@@ -1491,65 +1504,41 @@ Overfull \vbox (1.96347pt too high) detected at line 1595
 
 (./week3.vrb) [69
 
-] [70
+]
+\openout4 = `week3.vrb'.
 
-] [71
+(./week3.vrb) [70
 
 ]
-<assets/covidhazard.png, id=563, 1606.0pt x 955.57pt>
-File: assets/covidhazard.png Graphic file (type png)
-<use assets/covidhazard.png>
-Package pdftex.def Info: assets/covidhazard.png  used on input line 2326.
-(pdftex.def)             Requested size: 318.67209pt x 189.6088pt.
-[72
+\openout4 = `week3.vrb'.
 
- <./assets/covidhazard.png (PNG copy)>]
+(./week3.vrb) [71
+
+] [72
+
+]
 \openout4 = `week3.vrb'.
 
 (./week3.vrb) [73
 
+] [74
+
+] [75
+
 ]
+<assets/covidhazard.png, id=593, 1606.0pt x 955.57pt>
+File: assets/covidhazard.png Graphic file (type png)
+<use assets/covidhazard.png>
+Package pdftex.def Info: assets/covidhazard.png  used on input line 2360.
+(pdftex.def)             Requested size: 318.67209pt x 189.6088pt.
+[76
+
+ <./assets/covidhazard.png (PNG copy)>]
 \openout4 = `week3.vrb'.
 
-(./week3.vrb) [74
+(./week3.vrb) [77
 
 ]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb
-<week3_files/figure-beamer/surv4-1.png, id=586, 690.58pt x 432.61626pt>
-File: week3_files/figure-beamer/surv4-1.png Graphic file (type png)
-<use week3_files/figure-beamer/surv4-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/surv4-1.png  used on input l
-ine 14.
-(pdftex.def)             Requested size: 219.08743pt x 137.24521pt.
-) [75
-
- <./week3_files/figure-beamer/surv4-1.png>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb
-<week3_files/figure-beamer/surv5-1.png, id=594, 712.6625pt x 487.8225pt>
-File: week3_files/figure-beamer/surv5-1.png Graphic file (type png)
-<use week3_files/figure-beamer/surv5-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/surv5-1.png  used on input l
-ine 23.
-(pdftex.def)             Requested size: 219.08743pt x 149.96544pt.
-) [76
-
- <./week3_files/figure-beamer/surv5-1.png>]
-\openout4 = `week3.vrb'.
-
-(./week3.vrb
-<week3_files/figure-beamer/surv6-1.png, id=603, 712.6625pt x 495.8525pt>
-File: week3_files/figure-beamer/surv6-1.png Graphic file (type png)
-<use week3_files/figure-beamer/surv6-1.png>
-Package pdftex.def Info: week3_files/figure-beamer/surv6-1.png  used on input l
-ine 17.
-(pdftex.def)             Requested size: 219.08743pt x 152.434pt.
-) [77
-
- <./week3_files/figure-beamer/surv6-1.png>]
 \openout4 = `week3.vrb'.
 
 (./week3.vrb) [78
@@ -1557,16 +1546,57 @@ ine 17.
 ]
 \openout4 = `week3.vrb'.
 
-(./week3.vrb) [79
+(./week3.vrb
+<week3_files/figure-beamer/surv4-1.png, id=616, 690.58pt x 432.61626pt>
+File: week3_files/figure-beamer/surv4-1.png Graphic file (type png)
+<use week3_files/figure-beamer/surv4-1.png>
+Package pdftex.def Info: week3_files/figure-beamer/surv4-1.png  used on input l
+ine 14.
+(pdftex.def)             Requested size: 219.08743pt x 137.24521pt.
+) [79
+
+ <./week3_files/figure-beamer/surv4-1.png>]
+\openout4 = `week3.vrb'.
+
+(./week3.vrb
+<week3_files/figure-beamer/surv5-1.png, id=625, 712.6625pt x 487.8225pt>
+File: week3_files/figure-beamer/surv5-1.png Graphic file (type png)
+<use week3_files/figure-beamer/surv5-1.png>
+Package pdftex.def Info: week3_files/figure-beamer/surv5-1.png  used on input l
+ine 23.
+(pdftex.def)             Requested size: 219.08743pt x 149.96544pt.
+) [80
+
+ <./week3_files/figure-beamer/surv5-1.png>]
+\openout4 = `week3.vrb'.
+
+(./week3.vrb
+<week3_files/figure-beamer/surv6-1.png, id=634, 712.6625pt x 495.8525pt>
+File: week3_files/figure-beamer/surv6-1.png Graphic file (type png)
+<use week3_files/figure-beamer/surv6-1.png>
+Package pdftex.def Info: week3_files/figure-beamer/surv6-1.png  used on input l
+ine 17.
+(pdftex.def)             Requested size: 219.08743pt x 152.434pt.
+) [81
+
+ <./week3_files/figure-beamer/surv6-1.png>]
+\openout4 = `week3.vrb'.
+
+(./week3.vrb) [82
 
 ]
 \openout4 = `week3.vrb'.
 
-(./week3.vrb) [80
+(./week3.vrb) [83
 
-] [81
+]
+\openout4 = `week3.vrb'.
 
-] [82
+(./week3.vrb) [84
+
+] [85
+
+] [86
 
 ]
 \tf@nav=\write6
@@ -1580,11 +1610,11 @@ ine 17.
 
 (./week3.aux) ) 
 Here is how much of TeX's memory you used:
- 28289 strings out of 478268
- 552250 string characters out of 5846347
+ 28317 strings out of 478268
+ 552748 string characters out of 5846347
  908189 words of memory out of 5000000
- 45385 multiletter control sequences out of 15000+600000
- 558439 words of font info for 167 fonts, out of 8000000 for 9000
+ 45402 multiletter control sequences out of 15000+600000
+ 558758 words of font info for 168 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,17n,122p,1002b,782s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc
@@ -1605,17 +1635,18 @@ m/lmssbx10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso1
 0.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></us
 r/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/te
 xlive/2022/texmf-dist/fonts/type1/public/lm/lmsy5.pfb></usr/local/texlive/2022/
-texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2022/texmf-dist/
-fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1
-/public/lm/lmtk10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm
-/lmtt10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt8.pfb
-></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/lo
-cal/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></us
-r/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on week3.pdf (82 pages, 747724 bytes).
+texmf-dist/fonts/type1/public/lm/lmsy6.pfb></usr/local/texlive/2022/texmf-dist/
+fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1
+/public/lm/lmsy8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/
+lmtk10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt10.pfb
+></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/loca
+l/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive
+/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/tex
+live/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on week3.pdf (86 pages, 928378 bytes).
 PDF statistics:
- 826 PDF objects out of 1000 (max. 8388607)
- 663 compressed objects within 7 object streams
- 244 named destinations out of 1000 (max. 500000)
- 51338 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 863 PDF objects out of 1000 (max. 8388607)
+ 692 compressed objects within 7 object streams
+ 254 named destinations out of 1000 (max. 500000)
+ 51343 words of extra memory for PDF output out of 51595 (max. 10000000)
 

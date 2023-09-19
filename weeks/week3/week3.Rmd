@@ -223,7 +223,9 @@ ggplot(data = povmeans) +
 \begin{gather} Y = \beta X + \epsilon \end{gather}
 \vfill
 ```{r lpm, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "100%", fig.align = "center"}
-summary(feols(in_poverty ~ h_male + h_age, data = df, vcov = "HC1"))
+f1 <- feols(in_poverty ~ h_male + h_age, data = df)
+f2 <- feols(in_poverty ~ h_male + h_age, data = df, vcov = "HC1")
+etable(f1, f2)
 ```
 
 \vfill
@@ -254,11 +256,11 @@ summary(feols(in_poverty ~ h_male + h_age, data = df, vcov = "HC1"))
 - Sometimes people motivate other estimation methods based on heteroskedasticity
   - But we can easily correct for this using robust standard errors (HC1 in feols)
 \vfill
-- There are two other problems with LPM, though:
+- There are two other problems with LPM, though: \pause
   - The predicted values can be outside of the 0-1 range
-    - Is this a problem? Maybe. Maybe not. It depends on what you're doing.
+    - Is this a problem? Maybe. Maybe not. It depends on what you're doing. \pause
   - Constant effects throughout the probability distribution
-    - Is this realistic? If we think someone has a 95 percent probability of being poor, do we think the percentage point change would be the same for changing a variable relative to someone with a 5 percent probability of being poor?
+    - Is this realistic? If we think someone has a 95 percent probability of being poor, do we think the percentage point change would be the same for changing a variable relative to someone with a 50 percent probability of being poor?
 \vfill
 
 
@@ -296,6 +298,15 @@ where $Y^*$ is the latent variable, $G(\cdot)$ is the distribution of $\epsilon$
   - The last equality holds because $G(\cdot)$ will always be *symmetric around 0* here
   - That value here is $\beta X$
 \vfill
+
+
+
+
+
+
+## CDF examples of the logistic (sigmoid) function - Wikipedia
+\center
+	\includegraphics[width=0.7\columnwidth]{assets/cdfwiki}
 
 
 
@@ -379,11 +390,23 @@ where $Y^*$ is the latent variable, $G(\cdot)$ is the distribution of $\epsilon$
 \vfill
 \begin{gather} \ell_n(\beta, \sigma^2) = \log(L_n(\beta, \sigma^2)) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-\beta x_i)^2 \end{gather}
 
+\vfill
 - We have our log likelihood function, which is a function of the parameters, $\beta$ and $\sigma^2$
+
+\vfill
+
+
+
+
+
+
+## Maximum likelihood estimation
   
+\vfill
 - What we want to do is find the values of $\beta$ and $\sigma^2$ that *maximize* this function
   - In other words, the values that make our sample the most likely to have been observed, or the biggest probability of observing our sample
   
+\vfill
 - This is called *maximum likelihood estimation*
 
 \begin{gather} \left(\hat{\beta}, \hat{\sigma}^2\right) = \underset{\beta\in\mathbb{R}^k,\sigma^2>0}{\text{argmax}}\;\ell_n(\beta, \sigma^2) \end{gather}
@@ -465,7 +488,7 @@ where $k$ is the number of variables (coefficients), including the intercept.
 where $p$ is the probability of $Y=1$, or the mean. Remember that $Y\in\{0,1\}$; i.e., it can only equal 0 or 1.
 
 - Let's bring our link function back into it. The *conditional* probability is:
-\begin{gather} \pi(Y|X)=G(\beta X)^Y(1-G(\beta X))^{1-Y}=G(\beta X)^Y(G-\beta X)^{1-Y}=G(\beta Z),   \end{gather}
+\begin{gather} \pi(Y|X)=G(\beta X)^Y(1-G(\beta X))^{1-Y}=G(\beta X)^Y(G(-\beta X))^{1-Y}=G(\beta Z),   \end{gather}
 
 where $Z = \Biggl\{ \begin{array}{ll} X, & \text{if } Y=1 \\ -X, & \text{if } Y=0 \end{array}$
 \vfill
@@ -498,7 +521,7 @@ where $Z = \Biggl\{ \begin{array}{ll} X, & \text{if } Y=1 \\ -X, & \text{if } Y=
 - Again, we want to find the values of $\beta$ (and $\sigma$, which will show up in the link function) that maximize this function.
 \begin{gather} \left(\hat{\beta}, \hat{\sigma}^2\right) = \underset{\beta\in\mathbb{R}^k,\sigma^2>0}{\text{argmax}}\;\ell_n(\beta, \sigma^2) \end{gather}
 
-- Something interesting is that in practice, we don't numerically optimize...
+- Something interesting is that in practice, we don't numerically maximize...
   - Instead, we *minimize* the *negative* of the log likelihood function!
 
 \begin{gather} \left(\hat{\beta}, \hat{\sigma}^2\right) = \underset{\beta\in\mathbb{R}^k,\sigma^2>0}{\text{argmin}}\;-\ell_n(\beta, \sigma^2) \end{gather}
@@ -619,9 +642,9 @@ What is the actual mean for female headed households? `r format(mean(df$in_pover
   - odds ($\frac{p_f}{1-p_f}$): `r format(mean(df$in_poverty[df$h_male==0])/(1-mean(df$in_poverty[df$h_male==0])), digits = 3)`
 \vfill
 - Mean for male-headed households: `r format(mean(df$in_poverty[df$h_male==1]), digits = 3)`
-  - odds ($\frac{p_m}{1-p_m}$): `r format(mean(df$in_poverty[df$h_male==1])/(1-mean(df$in_poverty[df$h_male==1])), digits = 3)`
+  - odds $\left(\frac{p_m}{1-p_m}\right)$: `r format(mean(df$in_poverty[df$h_male==1])/(1-mean(df$in_poverty[df$h_male==1])), digits = 3)`
 \vfill
-- Odds ratio: `r format((mean(df$in_poverty[df$h_male==1])/(1-mean(df$in_poverty[df$h_male==1])))/(mean(df$in_poverty[df$h_male==0])/(1-mean(df$in_poverty[df$h_male==0]))), digits = 3)`
+- Odds ratio ($\frac{\frac{p_m}{1-p_m}}{\frac{p_f}{1-p_f}}$): `r format((mean(df$in_poverty[df$h_male==1])/(1-mean(df$in_poverty[df$h_male==1])))/(mean(df$in_poverty[df$h_male==0])/(1-mean(df$in_poverty[df$h_male==0]))), digits = 3)`
  \vfill
  - Exponentiating shows us the odds ratio!
 \vfill
@@ -1113,7 +1136,7 @@ summary(feglm(months_in_poverty ~ h_male, data = df, family = "poisson", vcov = 
   - They are the *log* of the *rate* of the outcome
   - i.e. the log of the number of months in poverty
 \vfill
-- The log count for male-headed households is around -0.28 *lower* than for female-headed households
+- The log count for male-headed households is around 0.28 *lower* than for female-headed households
 \vfill
 
 
@@ -1210,7 +1233,7 @@ summary(feglm(months_in_poverty ~ h_male + h_age, data = df, family = "quasipois
 
 ## Survival models
 \vfill
-- Let's use the package survival in R.
+- Let's use the package `survival` in R.
   - It has a dataset set up for us, called diabetic
 \vfill
 ```{r surv1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
@@ -1262,7 +1285,7 @@ plot(KM, ylab = "Survival probability", xlab = "Time (months)")
 
 ## Comparing survival curves based on treatment
 \vfill
-- Base R has ugly plots. We can use survminer to make it work with ggplot.
+- Base R has ugly plots. We can use `survminer` to make it work with `ggplot2`.
 \vfill
 ```{r surv5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
 library(survminer)
@@ -1351,7 +1374,7 @@ coxph(Surv(time = time, event = status) ~ age + as_factor(eye) + trt, data = dia
 
 ## Articles for next week (check syllabus for textbook readings)
 \vfill
-- Deserranno, E., Stryjan, M., & Sulaiman, M. (2019). Leader selection and service delivery in community groups: Experimental evidence from uganda. *American Economic Journal: Applied Economics*, 11(4), 240-267.
+- Deserranno, E., Stryjan, M., & Sulaiman, M. (2019). Leader selection and service delivery in community groups: Experimental evidence from Uganda. *American Economic Journal: Applied Economics*, 11(4), 240-267.
 \vfill
 - Fischer, T., Frölich, M., & Landmann, A. (2023). Adverse Selection in Low-Income Health Insurance Markets: Evidence from an RCT in Pakistan. *American Economic Journal: Applied Economics*, 15(3), 313-340.
 \vfill

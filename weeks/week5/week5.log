@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  16 SEP 2023 17:27
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  18 SEP 2023 12:04
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1077,9 +1077,11 @@ Package hyperref Warning: Option `pdfauthor' has already been used,
 
 (./week5.nav) [1
 
-{/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}]
+{/usr/local/texlive/2022/texmf-var/fonts/map/pdftex/updmap/pdftex.map}] [2
+
+]
 LaTeX Font Info:    Trying to load font information for OT1+lmss on input line 
-130.
+140.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/ot1lmss.fd
 File: ot1lmss.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
@@ -1088,64 +1090,145 @@ Package microtype Info: Loading generic protrusion settings for font family
 (microtype)             For optimal results, create family-specific settings.
 (microtype)             See the microtype manual for details.
 LaTeX Font Info:    Trying to load font information for OML+lmm on input line 1
-30.
+40.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omllmm.fd
 File: omllmm.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMS+lmsy on input line 
-130.
+140.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omslmsy.fd
 File: omslmsy.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    Trying to load font information for OMX+lmex on input line 
-130.
+140.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/lm/omxlmex.fd
 File: omxlmex.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
 )
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10.95> on input line 130.
+(Font)              <10.95> on input line 140.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <8> on input line 130.
+(Font)              <8> on input line 140.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <6> on input line 130.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 130
+(Font)              <6> on input line 140.
+LaTeX Font Info:    Trying to load font information for U+msa on input line 140
 .
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsa.fd
 File: umsa.fd 2013/01/14 v3.01 AMS symbols A
 ) (/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/mt-msa.cfg
 File: mt-msa.cfg 2006/02/04 v1.1 microtype config. file: AMS symbols (a) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+msb on input line 130
+LaTeX Font Info:    Trying to load font information for U+msb on input line 140
 .
 (/usr/local/texlive/2022/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 ) (/usr/local/texlive/2022/texmf-dist/tex/latex/microtype/mt-msb.cfg
 File: mt-msb.cfg 2005/06/01 v1.0 microtype config. file: AMS symbols (b) (RS)
 )
-LaTeX Font Info:    Trying to load font information for U+rsfs on input line 13
+LaTeX Font Info:    Trying to load font information for U+rsfs on input line 14
 0.
 (/usr/local/texlive/2022/texmf-dist/tex/latex/jknapltx/ursfs.fd
 File: ursfs.fd 1998/03/24 rsfs font definition file (jk)
 )
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10.95> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 130.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 140.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <8> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 130.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 140.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <6> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 130.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 140.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <10> on input line 130.
+(Font)              <10> on input line 140.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <7> on input line 130.
+(Font)              <7> on input line 140.
 LaTeX Font Info:    External font `lmex10' loaded for size
-(Font)              <5> on input line 130.
+(Font)              <5> on input line 140.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <10> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 130.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 140.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <7> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 130.
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 140.
 LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
-(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 130.
-[2
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 140.
+[3
+
+]
+<assets/mississippi1.png, id=44, 361.35pt x 430.60875pt>
+File: assets/mississippi1.png Graphic file (type png)
+<use assets/mississippi1.png>
+Package pdftex.def Info: assets/mississippi1.png  used on input line 148.
+(pdftex.def)             Requested size: 179.25114pt x 213.60863pt.
+[4
+
+ <./assets/mississippi1.png>] [5
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{did-the-polic
+y-of-extra-lending-save-banks}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.161 \end{frame}
+                  [6
+
+]
+<assets/mississippi4.png, id=67, 779.91376pt x 409.53pt>
+File: assets/mississippi4.png Graphic file (type png)
+<use assets/mississippi4.png>
+Package pdftex.def Info: assets/mississippi4.png  used on input line 168.
+(pdftex.def)             Requested size: 398.3386pt x 209.16373pt.
+[7
+
+ <./assets/mississippi4.png>] [8
+
+]
+<assets/dd2.png, id=84, 290.0436pt x 281.853pt>
+File: assets/dd2.png Graphic file (type png)
+<use assets/dd2.png>
+Package pdftex.def Info: assets/dd2.png  used on input line 189.
+(pdftex.def)             Requested size: 219.08743pt x 212.90738pt.
+[9
+
+ <./assets/dd2.png>] [10
+
+]
+<assets/dd1.png, id=100, 548.80031pt x 526.96875pt>
+File: assets/dd1.png Graphic file (type png)
+<use assets/dd1.png>
+Package pdftex.def Info: assets/dd1.png  used on input line 209.
+(pdftex.def)             Requested size: 219.08743pt x 210.36563pt.
+[11
+
+ <./assets/dd1.png>] [12
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{parallel-tren
+ds-assumption}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.238 \end{frame}
+                  [13
+
+]
+<assets/mississippi2.png, id=122, 429.605pt x 307.1475pt>
+File: assets/mississippi2.png Graphic file (type png)
+<use assets/mississippi2.png>
+Package pdftex.def Info: assets/mississippi2.png  used on input line 245.
+(pdftex.def)             Requested size: 278.83578pt x 199.35762pt.
+[14
+
+ <./assets/mississippi2.png>]
+LaTeX Font Info:    External font `lmex10' loaded for size
+(Font)              <9> on input line 277.
+LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
+(Font)              Font shape `T1/lmss/m/sl' tried instead on input line 277.
+[15
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{estimating-di
+ff-in-diff-empirically}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.277 \end{frame}
+                  [16
+
+] [17
 
 ]
 \tf@nav=\write5
@@ -1159,23 +1242,30 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <5> not available
 
 (./week5.aux) ) 
 Here is how much of TeX's memory you used:
- 26941 strings out of 478268
- 528932 string characters out of 5846347
- 888354 words of memory out of 5000000
- 44433 multiletter control sequences out of 15000+600000
- 541035 words of font info for 125 fonts, out of 8000000 for 9000
+ 27157 strings out of 478268
+ 533135 string characters out of 5846347
+ 890356 words of memory out of 5000000
+ 44580 multiletter control sequences out of 15000+600000
+ 551399 words of font info for 140 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 128i,13n,122p,1002b,544s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 128i,13n,122p,1002b,602s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ec.enc
-}</usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/loc
-al/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive
-/2022/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2022/texmf
--dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/texlive/2022/texmf-dist/fo
-nts/type1/public/amsfonts/symbols/msam10.pfb>
-Output written on week5.pdf (2 pages, 93248 bytes).
+}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-mathsy.enc}{/usr/loc
+al/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-mathit.enc}{/usr/local/texlive
+/2022/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}</usr/local/texlive/2022/texmf-di
+st/fonts/type1/public/lm/lmmi10.pfb></usr/local/texlive/2022/texmf-dist/fonts/t
+ype1/public/lm/lmss10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/publi
+c/lm/lmss12.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss8
+.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss9.pfb></usr/
+local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr/local/te
+xlive/2022/texmf-dist/fonts/type1/public/lm/lmsso10.pfb></usr/local/texlive/202
+2/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></usr/local/texlive/2022/texmf-di
+st/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2022/texmf-dist/fonts/t
+ype1/public/amsfonts/symbols/msam10.pfb>
+Output written on week5.pdf (17 pages, 489114 bytes).
 PDF statistics:
- 65 PDF objects out of 1000 (max. 8388607)
- 43 compressed objects within 1 object stream
- 7 named destinations out of 1000 (max. 500000)
- 43059 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 225 PDF objects out of 1000 (max. 8388607)
+ 167 compressed objects within 2 object streams
+ 50 named destinations out of 1000 (max. 500000)
+ 49236 words of extra memory for PDF output out of 51595 (max. 10000000)
 
