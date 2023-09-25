@@ -1,7 +1,7 @@
 ---
 title:  |
     | Microeconometrics (Causal Inference)
-    | Week 5 - Differences-in-differences I
+    | Weeks 5 and 6 - Differences-in-differences and synthetic control
 author:
   |
     | Joshua D. Merfeld
@@ -16,7 +16,7 @@ classoption: "aspectratio=169"
 
 # This includes latex arguments
 header-includes:
-  - \AtBeginDocument{\title[Week 5 - DiD I]{Microeconometrics (Causal Inference) \\ Week 5 - Differences-in-differences I}}
+  - \AtBeginDocument{\title[Weeks 5 and 6 - DiD]{Microeconometrics (Causal Inference) \\ Weeks 5 and 6 - Differences-in-differences and synthetic control}}
   - \AtBeginDocument{\author[Josh Merfeld - KDI School]{Joshua D. Merfeld \\ KDI School of Public Policy and Management}}
   - \input{header.tex}
   - \usepackage[flushleft]{threeparttable}
@@ -1837,7 +1837,358 @@ ggplot(dfgraph) +
   - It also matches on pre-treatment trends and covariates
   - This is what makes it different from pure matching
 \vfill
-- 
+- Main requirement:
+  - Many pre-treatment periods (Abadie, Diamond, and Hainmueller, 2010)
+\vfill 
+
+
+
+
+
+
+
+
+## A little formalization
+\vfill
+- Let's say we are interested in outcome $Y_{jt}$ for unit $j$ at time $t$
+  - "Treated" group is $j=1$
+\vfill
+- In the post period, we estimate the effect of the intervention as
+\begin{gather} Y_{1t} - \sum_{j=1}^Jw_j^*Y_{jt}, \end{gather}
+
+where $w_j$ are time-invariant weights that we will estimate in the *pre period*.
+\vfill
+
+
+
+
+
+
+
+
+## A little formalization
+\vfill
+- In an ideal world, we would estimate the weights such that
+\begin{gather} \sum_{j=2}^Jw_j^*Y_{j1} = Y_{11},\;\sum_{j=2}^Jw_j^*Y_{j2} = Y_{12},\;\ldots,\;\sum_{j=2}^Jw_j^*Y_{jT_0} = Y_{1T_0},  \end{gather}
+where $T_0$ is the number of pre-treatment periods.
+
+\vfill
+- In practice, however, this will never hold exactly.
+  - Instead, we will have to choose weights such that the differences *are as small as possible*.
+\vfill
+- Our job is to estimate $W$, the vector of weights for each of the candidate control units.
+\vfill
+
+
+
+
+
+
+
+
+## A little formalization
+\vfill
+- Consider a set of variables (which can include pre-treatment outcomes) $X$, where $X_1$ is the treated unit and $X_0$ are the control units.
+\vfill
+- We will minimize
+\begin{gather} \lVert X_1-X_0W\rVert = \sqrt{(X_1-X_0W)'V(X_1-X_0W)}, \end{gather}
+where $V$ is a diagonal matrix of weights *for different variables*.
+
+\vfill
+- Essentially there are two types of weights:
+  - Weights for different variables
+  - Weights for different units
+\vfill
+
+
+
+
+
+
+
+
+## A little formalization
+\vfill
+- Estimating $V$ is important
+\vfill
+- The most common approach is to minimize mean squared prediction error (Cunnigham, 2022):
+\begin{gather} \sum_{t=1}^{T_0}\left(Y_{1t}-\sum_{j=1}^Jw_j^*Y_{jt}\right)^2, \end{gather}
+where, again, $T_0$ is the number of pre-treatment periods.
+
+\vfill
+- Thankfully, the canned `R` packages do all of this for us!
+  - It's nonetheless good to have an understanding of what they're doing
+\vfill
+
+
+
+
+
+
+
+
+## Synthetic control in `R` with the `tidysynth` package
+```{r sc2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+library(tidysynth)
+
+# We are going to use the "smoking" data from Abadie, Diamond, and Hainmueller (2010)
+summary(df)
+# One issue: note how many missing values there are! We'll talk more on the next slide.
+```
+
+- A note: using this package is not straightforward. The website has code you can simply copy-paste: [\textcolor{kdisgreen}{https://cran.r-project.org/web/packages/tidysynth/readme/README.html}](https://cran.r-project.org/web/packages/tidysynth/readme/README.html)
+
+
+
+
+
+
+
+## We have to create a "synthetic control object"... kind of a pain, to be honest
+```{r sc3, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+smoking_out <- df %>%
+                # initial the synthetic control object
+                synthetic_control(outcome = cigsale, # outcome
+                                  unit = state, # unit index in the panel data
+                                  time = year, # time index in the panel data
+                                  i_unit = mean(df$state[df$california==1]), # unit where the intervention occurred
+                                  i_time = 1988, # time period when the intervention occurred
+                                  generate_placebos = T) %>% # generate placebo synthetic controls (for inference)
+                # Generate the aggregate predictors used to fit the weights
+                # average log income, retail price of cigarettes, and proportion of the
+                # population between 15 and 24 years of age from 1980 - 1988
+                generate_predictor(time_window = 1980:1988,
+                                  ln_income = mean(lnincome, na.rm = T),
+                                  ret_price = mean(retprice, na.rm = T),
+                                  youth = mean(age15to24, na.rm = T)) %>%
+                # average beer consumption in the donor pool from 1984 - 1988
+                generate_predictor(time_window = 1984:1988,
+                                  beer_sales = mean(beer, na.rm = T)) %>%
+                # Lagged cigarette sales 
+                generate_predictor(time_window = 1975,
+                                  cigsale_1975 = cigsale) %>%
+                generate_predictor(time_window = 1980,
+                                  cigsale_1980 = cigsale) %>%
+                generate_predictor(time_window = 1988,
+                                  cigsale_1988 = cigsale) %>%
+                # Generate the fitted weights for the synthetic control
+                generate_weights(optimization_window = 1970:1988, # time to use in the optimization task
+                                margin_ipop = .02, sigf_ipop = 7, bound_ipop = 6) %>% # optimizer options
+                # Generate the synthetic control
+                generate_control()
+```
+
+
+
+
+
+
+
+
+## Let's first look at the weights
+```{r sc4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+# If you get the first step above, the rest is easy
+smoking_out %>% plot_weights()
+# but what are the states!?
+```
+
+
+
+
+
+
+
+
+## Let's first look at the weights
+:::::::::::::: {.columns}
+::: {.column width="65%"}
+```{r sc4b, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+# Grab the weights
+weights <- smoking_out %>% grab_unit_weights()
+# merge in state names
+weights <- weights %>%
+            mutate(unit = as.numeric(unit)) %>%
+            left_join(df %>% select(unit = state, state_str) %>% distinct(), 
+                      by = "unit")
+# arrange by weight, in descending order
+weights %>% arrange(-weight)
+# note they sum to one
+print(paste0("Sum of weights: ", sum(weights$weight)))
+```
+:::
+::: {.column width="35%"}
+
+```{r sc4c, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+# Grab the weights
+weights <- smoking_out %>% grab_unit_weights()
+# merge in state names
+weights <- weights %>%
+            mutate(unit = as.numeric(unit)) %>%
+            left_join(df %>% select(unit = state, state_str) %>% distinct(), by = "unit")
+# arrange by weight, in descending order
+weights %>% arrange(-weight)
+print(paste0("Sum of weights: ", sum(weights$weight)))
+# note they sum to one
+```
+:::
+::::::::::::::
+
+
+
+
+
+
+
+
+## Another common test: balance
+
+```{r sc5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+balance <- smoking_out %>% grab_balance_table()
+colnames(balance) <- c("Variable", "California", "Synthetic California", "Placebo")
+kable(balance, 
+      align = "lccc", booktabs = TRUE, linesep = "", row.names = FALSE) %>%
+  column_spec(1,width = "2cm") %>%
+  column_spec(c(2:4),width = "2cm") %>%
+  kable_styling()
+```
+
+
+
+
+
+
+
+
+## Another common test: balance
+
+```{r sc5b, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+balance <- smoking_out %>% grab_balance_table()
+colnames(balance) <- c("Variable", "California", "Synthetic California", "Placebo")
+# let's round to make it prettier
+balance[,2:4] <- round(balance[,2:4], 3)
+kable(balance, 
+      align = "lccc", booktabs = TRUE, linesep = "", row.names = FALSE) %>%
+  column_spec(1,width = "2cm") %>%
+  column_spec(c(2:4),width = "2cm") %>%
+  kable_styling()
+```
+
+
+
+
+
+
+
+
+
+## The results
+```{r sc6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+gg1 <- smoking_out %>% plot_trends() # it's a ggplot object! So let's prettify it
+gg1 +
+  labs(x = "Year", y = "Cigarette sales (per capita)") +
+  theme(legend.position = c(0.2, 0.2))
+```
+
+
+
+
+
+
+
+
+
+## Just the difference
+```{r sc7, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+gg1 <- smoking_out %>% plot_differences()
+gg1 +
+  labs(x = "Year", y = "Difference in cigarette sales (per capita)")
+```
+
+
+
+
+
+
+
+
+
+## Inference in synthetic control
+\vfill
+- Okay... so is the result "big"?
+  - I know what you're really thinking: is the result *statistically significant*?
+\vfill
+- There are no standard errors, as such, in synthetic control
+\vfill
+- Instead, we use placebo tests
+  - We basically do the exact same thing *for every state in our data*
+  - If the effect is real, it should be much larger than any "effect" in other states, right?
+  - `tidysynth` makes this easy
+\vfill
+
+
+
+
+
+
+
+
+
+## Placebo tests
+```{r sc8, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+smoking_out %>% plot_placebos()
+```
+
+
+
+
+
+
+
+
+
+## Placebo tests
+\vfill
+- It turns out what Abadie et al. (2010) do is a little more complicated
+  - They look at mean squared prediction error (MSPE) for each state *before* and *after* the intervention
+  - They then calculate the ratio: $\frac{MSPE_{after}}{MSPE_{before}}$
+\vfill
+- We can rank states based on how much they *change* after the intervention!
+\vfill
+
+
+
+
+
+
+
+
+
+## Placebo tests
+```{r sc9, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+sig <- smoking_out %>% grab_significance()
+# merge in state names
+sig <- sig %>%
+        mutate(unit = as.numeric(unit_name)) %>%
+        left_join(df %>% select(unit = state, state_str) %>% distinct(), by = "unit")
+# let's replace "unit_name" with "state_str"
+sig$unit_name <- sig$state_str
+sig <- sig %>% select(-c("state_str", "z_score", "unit"))
+# round
+sig[,c(3,4,5,7)] <- round(sig[,c(3,4,5,7)], 3)
+kable(sig[1:10,],  # just first 10
+      align = "lcccccc", booktabs = TRUE, linesep = "", row.names = FALSE) %>%
+  column_spec(c(1,7),width = "2cm") %>%
+  column_spec(c(2:6),width = "1cm") %>%
+  kable_styling()
+```
+
+
+
+
+
+
+
+
 
 
 

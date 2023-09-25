@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  25 SEP 2023 14:17
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  25 SEP 2023 20:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1737,11 +1737,118 @@ t line 2786.
 File: week5and6_files/figure-beamer/sc1-1.png Graphic file (type png)
 <use week5and6_files/figure-beamer/sc1-1.png>
 Package pdftex.def Info: week5and6_files/figure-beamer/sc1-1.png  used on input
- line 2839.
+ line 2840.
 (pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
 [105
 
- <./week5and6_files/figure-beamer/sc1-1.png>]
+ <./week5and6_files/figure-beamer/sc1-1.png>] [106
+
+] [107
+
+] [108
+
+] [109
+
+] [110
+
+] [111
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [112
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [113
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [114
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb
+<week5and6_files/figure-beamer/sc4-1.png, id=913, 696.6025pt x 489.83pt>
+File: week5and6_files/figure-beamer/sc4-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc4-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc4-1.png  used on input
+ line 12.
+(pdftex.def)             Requested size: 258.91765pt x 182.06389pt.
+) [115
+
+ <./week5and6_files/figure-beamer/sc4-1.png>]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [116
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [117
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [118
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb
+<week5and6_files/figure-beamer/sc6-1.png, id=945, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/sc6-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc6-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc6-1.png  used on input
+ line 14.
+(pdftex.def)             Requested size: 258.91765pt x 179.78394pt.
+) [119
+
+ <./week5and6_files/figure-beamer/sc6-1.png>]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb
+<week5and6_files/figure-beamer/sc7-1.png, id=954, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/sc7-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc7-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc7-1.png  used on input
+ line 13.
+(pdftex.def)             Requested size: 258.91765pt x 179.78394pt.
+) [120
+
+ <./week5and6_files/figure-beamer/sc7-1.png>]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [121
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb
+<week5and6_files/figure-beamer/sc8-1.png, id=971, 712.6625pt x 495.8525pt>
+File: week5and6_files/figure-beamer/sc8-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc8-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc8-1.png  used on input
+ line 11.
+(pdftex.def)             Requested size: 258.91765pt x 180.1486pt.
+) [122
+
+ <./week5and6_files/figure-beamer/sc8-1.png>] [123
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb
+Overfull \hbox (1.25352pt too wide) in paragraph at lines 29--29
+ []|\T1/lmss/m/n/6 (-20) mspe_ratio| 
+ []
+
+) [124
+
+]
 \tf@nav=\write6
 \openout6 = `week5and6.nav'.
 
@@ -1753,10 +1860,10 @@ Package pdftex.def Info: week5and6_files/figure-beamer/sc1-1.png  used on input
 
 (./week5and6.aux) ) 
 Here is how much of TeX's memory you used:
- 30337 strings out of 478268
- 594168 string characters out of 5846347
- 939718 words of memory out of 5000000
- 47278 multiletter control sequences out of 15000+600000
+ 30500 strings out of 478268
+ 597603 string characters out of 5846347
+ 951098 words of memory out of 5000000
+ 47356 multiletter control sequences out of 15000+600000
  586221 words of font info for 190 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,16n,122p,1006b,793s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1785,10 +1892,10 @@ fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/
 local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></
 usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pf
 b>
-Output written on week5and6.pdf (105 pages, 4305889 bytes).
+Output written on week5and6.pdf (124 pages, 4487169 bytes).
 PDF statistics:
- 1036 PDF objects out of 1200 (max. 8388607)
- 826 compressed objects within 9 object streams
- 321 named destinations out of 1000 (max. 500000)
- 69836 words of extra memory for PDF output out of 74296 (max. 10000000)
+ 1194 PDF objects out of 1200 (max. 8388607)
+ 956 compressed objects within 10 object streams
+ 378 named destinations out of 1000 (max. 500000)
+ 69856 words of extra memory for PDF output out of 74296 (max. 10000000)
 
