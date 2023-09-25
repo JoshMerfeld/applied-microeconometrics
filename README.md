@@ -47,6 +47,8 @@ You can find the slides (and any data we will be using) for each week under thei
   - You can find the data for the second class in the week 1 folder or by clicking [here](weeks/week1/data.csv) (you can download the csv in the upper-right-hand corner).
 - Week 2: You can find the slides for the the week [here](weeks/week2/week2.pdf).
 - Week 3: You can find the slides for the the week [here](weeks/week3/week3.pdf).
+- Week 4: You can find the slides for the the week [here](weeks/week4/week4.pdf).
+- Weeks 5 and 6: You can find the slides for the the two weeks [here](weeks/week5and6/week5and6.pdf).
 
 ## Assignments
 
