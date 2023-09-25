@@ -1,0 +1,1855 @@
+---
+title:  |
+    | Microeconometrics (Causal Inference)
+    | Week 5 - Differences-in-differences I
+author:
+  |
+    | Joshua D. Merfeld
+    | KDI School of Public Policy and Management
+date: "`r Sys.Date()`"
+
+# Output type and options
+output: 
+  beamer_presentation:
+    theme: Montpellier
+classoption: "aspectratio=169"
+
+# This includes latex arguments
+header-includes:
+  - \AtBeginDocument{\title[Week 5 - DiD I]{Microeconometrics (Causal Inference) \\ Week 5 - Differences-in-differences I}}
+  - \AtBeginDocument{\author[Josh Merfeld - KDI School]{Joshua D. Merfeld \\ KDI School of Public Policy and Management}}
+  - \input{header.tex}
+  - \usepackage[flushleft]{threeparttable}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+
+
+library(tidyverse)
+library(kableExtra)
+library(fixest)
+library(ggpubr)
+library(RColorBrewer)
+library(haven)
+library(fwildclusterboot)
+library(modelsummary)
+
+ckdata <- read_csv("cardkruegerlong.csv")
+
+```
+
+
+
+# Introduction
+
+## What are we doing today?
+\vfill
+- Canonical differences-in-differences
+  - Inference
+  - Wild cluster bootstrap
+ \vfill
+- Fixed effects vs. random effects
+\vfill
+- Bias in two-way fixed effects
+\vfill
+
+
+
+# Differences-in-differences
+
+## Differences-in-differences... in the 1800s?
+\center
+	\includegraphics[width=0.4\columnwidth]{assets/broadstreet}
+
+## Differences-in-differences... in the 1800s? (from Cunningham's CI)
+\center
+	\includegraphics[width=0.6\columnwidth]{assets/snowmap}
+
+
+
+## Differences-in-differences
+
+- More commonly referred to as "DID" or "diff-in-diff"
+  - Classic reference: Card and Krueger (1994)
+
+- Most common method, likely because data requirements are least stringent
+
+- Example in _Mostly Harmless_: offering credit to banks during the Great Depression (Richardson and Troost, 2009)
+  - Set up: Two different federal reserve banks lent to neighborhood banks in Mississippi
+  - Atlanta fed favored lending to banks in trouble
+  - St. Louis fed favored the exact opposite
+
+
+
+
+
+## Richardson and Troost (2009) - Mississippi dividing line
+\vspace{-1mm}
+\center
+	\includegraphics[width=0.45\columnwidth]{assets/mississippi1}
+
+
+
+
+
+## Did the policy of extra lending save banks?
+
+- Basic idea: compare what happened to Atlanta fed banks (southern Mississippi) with St. Louis fed banks (northern Mississippi)
+
+- Could compare after lending, but what's the assumption here? \pause
+
+- Assumption: same levels before intervention (very strict assumption)
+
+
+
+
+
+## In fact, pre-intervention levels are different!
+
+\center
+	\includegraphics[width=\columnwidth]{assets/mississippi4}
+
+
+
+
+
+## Did the policy of extra lending save banks?
+
+- Instead, compare _changes_ from before to after treatment
+
+- Assumption: parallel trends
+
+- If valid, the fact the districts were different prior to the treatment isn't a problem
+
+
+
+
+
+## "Parallel trends"
+\vspace{-2mm}
+\center
+	\includegraphics[width=0.55\columnwidth]{assets/dd2}
+
+
+
+
+
+## Why is it "differences in differences"?
+
+- Difference 1: St. Louis post minus St. Louis pre
+
+- Difference 2: Atlanta post minus Atlanta pre
+
+- Difference-in-differences: Difference 2 minus difference 1
+
+
+
+
+
+## "Differences in differences" graphically
+\vspace{-1mm}
+\center
+	\includegraphics[width=0.55\columnwidth]{assets/dd1}
+
+
+
+
+
+## Parallel trends assumption
+
+- The key assumption in differences-in-differences is the parallel trends assumption
+  - _If the treated group had not been treated, it would have changed by the same amount ("had the same trend") as the comparison group._
+
+- This is a counterfactual assumption: We cannot explicitly test it
+
+- What can we do instead? \pause
+  - We can test trends _before_ treatment
+  - Or in the case of this article, _after_ treatment!
+
+
+
+
+
+## Richardson and Troost (2009) - Testing the assumption
+
+\center
+	\includegraphics[width=0.7\columnwidth]{assets/mississippi2}
+
+
+
+
+
+## Estimating diff-in-diff empirically
+
+- Can be estimated in a straightforward regression:
+\begin{gather} Y_{it} = \beta_0 + \beta_1 TREAT_i + \beta_2 POST_t + \beta_3 (POST_t \times TREAT_i) + \varepsilon_{it} \end{gather}
+\pause
+  - $\beta_0$: pre mean for the comparison group
+  - $\beta_1$: difference in the pre mean between the treated and untreated group
+  - $\beta_2$: difference in means between the pre and post period for the comparison group
+  - $\beta_3$: difference-in-differences estimate
+    - This is the difference in the change from pre to post for the treated group relative to the comparison group
+
+
+
+
+
+## Card and Krueger (1994) - Minimum wage and employment
+```{r dd1, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+ckdata <- read_csv("cardkruegerlong.csv")
+head(ckdata)
+# note that state = 1 for NJ and 0 for PA.
+# also note that post = 1 for 1993 and 0 for 1992
+# NJ is treated group, so state = 1 means treat = 1
+
+# looks like fulltime is a character! let's try to make it numeric
+ckdata$fulltime_num <- as.numeric(ckdata$fulltime)
+ckdata$parttime_num <- as.numeric(ckdata$parttime)
+```
+
+
+
+
+
+## Card and Krueger (1994) - Minimum wage and employment
+```{r dd2, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+# said there are NAs in the data, so let's see where they are
+ckdata %>% filter(is.na(fulltime_num)) %>% select(fulltime, fulltime_num)
+# ah, so they are .! those are missing values in Stata, so leave as missing.
+```
+
+
+
+
+
+## Card and Krueger (1994) - Minimum wage and employment
+```{r dd3, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(fulltime_num ~ state + post + state:post, data = ckdata, vcov = "HC1")
+summary(reg1)
+```
+
+
+
+
+
+## Card and Krueger (1994) - Minimum wage and employment
+```{r dd4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(fulltime_num ~ state + post + state:post, data = ckdata, vcov = "HC1")
+reg2 <- feols(parttime_num ~ state + post + state:post, data = ckdata, vcov = "HC1")
+table <- etable(reg1, reg2,
+                # standard errors, digits, fit statistics, put SE below coefficients (the norm)
+                vcov = "HC1", digits = 3, fitstat = "", se.below = TRUE, 
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                # rename the variables
+                dict = c("Constant" = "Intercept", "state" = "Treat", "post" = "Post", "state:post" = "Treat x Post"))
+table
+# drop some rows
+table <- table[-c(1:2, 11:nrow(table)),]
+# rename columns
+colnames(table) <- c("", "Full-time", "Part-time")
+```
+
+
+
+
+
+## Card and Krueger (1994) - Minimum wage and employment
+```{r dd5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+kable(table, 
+      align = "lcc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+  column_spec(1,width = "2cm") %>%
+  column_spec(c(2:3),width = "1.5cm") %>%
+  kable_styling() %>%
+  footnote("* p < 0.1, ** p < 0.05, *** p < 0.01.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            ) %>%
+  footnote("Note: Robust standard errors in parentheses.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            )
+```
+
+
+
+
+
+## Card and Krueger (1994) - Poisson regression!
+```{r dd6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feglm(fulltime_num ~ state + post + state:post, data = ckdata, vcov = "HC1", family = "poisson")
+reg2 <- feglm(parttime_num ~ state + post + state:post, data = ckdata, vcov = "HC1", family = "poisson")
+table <- etable(reg1, reg2,
+                # standard errors, digits, fit statistics, put SE below coefficients (the norm)
+                vcov = "HC1", digits = 3, fitstat = "", se.below = TRUE, 
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                # rename the variables
+                dict = c("Constant" = "Intercept", "state" = "Treat", "post" = "Post", "state:post" = "Treat x Post"))
+table
+# drop some rows
+table <- table[-c(1:2, 11:nrow(table)),]
+# rename columns
+colnames(table) <- c("", "Full-time", "Part-time")
+```
+
+
+
+
+
+## Card and Krueger (1994) - Minimum wage and employment
+```{r dd7, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+kable(table, caption = "Poisson regression", # adding a caption
+      align = "lcc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+  column_spec(1,width = "2cm") %>%
+  column_spec(c(2:3),width = "1.5cm") %>%
+  kable_styling() %>%
+  footnote("* p < 0.1, ** p < 0.05, *** p < 0.01.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            ) %>%
+  footnote("Note: Robust standard errors in parentheses.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            )
+```
+
+
+
+
+
+
+
+## Estimating diff-in-diff empirically - adding controls
+
+- Can add control variables
+\begin{gather} Y_{it} = \beta_0 + \beta_1 TREAT_i + \beta_2 POST_t + \\
+                \beta_3 (POST_t \times TREAT_i) + X_{it} + \varepsilon_{it} \end{gather}
+
+- Adding controls can help control for differing trends ("conditional" parallel trends)
+
+- Note: the interpretation of $\beta_0$ is no longer the same; others stay the same
+
+
+
+
+
+
+
+## Standard errors in differences-in-differences
+\vfill
+- Card and Krueger did not cluster standard errors
+  - In fact, that would have been difficult because they really only had two "clusters"!
+  -  But their robust standard errors are likely underestimated due to the clustering
+\vfill
+- Classic reference: Bertrand, Duflo, and Mullainathan (2004)
+  - "How Much Should We Trust Differences-in-Differences Estimates?"
+\vfill
+
+
+
+
+
+
+
+## Standard errors in differences-in-differences
+\vfill
+- Bertrand, Duflo, and Mullainathan (2004) suggest three possibilities:
+  1. Cluster at the group level
+  2. Block bootstrap (not going to discuss)
+  3. Aggregating data into one pre and one post period (event studies later)
+\vfill
+- Let's go through these
+\vfill
+
+
+
+
+
+
+
+## Clustering
+\vfill
+- The most common approach: cluster standard errors
+\vfill
+- Cameron, Gelbach, and Miller (2008) show that this is problematic with few clusters
+  - "Bootstrap-based improvements for inference with clustered errors"
+\vfill
+- The authors look at many possible approaches and find that the "wild cluster bootstrap" seems to perform best, on average
+\vfill
+
+
+
+
+
+
+
+## Wild cluster bootstrap
+\vfill
+- The wild cluster bootstrap is a "non-parametric" bootstrap
+  - I'll do the non-cluster as an example. Software makes this easy!
+\vfill
+- Suppose we are interested in the following regression:
+$$ y_i = \beta_0 + \beta_1 x_i + \varepsilon_i $$
+
+- We want to test whether $\beta_1 = 0$ and we have relatively few clusters (say between 5 and 30)
+\vfill
+
+
+
+
+
+
+
+## Wild cluster bootstrap
+
+\begin{gather}\label{wcreg} y_i = \beta_0 + \beta_1 x_i + \varepsilon_i \end{gather}
+
+1. Estimate above regression and obtain $\hat{\beta}$, $\hat{\varepsilon}$
+
+2. Impose the null hypothesis ($\beta_1 = 0$) and estimate the restricted regression:
+\begin{gather}\label{wcregres} \tilde{y}_i = \tilde{\beta}_0 + \tilde{\varepsilon}_i \end{gather}
+
+
+
+
+
+
+
+## Wild cluster bootstrap
+
+3. Bootstrap replications:
+  - Use equation \autoref{wcregres} to generate $\tilde{y}_i^b$, where $\tilde{y}_i^b = \tilde{\beta}_0^{b} + \tilde{\varepsilon}_i^{b}$
+    - Rademacher weights: The randomness comes from either adding $\hat{\varepsilon}_i$ or $-\hat{\varepsilon}_i$ with equal probability
+  - Estimate:
+\begin{gather}\label{wcregB} \tilde{y}_i^{b} = \tilde{\beta}_0^{b*} + \tilde{\beta}_1^{b*}x_i + \tilde{\varepsilon}_i^{b*} \end{gather}
+
+  - Calculate the t-statistic for the bootstrap replication:
+\begin{gather}\label{wctstat} t^{b*} = \frac{\tilde{\beta}_1^{b*}}{\sqrt{\tilde{V}^{b*}}} \end{gather}
+
+
+
+
+
+
+
+## Wild cluster bootstrap
+Two-tailed test:
+
+- Reject the null hypothesis if 
+  $$|t^{b*}| > |t^{*}|\;\mathrm{for}\;b = 1, \dots, B,$$ 
+where $t^{*}$ is the t-statistic from the \textit{original regression}.
+
+- P-value across $B$ bootstrap samples is:
+  \begin{gather}\frac{1}{B}\sum_{b=1}^B \mathbb{I}(|t^{b*}| > |t^{*}|),\end{gather}
+
+where $\mathbb{I}$ is the indicator function.
+
+
+
+
+
+
+
+## Implementing WCB in `R`
+- Thankfully there's a package that allows us to do this!
+  - `fwildclusterboot` (Friedrich, 2019)
+
+- This package works with `fixest` objects!
+
+- Let's use the `castle.dta` data in the GitHub repo to test this
+
+
+
+
+
+
+
+## Implementing WCB in `R`
+
+```{r wcb1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(haven) # to load .dta files
+df <- read_dta("castle.dta")
+head(df)
+# key variables: state, year, cdl ("treatment"), and homicide_c (outcome)
+# homicide_c to rate (per 100,000 people)
+df$homicide_c <- (df$homicide_c/df$population)*100000
+# and log
+df$homicide_c <- log(df$homicide_c)
+```
+
+
+
+
+
+
+
+## Implementing WCB in `R`
+
+```{r wcb2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# Note: this is not differences-in-differences. 
+# Just an example of the wild cluster bootstrap with fwildclusterboot
+reg1 <- feols(homicide_c ~ cdl, data = df, cluster = "state")
+summary(reg1)
+```
+
+
+
+
+
+
+
+## Implementing WCB in `R`
+
+```{r wcb3, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(homicide_c ~ cdl, data = df, cluster = "state")
+boot_reg <- boottest(
+                    reg1, 
+                    clustid = c("state"), 
+                    param = "cdl", 
+                    B = 10000,
+                    type = "rademacher" # default weighting, by the way
+                    )
+boot_reg
+```
+
+
+
+
+
+
+
+## Add controls
+
+```{r wcb4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = "state")
+reg1
+boot_reg <- boottest(
+                    reg1, 
+                    clustid = c("state"), 
+                    param = "cdl", 
+                    B = 10000,
+                    type = "rademacher" # default weighting, by the way
+                    )
+boot_reg
+```
+
+
+
+
+
+
+
+## Multi-way clustering, too!
+
+```{r wcb5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = c("state", "year"))
+reg1
+boot_reg <- boottest(
+                    reg1, 
+                    clustid = c("state"), 
+                    param = "cdl", 
+                    B = 10000,
+                    type = "rademacher" # default weighting, by the way
+                    )
+boot_reg
+```
+
+
+
+
+
+
+
+## Finally, Webb weights (Webb, 2023) -- but using Rademacher weights is the norm
+
+```{r wcb6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = c("state", "year"))
+reg1
+boot_reg <- boottest(
+                    reg1, 
+                    clustid = c("state"), 
+                    param = "cdl", 
+                    B = 10000,
+                    type = "webb"
+                    )
+boot_reg
+```
+
+
+
+
+
+
+
+## Some thoughts on clustering
+\vfill
+- If you have more than ~30 clusters, you can probably just cluster at the group level
+  - We see that the standard errors are very similar in the state examples above
+\vfill
+- Otherwise, consider using an alternative approach
+  - Also important when clusters have wildly different sample sizes, or where the treated clusters are relatively few (Moulton, 1990)
+\vfill
+- Alternative approach with only one treated cluster: randomization inference
+\vfill 
+
+
+
+
+
+
+
+## Randomization inference in Buchmueller, DiNardo, and Valletta (2011)
+- They are interested in the change in insurance coverage in Hawaii relative to other states:
+\begin{gather} Y_{ist}=X_{ist}\beta^t+Z_{st}\gamma^t+H_{it}\delta^t+\phi_{st}+\eta_{it} \end{gather}
+
+- They calculate the change as: $\Delta=\delta^1-\delta^0$
+
+- The idea: see where the Hawaii effect sits in the distribution of the same effect across *all US states*
+  - "Placebo" effects
+  - Note that this is not true "randomization" inference
+    - I'll show you an example with one of my papers in a minute
+
+
+
+
+
+
+
+## Randomization inference in Buchmueller, DiNardo, and Valletta (2011)
+\center
+	\includegraphics[width=\columnwidth]{assets/randomization}
+
+
+
+
+
+
+
+## Randomization inference in Merfeld (2023)
+\vfill
+- I'm interested in the effects of pollution on agricultural productivity in India
+\vfill
+- I have villages, which are nested within districts
+  - I cluster on villages
+\vfill
+- Alternative: randomly assign pollution to villages *within the same district* and compare my effects to the distribution of effects
+\vfill
+
+
+
+
+
+
+
+## Randomization inference in Merfeld (2023)
+\center
+	\includegraphics[width=0.25\columnwidth]{assets/randomization_merfeld}
+
+
+
+
+
+
+
+## Placebo tests for the parallel trends assumption
+\vfill
+- Above, we looked at the parallel trends assumption graphically in Richardson and Troost (2009)
+\vfill
+- Another common way is to look at *leads* of treatment
+  - In my paper, for example, pollution next year should not affect agricultural productivity this year
+\vfill
+
+
+
+
+
+
+
+## Leads of pollution in Merfeld (2023)
+```{r yieldtableleads, include = TRUE, echo = FALSE, message = FALSE, warning = FALSE}
+yield3ivmain_lead <- readRDS("assets/yield3ivmain_lead.rds")
+# Table
+colnames(yield3ivmain_lead) <- c("(1)", "(2)")
+rownames(yield3ivmain_lead) <- c("particulate matter (one-year lead)", "",
+                                  "particulate matter (two-year lead)", "",
+                                  "weather (expanded)",
+                                  "fixed effects:", "village", "year",
+                                  "F", 
+                                  "observations")
+kable(
+      yield3ivmain_lead,
+      align = "cc", booktabs = TRUE, linesep = ""
+      ) %>%
+  footnote(
+           "Note: Standard errors are in parentheses and are clustered at the village level. * p<0.10 ** p<0.05 *** p<0.01", 
+            general_title = "",
+            threeparttable = TRUE,
+            footnote_as_chunk = TRUE
+            ) %>%
+  column_spec(1, width = "7.4cm") %>%
+  column_spec(c(2:3),width = "2cm") %>%
+  row_spec(c(8), hline_after = TRUE) %>%
+  row_spec(c(6), bold = TRUE) %>%
+  kable_classic_2()
+
+```
+
+
+
+
+
+
+
+## Convincing the reader is like writing a good story
+\vfill
+- When you're writing a diff-in-diff paper, think about the possible threats to your identification strategy
+\vfill
+- Then, think about how you can convince the reader that your strategy is valid
+  - Use placebos: is there somewhere we shouldn't expect an effect?
+  - In the case of my paper, the leads convinced some seminar participants!
+\vfill
+- You can likewise think of heterogeneity we would *expect* to see, and test for that!
+\vfill
+
+
+
+
+
+
+# Fixed and random effects
+
+## Before moving on to some of the new literature...
+\vfill
+- Let's talk about fixed and random effects
+  - Fixed effects will be important for the upcoming discussions
+\vfill
+- Some nice (but old) slides from Oscar Tores-Reyna [\textcolor{kdisgreen}{here}](https://www.princeton.edu/~otorres/Panel101.pdf).
+\vfill
+
+
+
+
+
+
+## Panel data
+\vfill
+- Both fixed and random effects are used in panel data
+  - Panel data: data with multiple observations for each unit
+  - Examples: individuals, firms, countries, etc.
+\vfill
+- In our previous example of homicide and castle doctrine laws: unit is the state!
+\vfill
+
+
+
+
+
+
+## Panel data
+```{r panel1, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+df <- read_dta("castle.dta")
+# homicide_c to rate
+df$homicide_c <- (df$homicide_c/df$population)*1000
+# and log
+df$homicide_c <- log(df$homicide_c)
+ggplot(df) + 
+  geom_line(aes(x = year, y = homicide_c, color = state)) +
+  scale_color_viridis_d() +
+  theme_minimal() +
+  theme(legend.position = "none") +
+  labs(x = "Year", y = "Homicide rate (log)", title = "Homicide rate by state and year") +
+  # and add x labels for each year
+  scale_x_continuous(breaks = c(2000:2010))
+```
+
+
+
+
+
+
+## Fixed effects
+\vfill
+- Fixed effects are a way to control for omitted variables
+  - However there is a key assumption: the omitted variable is time-invariant
+\vfill
+- Fixed effects are also called "within" effects
+  - Why? Because we are looking at the variation within each unit
+\vfill
+- The regression is of the form:
+\begin{gather} y_{it} = \alpha_i + \beta x_{it} + \varepsilon_{it}, \end{gather}
+
+where $\alpha_i$ is the fixed effect for unit $i$. Note the subscript! No t!
+\vfill
+
+
+
+
+
+
+## Fixed effects, empirically
+\vfill
+- Empirically, what are fixed effects doing?
+  - They are subtracting the mean of **each unit** from the outcome variable
+\vfill
+- In a regression, we add a dummy variable for each unit
+  - We have to leave out one dummy variable, though
+  - Software will do this for us!
+  - Note that the intercept is usually meaningless in this case
+\vfill
+- Cannot include time-invariant variables in the regression
+  - Why? Because the fixed effect will absorb them!
+\vfill
+
+
+
+
+
+
+## Fixed effects with feols
+- `feols` makes this easy on us. Let's return to our previous example.
+
+```{r fe1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = c("state"))
+reg2 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state, data = df, cluster = c("state"))
+etable(reg1, reg2,
+        # standard errors, digits, fit statistics, put SE below coefficients (the norm)
+        digits = 3, fitstat = "", se.below = TRUE, 
+        # change significance codes to the norm
+        signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1))
+```
+
+
+
+
+
+
+## Just a quick note: wild cluster bootstrap still works!
+```{r fe2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# need to use a numeric variable for the bootstrap. sid is in our data, thankfully.
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | sid, data = df, cluster = c("sid"))
+reg1
+boot_reg <- boottest(
+                    reg1, 
+                    clustid = c("sid"), # note that it requires a numeric variable!
+                    param = "cdl", 
+                    B = 10000
+                    )
+boot_reg
+```
+
+
+
+
+
+
+## Fixed effects are the norm with "differences-in-differences"
+\vfill
+- It's not quite the same as the canonical differences-in-differences model
+\vfill
+- We redefine treatment for the same unit
+  - Before treatment, the value is zero, and after it is One
+  - Note that this is different from the canonical model, where the value is zero for the comparison group and one for the treated group
+\vfill
+- In fact, the regression we just saw is a differences-in-differences model of this form!
+  - In practice, we often tend to add time fixed effects, too:
+\begin{gather} y_{it} = \alpha_i + \delta_{t} + \beta x_{it} + \varepsilon_{it}, \end{gather}
+\vfill
+
+
+
+
+
+
+## The "effect" of castle doctrine laws, two-way fixed effects
+```{r fe3, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state, data = df, cluster = c("state"))
+reg2 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state + year, data = df, cluster = c("state"))
+etable(reg1, reg2,
+        # standard errors, digits, fit statistics, put SE below coefficients (the norm)
+        digits = 3, fitstat = "", se.below = TRUE, 
+        # change significance codes to the norm
+        signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1))
+```
+
+
+
+
+
+
+## Random effects
+\vfill
+- Before turning to recent issues discovered with the two-way fixed effects estimator, let's talk about random effects
+\vfill
+- Random effects are a way to capture the heterogeneity across units
+  - The key is that this heterogeneity is *random* and uncorrelated with the predictors in the model
+\vfill
+- This is really a way to capture the *variance* across units
+  - In practice, this absorbs some of the variance, increasing precision (but at the cost of the assumption above)
+\vfill
+
+
+
+
+
+
+## Random effects in `R`
+```{r fe4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(lme4)
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = "state")
+# note iid standard errors for simplicity for random effects 
+# (can use other packages to change the vcov calculation if we think assumptions aren't exactly true...)
+reg2 <- lmer(homicide_c ~ cdl + log(population) + log(income) + unemployrt + (1 | state), data = df) 
+reg3 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state, data = df, cluster = "state")
+modelsummary(list("None" = reg1, "RE" = reg2, "FE" = reg3), gof_omit = ".*", 
+              output = "markdown", coef_omit = c(-2,-3,-4,-5),
+              coef_rename = c("cdl" = "Castle laws", "log(population)" = "Population (log)", 
+                              "log(income)" = "Income (log)", "unemployrt" = "Unemployment rate"))
+```
+
+
+
+
+
+
+## Random effects
+\vfill
+Some things about random effects relative to vanilla OLS (not fixed effects):
+\vfill
+
+- The random effects estimator is asymptotically more efficient than OLS if there is unit-level heterogeneity: $\mathbb{E}(V_{RE})<\mathbb{E}(V_{OLS})$
+  
+  - In practice with finite samples, not necessarily
+\vfill
+
+- In expectation, coefficients are the same: $\mathbb{E}(\beta_{RE}) = \mathbb{E}(\beta_{OLS})$
+  
+  - Random effects is estimated using (feasible) generalized least squares, which essentially reweights the observations
+\vfill
+
+
+
+
+
+
+# Bias in TWFE
+
+## Bias in TWFE
+\vfill
+- Recently, a number of papers have shown that the two-way fixed effects estimator can be... problematic
+\vfill
+- We have been discussing differences-in-differences with TWFE of the following form:
+\begin{gather} y_{it} = \alpha_i + \delta_{t} + \beta D_{it} + \gamma x_{it} + \varepsilon_{it}, \end{gather}
+where $D_{it}$ is a dummy variable for treatment.
+\vfill
+
+- If there are only two time periods and one group receives treatment in only one period, this is not a problem!
+  - The Card and Krueger setup is not an issue with TWFE
+\vfill
+
+
+
+
+
+## TWFE and differential treatment timing
+:::::::::::::: {.columns}
+::: {.column width="65%"}
+\vspace{1cm}
+- The real issue is when treatment is staggered across time
+  - For example, if treatment is introduced in different years for different states
+\vspace{1cm}
+- It turns out this is the case with the castle doctrine law!
+\vspace{1cm}
+:::
+::: {.column width="35%"}
+\vspace{1cm}
+```{r twfe, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+sums <- df %>% group_by(year) %>%
+        summarize(treated = mean(cdl==1))
+kable(sums,
+      align = "lc", booktabs = TRUE, linesep = "") %>%
+      kable_classic_2()
+```
+:::
+::::::::::::::
+
+
+
+
+
+## Goodman-Bacon (2021), *Journal of Econometrics*
+\vfill
+- Goodman-Bacon lays out the problem (as does Scott in *CI*)
+\vfill
+- Suppose we have three groups and three time periods
+  - Group 1 is treated before period 2 (Goodman-Bacon calls this group *k*)
+  - Group 2 is treated before period 3 (Goodman-Bacon calls this group *l*)
+  - Group 3 is never treated (Goodman-Bacon calls this group *U*)
+\vfill
+- If we are willing to assume treatment effect *homogeneity*, then we have no problems!
+  - Are you willing to assume this?
+\vfill
+
+
+
+
+
+## Goodman-Bacon (2021)
+\vfill
+- Goodman-Bacon shows that the overall treatment effect is a *weighted average* of treatment effects from every possible 2x2 comparison where treatment status doesn't change:
+  - Group 1 vs group 2
+  - Group 1 vs group 3
+  - Group 2 vs group 1
+  - Group 2 vs group 3
+\vfill
+- These weights are a function of two things:
+  - Group sizes
+  - Variance in treatment
+\vfill
+
+
+
+
+
+## Goodman-Bacon (2021)
+\center
+  \includegraphics[width=0.7\columnwidth]{assets/bacon}
+
+
+
+
+
+## Goodman-Bacon (2021)
+\vfill
+- He shows there are three relevant comparisons:
+\begin{align} \hat{\beta}_{kU}^{2x2}&\equiv \left(\bar{y}_k^{POST(k)}-\bar{y}_k^{PRE(k)}\right) - \left(\bar{y}_U^{POST(k)}-\bar{y}_U^{PRE(k)}\right) \\
+              \hat{\beta}_{kl}^{2x2,k}&\equiv \left(\bar{y}_k^{MID(k,l)}-\bar{y}_k^{PRE(k)}\right) - \left(\bar{y}_l^{MID(k,l)}-\bar{y}_l^{PRE(k)}\right) \\
+              \hat{\beta}_{kl}^{2x2,l}&\equiv \left(\bar{y}_l^{POST(l)}-\bar{y}_l^{MID(k,l)}\right) - \left(\bar{y}_k^{POST(l)}-\bar{y}_k^{MID(k,l)}\right), \end{align}
+where $k$ and $l$ are treated groups, and $U$ is the untreated group.
+\vfill
+
+
+
+
+
+## Goodman-Bacon (2021)
+\vfill
+- The DD estimator is a weighted average of all these comparisons.
+\vfill
+- Generalizing to $K$ time periods:
+\begin{gather} \hat{\beta}^{DD}=\sum_{k\neq U}s_{kU}\hat{\beta}_{kU}^{2x2}+\sum_{k\neq U}\sum_{l>k}\left[s_{kl}^k\hat{\beta}_{kl}^{2x2,k}+s_{kl}^l\hat{\beta}_{kl}^{2x2,l} \right], \end{gather}
+where $s_{ij}$ is the weight for the comparison between groups $i$ and $j$.
+\vfill
+
+
+
+
+
+## Goodman-Bacon (2021)
+The weights:
+\begin{align} s_{kU}&=\frac{(n_k+n_U)^2n_{kU}(1-n_{kU})\bar{D}_k(1-\bar{D}_k)}{\hat{V}^D} \\
+              s_{kl}^k&=\frac{\left((n_k+n_l)(1-\bar{D}_l)\right)^2n_{kl}(1-n_{kl})\frac{\bar{D}_k-\bar{D}_l}{1-\bar{D}_l}\frac{1-\bar{D}_k}{1-\bar{D}_k}}{\hat{V}^D} \\
+              s_{kl}^l&=\frac{\left((n_k+n_l)(\bar{D}_k)\right)^2n_{kl}(1-n_{kl})\frac{\bar{D}_l}{\bar{D}_k}\frac{\bar{D}_k-\bar{D}_l}{\bar{D}_k}}{\hat{V}^D} \end{align}
+
+- Note how the variance of treatment affects the weights! "Changing the number or spacing of time periods changes the weights" (Goodman-Bacon).
+  - Even if the treatment effect is constant, changing the length of the panel can change the weighted average if different groups have different treatment effects.
+
+
+
+
+
+## de Chaisemartin and D’Haultfœuille (2020), *American Economic Review*
+\vfill
+- de Chaisemartin and D’Haultfœuille (2020) more explicitly show the problem with weights.
+\vfill
+- Let $w_{g,t}$ represent the weight for group $g$ at time $t$, $\Delta_{g,t}$ represent the average treatment effect for the same, and $N_1$ represent the total number of treated units at the time:
+\begin{gather} \beta_{FE} = \mathbb{E}\left[\sum_{(g,t):D_{g,t}=1}\frac{N_{g,t}}{N_1}w_{g,t}\Delta_{g,t}\right] \end{gather}
+
+- The fixed effect estimator is a weighted average of these treatment effects.
+  - But how do we get the weights?
+\vfill
+
+
+
+
+
+## de Chaisemartin and D’Haultfœuille (2020)
+\vfill
+- Let $D_{g,t}$ represent treatment status of group $g$ at time $t$:
+\begin{gather} D_{g,t} = \alpha + \gamma_g + \lambda_t + \varepsilon_{g,t}, \end{gather}
+where $\gamma_g$ is the group fixed effect and $\lambda_t$ is the time fixed effect.
+\vfill
+
+- It turns out that the average residual *is not zero*, so let's rescale it by its mean:
+\begin{gather} w_{g,t} = \frac{\varepsilon_{g,t}}{\sum_{(g,t):D_{g,t}=1}\frac{N_{g,t}}{N_1}\varepsilon_{g,t}} \end{gather}
+
+- Since $\varepsilon_{g,t}$ can be positive or negative, this means that the weights can be negative!
+\vfill
+
+
+
+
+
+## de Chaisemartin and D’Haultfœuille (2020)
+\vfill
+- The problem is an *extrapolation* problem
+  - Essentially, "the regression predicts a treatment probability larger than the one in that cell" (de Chaisemartin and D’Haultfœuille)
+\vfill
+- Note that if the treatment effect is constant, then the weighted average is always the same, no matter the weights
+  - But if the treatment effect is not constant, then the weighted average can be different from the true average
+\vfill
+
+
+
+
+
+## Back to Bacon-Goodman
+\vfill
+- Let's return to Bacon-Goodman's formulation
+\vfill
+- What happens if we have a "control" group in a later period that is treated in an earlier period?
+\begin{align} \begin{split} \hat{\delta}_{lk}^{2x2} = &ATT_{l,POST(l)} \\
+                                                    + &\Delta Y_l^0(Post(l), MID) - \Delta Y_k^0(Post(l), MID) \\
+                                                    - &(ATT_k(Post) - ATT_k(Mid)) \end{split} \end{align}
+
+- The first line is *what we want*
+- The second line is parallel-trends bias
+- The third line is bias due to heterogeneity in time!
+  - Even with parallel trends, this third line can cause deviations from the true ATT
+
+
+
+
+
+
+## Enough math, what to do?
+\vfill
+- That's enough math. Let's talk about what we can actually do!
+\vfill
+- Let's go back to the `castle.dta` dataset
+  - Cheng and Hoekstra (2013), *Journal of Human Resources*
+\vfill
+- Let's use the information in Cunningham's book
+\vfill
+
+
+
+
+
+
+## Cheng and Hoekstra (2013), *Journal of Human Resources*
+\vfill
+- The "castle doctrine" laws essentially make lethal force "more" legal
+\vfill
+- Recall the changes we made: turn homicide into a rate (per 100,000 people) and take the log:
+\vfill
+```{r ch1, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(haven) # to load .dta files
+df <- read_dta("castle.dta")
+head(df)
+# key variables: state, year, cdl ("treatment"), and homicide_c (outcome)
+# homicide_c to rate (per 100,000 people)
+df$homicide_c <- (df$homicide_c/df$population)*100000
+# and log
+df$homicide_c <- log(df$homicide_c)
+```
+\vfill
+
+
+
+
+
+
+## Cheng and Hoekstra (2013), *Journal of Human Resources*
+\vfill
+- I made some changes to the data, as well
+  - I've turned the "treatment" variable (`cdl`) into a dummy variable
+\vfill
+- We have the issue we ran into above: 
+  - Treatment is staggered across time
+  - This means that some already-treated units will serve as controls for later-treated units!
+\vfill
+
+
+
+
+
+
+## Treatment timing
+```{r ch2, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# where is the treatment?
+df_year <- df %>%
+            group_by(year) %>%
+            summarize(treated = mean(cdl))
+ggplot(df_year) +
+  geom_line(aes(x = year, y = treated)) +
+  # change x axis to be every year
+  scale_x_continuous(breaks = c(2000:2010)) +
+  theme_minimal()
+```
+
+
+
+
+
+
+## Treatment timing by individual state
+```{r ch3, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+
+ggplot(df) +
+  geom_line(aes(x = year, y = cdl, color = state), alpha = 0.5) +
+  scale_color_viridis_d() +
+  # change x axis to be every year
+  scale_x_continuous(breaks = c(2000:2010)) +
+  # no legend
+  theme_minimal() +
+  theme(legend.position = "none")
+```
+
+
+
+
+
+
+## Two-way fixed effects with `fixest`, as simple as possible
+```{r ch4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# state fe, note the weights!
+reg1 <- feols(homicide_c ~ cdl + log(population) + unemployrt | state, data = df, 
+              cluster = c("state"), weights = df$population)
+# state and year fe
+reg2 <- feols(homicide_c ~ cdl + log(population) + unemployrt | state + year, data = df, 
+              cluster = c("state"), weights = df$population)
+# with state linear trends, note the syntax
+reg3 <- feols(homicide_c ~ cdl + log(population) + unemployrt | state + year + state[year], data = df, 
+              cluster = c("state"), weights = df$population)
+# put together
+tablech <- etable(reg1, reg2, reg3,
+                # standard errors, digits, fit statistics, put SE below coefficients (the norm)
+                digits = 3, fitstat = "n", se.below = TRUE,
+                depvar = FALSE,
+                # rename the variables
+                dict = c("cdl" = "Treat", "log(population)" = "Pop. (log)", "unemployrt" = "Unemp. rate"))
+tablech <- tablech[-c(12,13),]
+tablech[c(7,10),2:4] <- ""
+```
+
+
+
+
+
+
+## Two-way fixed effects with `fixest`
+```{r ch5, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+kable(tablech, 
+      align = "lccc", booktabs = TRUE, linesep = "", row.names = FALSE) %>%
+  footnote("* p < 0.1, ** p < 0.05, *** p < 0.01.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            ) %>%
+  footnote("Note: Standard errors clustered at the state level are in parentheses.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            ) %>%
+  column_spec(1,width = "3cm") %>%
+  column_spec(c(2:4),width = "2cm") %>%
+  row_spec(c(7, 10), bold = TRUE) %>%
+  row_spec(c(11), hline_after = TRUE) %>%
+  kable_styling()
+```
+
+
+
+
+
+
+## Event studies
+\vfill
+- Event studies are a way to look at the effect of treatment over time
+  - We can see if the effect is immediate, or if it takes time to "kick in"
+  - We can also see whether there are any pre-trends
+\vfill
+- Effectively, what we want to do is redefine the time period to be relative to treatment
+  - For example, if treatment is introduced in 2005, we want to redefine 2005 as year 0, 2004 as year -1, etc.
+  - Let's do this nrow
+\vfill
+
+
+
+
+
+
+## Event studies
+```{r ch6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# first, find the year of treatment by state
+df <- df %>%
+      # group by state ("panel" identifier)
+      group_by(state) %>%
+      mutate(year_treat = ifelse(cdl==1, year, NA),
+              # first year with treatment
+              year_treat = min(year_treat, na.rm = TRUE),
+              # create new time variable called event_year
+              event_year = year - year_treat) %>%
+              # ungroup
+              ungroup()
+# note that states NEVER treated are missing
+table(df$event_year)
+
+# now find the average homicide rate by event_year
+df_event <- df %>%
+            # drop the missings
+            filter(event_year>-11) %>%
+            group_by(event_year) %>%
+            summarize(homicide_c = weighted.mean(homicide_c, weights = population, na.rm = TRUE))
+```
+
+
+
+
+
+
+## check it looks okay
+:::::::::::::: {.columns}
+::: {.column width="50%"}
+```{r ch7a, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+head(df %>% select(state, year, event_year, cdl) %>% filter(state=="Alabama"), n = 11)
+```
+:::
+::: {.column width="50%"}
+```{r ch7b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+head(df %>% select(state, year, event_year, cdl) %>% filter(state=="Alaska"), n = 11)
+```
+:::
+::::::::::::::
+
+
+
+
+
+
+
+## Plot the pure, ***means***
+```{r ch8, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot(df_event) + 
+  geom_line(aes(x = event_year, y = homicide_c)) +
+  theme_minimal() +
+  labs(x = "Years relative to treatment", y = "Homicide rate (log)")
+```
+
+
+
+
+
+
+
+## What do we really want to see?
+\vfill
+- We don't really want the means, though
+\vfill
+- What do we want instead? \pause
+  - We want the *effect* of treatment over time
+  - We want to essentially plot *coefficients*
+\vfill
+
+
+
+
+
+
+
+## Calculating year-specific coefficients
+```{r ch9, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# note that the year BEFORE treatment, -1, IS THE OMITTED CATEGORY
+# i() is a fixest-specific way to create factors/dummies
+reg1 <- feols(homicide_c ~ i(event_year, ref = -1) + log(population) + unemployrt | state + year, data = df, 
+              cluster = c("state"), weights = df$population)
+reg1$coefficients
+# It's a vector. We can extract the coefficients we want by subsetting with []
+# get coefficients
+coef <- c(reg1$coefficients[1:9], 0, reg1$coefficients[10:14])
+# confidence intervals
+lower <- c(confint(reg1)[1:9,1], 0, confint(reg1)[10:14,1])
+upper <- c(confint(reg1)[1:9,2], 0, confint(reg1)[10:14,2])
+# create minimum/maximum 
+years <- c(-10:4)
+```
+
+
+
+
+
+
+
+## Plot these coefficients using geom_point
+```{r ch10a, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot() +
+  geom_point(aes(x = years, y = coef)) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+## Plot these coefficients using geom_point
+```{r ch10b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+twfeyears <- years
+twfecoef <- coef
+twfelower <- lower
+twfeupper <- upper
+ggplot() +
+  geom_point(aes(x = years, y = coef)) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+## Let's remove the first three years because of small sample sizes
+```{r ch10c, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+ggplot() +
+  geom_point(aes(x = years[-c(1:3)], y = coef[-c(1:3)])) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years[-c(1:3)]) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+
+## Add the confidence intervals using geom_errorbar
+```{r ch11a, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot() +
+  geom_point(aes(x = years, y = coef)) +
+  geom_errorbar(aes(x = years, ymin = lower, ymax = upper), alpha = 0.2, width = 0.1) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+## Add the confidence intervals using geom_errorbar
+```{r ch11b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+ggplot() +
+  geom_point(aes(x = years[-c(1:3)], y = coef[-c(1:3)])) +
+  geom_errorbar(aes(x = years[-c(1:3)], ymin = lower[-c(1:3)], ymax = upper[-c(1:3)]), alpha = 0.2, width = 0.1) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years[-c(1:3)]) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+## Add the confidence intervals using geom_line, if you prefer
+```{r ch12, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+ggplot() +
+  geom_point(aes(x = years[-c(1:3)], y = coef[-c(1:3)])) +
+  geom_line(aes(x = years[-c(1:3)], y = lower[-c(1:3)]), alpha = 0.2, color = "black", linetype = "dashed") +
+  geom_line(aes(x = years[-c(1:3)], y = upper[-c(1:3)]), alpha = 0.2, color = "black", linetype = "dashed") +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years[-c(1:3)]) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+## Add the confidence intervals using geom_ribbon, if you prefer
+```{r ch13, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+ggplot() +
+  geom_point(aes(x = years[-c(1:3)], y = coef[-c(1:3)])) +
+  geom_ribbon(aes(x = years[-c(1:3)], ymin = lower[-c(1:3)], ymax = upper[-c(1:3)]), alpha = 0.2) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years[-c(1:3)]) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+## Let's use the "Bacon decomposition" to look at weighting
+\vfill
+- This won't allow us to calculate standard errors
+\vfill
+- This of this as "diagnostics"
+\vfill
+- We can see how different 2x2 cells have different weights, sometimes markedly so
+  - We can also see that different cells have different treatment estimates
+\vfill
+
+
+
+
+
+
+
+
+## Let's try the "Bacon decomposition" - Note the treatment variable *must* be binary
+```{r ch14, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(bacondecomp)
+
+# syntax:
+# bacon(formula, data, id_var, time_var, quietly = F)
+bacon <- bacon(homicide_c ~ cdl + log(population) + unemployrt, data = df, id_var = "state", time_var = "year", quietly = F)
+bacon$two_by_twos
+```
+
+
+
+
+
+
+
+
+## Get the overall average effect by multiplying weights by estimates
+```{r ch15, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+bacon <- bacon(homicide_c ~ cdl + log(population) + unemployrt, data = df, id_var = "state", time_var = "year", quietly = F)
+weighted.mean(bacon$two_by_twos$estimate, bacon$two_by_twos$weight)
+
+# compare to TWFE estimate
+feols(homicide_c ~ cdl + log(population) + unemployrt | state + year, data = df, 
+              cluster = c("state")) # No weights since Bacon decomp doesn't allow them
+```
+
+
+
+
+
+
+
+
+## We can plot the average effects for the different groups
+```{r ch16, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+ggplot(data = bacon$two_by_twos) +
+  geom_point(aes(x = weight, y = estimate, color = type, shape = type)) +
+  labs(x = "Weight", y = "Estimate") +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+## Let's estimate effects using the `did2s` function from Kyle Butts
+- bacondecomp is good for diagnostics, but we really want to estimate the ATT with standard errors
+\vfill
+
+```{r ch17, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+library(did2s)
+```
+\vfill
+
+- yname: the outcome variable
+- first_stage: formula for first stage, can include fixed effects and covariates, but do not include treatment variable(s)!
+- second_stage: This should be the treatment variable or in the case of event studies, treatment variables.
+- treatment: This has to be the 0/1 treatment variable that marks when treatment turns on for a unit. If you suspect anticipation, see note above for accounting for this.
+- cluster_var: Which variables to cluster on
+\vfill
+
+
+
+
+
+
+
+
+## Let's estimate effects using the `did2s` function from Kyle Butts
+```{r ch18, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+library(did2s)
+# note that we can use fixest syntax, with FE and with i()!
+# can also add weights
+did2s <- did2s(data = df, yname = "homicide_c", first_stage = "log(population) + unemployrt | state + year", 
+                second_stage = "cdl", treatment = "cdl", cluster_var = "state", weights = "population")
+# let's compare it to the vanilla TWFE
+twfe <- feols(homicide_c ~ cdl + log(population) + unemployrt | state + year, data = df, 
+              cluster = c("state"), weights = df$population)
+```
+
+
+
+
+
+
+
+
+## And the results
+```{r ch19, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+# The "correct" results
+did2s
+
+# and the TWFE results?
+twfe
+```
+
+
+
+
+
+
+
+
+## We can also estimate the event study this way!
+```{r ch20a, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+# Estimate
+did2s <- did2s(data = df, yname = "homicide_c", first_stage = "log(population) + unemployrt | state + year", 
+                second_stage = "i(event_year, ref = -1)", treatment = "cdl", cluster_var = "state", 
+                weights = "population")
+coefficients <- c(did2s$coefficients[2:10], 0, did2s$coefficients[11:15])
+# confidence intervals
+lower <- c(confint(did2s)[2:10,1], 0, confint(did2s)[11:15,1])
+upper <- c(confint(did2s)[2:10,2], 0, confint(did2s)[11:15,2])
+# plot estimates
+ggplot() +
+  geom_point(aes(x = c(-10:4), y = coefficients)) +
+  geom_errorbar(aes(x = c(-10:4), ymin = lower, ymax = upper), alpha = 0.2, width = 0.1) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+
+## Some small changes to remove first three years
+```{r ch20b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+# Estimate
+did2s <- did2s(data = df, yname = "homicide_c", 
+                first_stage = "log(population) + unemployrt | state + year", 
+                second_stage = "i(event_year, ref = -1)", 
+                treatment = "cdl", cluster_var = "state", 
+                weights = "population")
+coefficients <- c(did2s$coefficients[2:10], 0, did2s$coefficients[11:15])[c(-10:4) %in% c(-7:4)]
+# confidence intervals
+lower <- c(confint(did2s)[2:10,1], 0, confint(did2s)[11:15,1])[c(-10:4) %in% c(-7:4)]
+upper <- c(confint(did2s)[2:10,2], 0, confint(did2s)[11:15,2])[c(-10:4) %in% c(-7:4)]
+# plot estimates
+ggplot() +
+  geom_point(aes(x = c(-7:4), y = coefficients)) +
+  geom_errorbar(aes(x = c(-7:4), ymin = lower, ymax = upper), alpha = 0.2, width = 0.1) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years) +
+  theme_minimal()
+```
+
+
+
+
+
+
+
+
+
+## Compared to TWFE?
+```{r ch21, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+# Estimate
+data <- cbind(c(did2s$coefficients[2:10], 0, did2s$coefficients[11:15])[c(-10:4) %in% c(-7:4)], 
+              c(confint(did2s)[2:10,1], 0, confint(did2s)[11:15,1])[c(-10:4) %in% c(-7:4)],
+              c(confint(did2s)[2:10,2], 0, confint(did2s)[11:15,2])[c(-10:4) %in% c(-7:4)])
+data <- as_tibble(data)
+colnames(data) <- c("Estimate", "Lower", "Upper")
+data$Type <- "DID2S"
+data$Year <- c(-7:4)
+data2 <- cbind(twfecoef, 
+              twfelower,
+              twfeupper)
+data2 <- data2[-c(1:3),]
+colnames(data2) <- c("Estimate", "Lower", "Upper")
+data2 <- as_tibble(data2)
+data2$Type <- "TWFE"
+data2$Year <- c(-7:4)
+data <- rbind(data, data2)
+# plot estimates
+ggplot(data) +
+  geom_point(aes(x = Year, y = Estimate, color = Type)) +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
+  # change x axis to be every year
+  scale_x_continuous(breaks = years) +
+  theme_minimal() +
+  theme(legend.position = c(0.2, 0.8))
+```
+
+
+
+
+
+
+## Wrapping up TWFE
+\vfill
+- We've learned how to estimate two-way fixed effects models with `fixest`
+  - We've also learned how they can be biased if treatment is staggered
+\vfill
+- We saw how to use `did2s` to estimate the ATT
+  - We also saw how to use `bacondecomp` to look at the weights
+\vfill
+- A lingering question: TWFE with continuous treatment variables
+  - Callaway et al. (2021) and Chaisemartin and D’Haultfœuille (2023) have some ideas
+  - I haven't seen reliable packages for these, though
+\vfill
+- IVs with TWFE?
+\vfill
+
+
+
+
+
+
+
+# Synthetic control
+
+## Increasing cigarette taxes and discouraging smoking in California (in 1988)
+```{r sc1, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+# Estimate
+df <- read_dta("smoking.dta")
+df$california <- as.numeric(df$state==3)
+dfgraph <- df %>%
+            group_by(year, california) %>%
+            summarize(cigsale = mean(cigsale))
+dfgraph$group <- ifelse(dfgraph$california==1, "California", "Rest of U.S.")
+ggplot(dfgraph) +
+  geom_line(aes(x = year, y = cigsale, color = group)) +
+  scale_color_viridis_d("State", labels = c("California", "Rest of U.S.")) +
+  geom_vline(xintercept = 1988, linetype = "dashed", color = "black") +
+  theme_minimal() +
+  labs(x = "Year", y = "Cigarette sales (per capita)") +
+  theme(legend.position = c(0.2, 0.2))
+  
+```
+
+
+
+
+
+
+
+## Increasing cigarette taxes and discouraging smoking in California (in 1988)
+\vfill
+- What if we wanted to figure out whether the law changed smoking in California?
+\vfill
+- A key problem, similar to Card and Krueger:
+  - There is really only one treated unit
+  - Many people live in California, obviously, but they are all equally affected by the law
+\vfill
+- Differences-in-differences is problematic here
+  - A single treated cluster!
+\vfill
+- So what are we to do?
+\vfill
+
+
+
+
+
+
+
+
+## Synthetic control
+\vfill
+- This is where synthetic control comes in
+  - Abadie and Gardeazabal (2003), *American Economic Review*
+  - Abadie, Diamond, and Hainmueller (2010), *Journal of the American Statistical Association*
+\vfill
+- The basic idea: 
+  - We want to create a "synthetic" California that is a weighted average of the other states
+  - We want to weight the other states so that they look like California before the law
+  - We can then compare the synthetic California to the real California after the law
+\vfill
+
+
+
+
+
+
+
+
+## Synthetic control
+\vfill
+- Synthetic control doesn't just match on pre-treatment outcomes
+  - It also matches on pre-treatment trends and covariates
+  - This is what makes it different from pure matching
+\vfill
+- 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
