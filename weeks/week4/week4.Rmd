@@ -467,6 +467,8 @@ kable(table,
 \vfill
 - ANCOVA, but it's really just simple OLS regression
 \vfill
+- Important: never control for things that can change due to treatment!
+\vfill
 
 
 
@@ -818,7 +820,7 @@ where $s$ is the stratum number, $I(G_s)$ is an indicator for being in stratum $
   - The treatment group and the control group are approximately the same
 \vfill
 - The catch: we can only do this for *observables*
-  - While RCTs also match on unobservables, we can't do that here
+  - While RCTs also implicitly "match" on unobservables, we can't do that here
 \vfill 
 
 

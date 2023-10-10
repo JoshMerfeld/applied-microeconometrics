@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  18 SEP 2023 11:22
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  9 OCT 2023 10:51
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1290,7 +1290,7 @@ Overfull \vbox (0.15018pt too high) detected at line 659
 <assets/fischer1.png, id=282, 1267.73625pt x 470.75874pt>
 File: assets/fischer1.png Graphic file (type png)
 <use assets/fischer1.png>
-Package pdftex.def Info: assets/fischer1.png  used on input line 819.
+Package pdftex.def Info: assets/fischer1.png  used on input line 822.
 (pdftex.def)             Requested size: 318.67209pt x 118.33588pt.
 [34
 
@@ -1298,10 +1298,10 @@ Package pdftex.def Info: assets/fischer1.png  used on input line 819.
 <assets/fischer2.png, id=291, 1274.7625pt x 396.48125pt>
 File: assets/fischer2.png Graphic file (type png)
 <use assets/fischer2.png>
-Package pdftex.def Info: assets/fischer2.png  used on input line 826.
+Package pdftex.def Info: assets/fischer2.png  used on input line 829.
 (pdftex.def)             Requested size: 318.67209pt x 99.11401pt.
 LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <10> not available
-(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 826.
+(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 829.
 
 [35
 
@@ -1314,14 +1314,14 @@ pdfTeX warning (ext4): destination with the same identifier (name{aggregate-ran
 domization}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.886 \end{frame}
+l.889 \end{frame}
                   [38
 
 ]
 <assets/fischer3.png, id=323, 1252.68pt x 744.7825pt>
 File: assets/fischer3.png Graphic file (type png)
 <use assets/fischer3.png>
-Package pdftex.def Info: assets/fischer3.png  used on input line 893.
+Package pdftex.def Info: assets/fischer3.png  used on input line 896.
 (pdftex.def)             Requested size: 318.67209pt x 189.46812pt.
 [39
 
@@ -1329,7 +1329,7 @@ Package pdftex.def Info: assets/fischer3.png  used on input line 893.
 <assets/fischer4.png, id=332, 1252.68pt x 744.7825pt>
 File: assets/fischer4.png Graphic file (type png)
 <use assets/fischer4.png>
-Package pdftex.def Info: assets/fischer4.png  used on input line 900.
+Package pdftex.def Info: assets/fischer4.png  used on input line 903.
 (pdftex.def)             Requested size: 318.67209pt x 189.46812pt.
 [40
 
@@ -1339,7 +1339,7 @@ Package pdftex.def Info: assets/fischer4.png  used on input line 900.
 <assets/xkcd1.png, id=348, 945.5325pt x 485.815pt>
 File: assets/xkcd1.png Graphic file (type png)
 <use assets/xkcd1.png>
-Package pdftex.def Info: assets/xkcd1.png  used on input line 936.
+Package pdftex.def Info: assets/xkcd1.png  used on input line 939.
 (pdftex.def)             Requested size: 318.67209pt x 163.7368pt.
 [42
 
@@ -1347,7 +1347,7 @@ Package pdftex.def Info: assets/xkcd1.png  used on input line 936.
 <assets/xkcd2.png, id=357, 918.43124pt x 307.1475pt>
 File: assets/xkcd2.png Graphic file (type png)
 <use assets/xkcd2.png>
-Package pdftex.def Info: assets/xkcd2.png  used on input line 943.
+Package pdftex.def Info: assets/xkcd2.png  used on input line 946.
 (pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
 [43
 
@@ -1355,7 +1355,7 @@ Package pdftex.def Info: assets/xkcd2.png  used on input line 943.
 <assets/xkcd3.png, id=367, 918.43124pt x 307.1475pt>
 File: assets/xkcd3.png Graphic file (type png)
 <use assets/xkcd3.png>
-Package pdftex.def Info: assets/xkcd3.png  used on input line 950.
+Package pdftex.def Info: assets/xkcd3.png  used on input line 953.
 (pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
 [44
 
@@ -1363,7 +1363,7 @@ Package pdftex.def Info: assets/xkcd3.png  used on input line 950.
 <assets/xkcd4.png, id=376, 918.43124pt x 307.1475pt>
 File: assets/xkcd4.png Graphic file (type png)
 <use assets/xkcd4.png>
-Package pdftex.def Info: assets/xkcd4.png  used on input line 957.
+Package pdftex.def Info: assets/xkcd4.png  used on input line 960.
 (pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
 [45
 
@@ -1371,7 +1371,7 @@ Package pdftex.def Info: assets/xkcd4.png  used on input line 957.
 <assets/xkcd5.png, id=385, 918.43124pt x 307.1475pt>
 File: assets/xkcd5.png Graphic file (type png)
 <use assets/xkcd5.png>
-Package pdftex.def Info: assets/xkcd5.png  used on input line 964.
+Package pdftex.def Info: assets/xkcd5.png  used on input line 967.
 (pdftex.def)             Requested size: 318.67209pt x 106.57057pt.
 [46
 
@@ -1379,7 +1379,7 @@ Package pdftex.def Info: assets/xkcd5.png  used on input line 964.
 <assets/xkcd6.png, id=394, 1086.0575pt x 563.10374pt>
 File: assets/xkcd6.png Graphic file (type png)
 <use assets/xkcd6.png>
-Package pdftex.def Info: assets/xkcd6.png  used on input line 971.
+Package pdftex.def Info: assets/xkcd6.png  used on input line 974.
 (pdftex.def)             Requested size: 318.67209pt x 165.22916pt.
 [47
 
@@ -1390,7 +1390,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{the-problem-m
 athematically}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1007 \end{frame}
+l.1010 \end{frame}
                    [49
 
 ]
@@ -1398,7 +1398,7 @@ pdfTeX warning (ext4): destination with the same identifier (name{the-problem-m
 athematically}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.1007 \end{frame}
+l.1010 \end{frame}
                    [50
 
 ] [51
@@ -1417,7 +1417,7 @@ LaTeX Font Info:    Font shape `T1/lmss/m/it' in size <9> not available
 <assets/q1.png, id=442, 986.68625pt x 554.07pt>
 File: assets/q1.png Graphic file (type png)
 <use assets/q1.png>
-Package pdftex.def Info: assets/q1.png  used on input line 1083.
+Package pdftex.def Info: assets/q1.png  used on input line 1086.
 (pdftex.def)             Requested size: 318.67209pt x 178.94618pt.
 [53
 
@@ -1448,7 +1448,7 @@ Package pdftex.def Info: assets/q1.png  used on input line 1083.
 \openout4 = `week4.vrb'.
 
 (./week4.vrb)
-Overfull \vbox (27.2419pt too high) detected at line 1342
+Overfull \vbox (27.2419pt too high) detected at line 1345
  []
 
 [61
@@ -1475,7 +1475,7 @@ Overfull \vbox (27.2419pt too high) detected at line 1342
 File: week4_files/figure-beamer/match6-1.png Graphic file (type png)
 <use week4_files/figure-beamer/match6-1.png>
 Package pdftex.def Info: week4_files/figure-beamer/match6-1.png  used on input 
-line 1437.
+line 1440.
 (pdftex.def)             Requested size: 219.08743pt x 141.5494pt.
 [66
 
@@ -1486,7 +1486,7 @@ line 1437.
 File: week4_files/figure-beamer/match7-1.png Graphic file (type png)
 <use week4_files/figure-beamer/match7-1.png>
 Package pdftex.def Info: week4_files/figure-beamer/match7-1.png  used on input 
-line 1474.
+line 1477.
 (pdftex.def)             Requested size: 219.08743pt x 160.9413pt.
 [68
 
@@ -1506,7 +1506,7 @@ line 1474.
 Here is how much of TeX's memory you used:
  28238 strings out of 478268
  550060 string characters out of 5846347
- 916363 words of memory out of 5000000
+ 915363 words of memory out of 5000000
  45422 multiletter control sequences out of 15000+600000
  557103 words of font info for 156 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -1532,7 +1532,7 @@ texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texlive/2022/texmf-dist/
 fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2022/texmf-dist/fonts/typ
 e1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/2022/texmf-dist/fonts
 /type1/public/amsfonts/symbols/msbm10.pfb>
-Output written on week4.pdf (69 pages, 4012719 bytes).
+Output written on week4.pdf (69 pages, 4012826 bytes).
 PDF statistics:
  718 PDF objects out of 1000 (max. 8388607)
  564 compressed objects within 6 object streams
