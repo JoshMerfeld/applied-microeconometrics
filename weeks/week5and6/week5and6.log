@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  25 SEP 2023 20:59
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  17 OCT 2023 20:34
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1428,63 +1428,66 @@ LaTeX Font Info:    Font shape `T1/lmtt/bx/n' in size <10> not available
 
 (./week5and6.vrb) [40
 
-] [41
+]
+\openout4 = `week5and6.vrb'.
 
-] [42
+(./week5and6.vrb) [41
 
 ]
-<assets/randomization.png, id=357, 1086.0575pt x 496.85625pt>
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [42
+
+] [43
+
+] [44
+
+]
+<assets/randomization.png, id=372, 1086.0575pt x 496.85625pt>
 File: assets/randomization.png Graphic file (type png)
 <use assets/randomization.png>
-Package pdftex.def Info: assets/randomization.png  used on input line 1207.
+Package pdftex.def Info: assets/randomization.png  used on input line 1306.
 (pdftex.def)             Requested size: 398.3386pt x 182.23425pt.
-[43
+[45
 
- <./assets/randomization.png>] [44
+ <./assets/randomization.png>] [46
 
 ]
-<assets/randomization_merfeld.png, id=374, 292.9344pt x 579.1236pt>
+<assets/randomization_merfeld.png, id=388, 292.9344pt x 579.1236pt>
 File: assets/randomization_merfeld.png Graphic file (type png)
 <use assets/randomization_merfeld.png>
 Package pdftex.def Info: assets/randomization_merfeld.png  used on input line 1
-238.
+337.
 (pdftex.def)             Requested size: 99.58464pt x 196.8729pt.
-[45
+[47
 
- <./assets/randomization_merfeld.png>] [46
-
-] [47
-
-] [48
+ <./assets/randomization_merfeld.png>] [48
 
 ] [49
 
 ] [50
 
+] [51
+
+] [52
+
 ]
-<week5and6_files/figure-beamer/panel1-1.png, id=422, 712.6625pt x 494.84875pt>
+<week5and6_files/figure-beamer/panel1-1.png, id=436, 712.6625pt x 494.84875pt>
 File: week5and6_files/figure-beamer/panel1-1.png Graphic file (type png)
 <use week5and6_files/figure-beamer/panel1-1.png>
 Package pdftex.def Info: week5and6_files/figure-beamer/panel1-1.png  used on in
-put line 1370.
-(pdftex.def)             Requested size: 219.08743pt x 152.12544pt.
-[51
+put line 1466.
+(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
+[53
 
- <./week5and6_files/figure-beamer/panel1-1.png>] [52
+ <./week5and6_files/figure-beamer/panel1-1.png>] [54
 
-] [53
-
-]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb) [54
+] [55
 
 ]
 \openout4 = `week5and6.vrb'.
 
-(./week5and6.vrb) [55
-
-] [56
+(./week5and6.vrb) [56
 
 ]
 \openout4 = `week5and6.vrb'.
@@ -1502,31 +1505,34 @@ put line 1370.
 
 ] [61
 
-] [62
-
 ]
-LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <10> not available
-(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 1833
-.
-[63
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [62
+
+] [63
 
 ] [64
 
-]
-<assets/bacon.jpg, id=526, 433.62pt x 310.0383pt>
-File: assets/bacon.jpg Graphic file (type jpg)
-<use assets/bacon.jpg>
-Package pdftex.def Info: assets/bacon.jpg  used on input line 1875.
-(pdftex.def)             Requested size: 278.83578pt x 199.37471pt.
-[65
+] [65
 
- <./assets/bacon.jpg>] [66
+]
+LaTeX Font Info:    Font shape `T1/lmss/bx/it' in size <10> not available
+(Font)              Font shape `T1/lmss/bx/sl' tried instead on input line 1967
+.
+[66
 
 ] [67
 
-] [68
+]
+<assets/bacon.jpg, id=550, 433.62pt x 310.0383pt>
+File: assets/bacon.jpg Graphic file (type jpg)
+<use assets/bacon.jpg>
+Package pdftex.def Info: assets/bacon.jpg  used on input line 2009.
+(pdftex.def)             Requested size: 278.83578pt x 199.37471pt.
+[68
 
-] [69
+ <./assets/bacon.jpg>] [69
 
 ] [70
 
@@ -1534,162 +1540,149 @@ Package pdftex.def Info: assets/bacon.jpg  used on input line 1875.
 
 ] [72
 
-]
-\openout4 = `week5and6.vrb'.
+] [73
 
-(./week5and6.vrb) [73
+] [74
 
-]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb) [74
+] [75
 
 ]
 \openout4 = `week5and6.vrb'.
 
-(./week5and6.vrb) [75
+(./week5and6.vrb) [76
 
 ]
-<week5and6_files/figure-beamer/ch2-1.png, id=609, 712.6625pt x 496.85625pt>
-File: week5and6_files/figure-beamer/ch2-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch2-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch2-1.png  used on input
- line 2130.
-(pdftex.def)             Requested size: 219.08743pt x 152.74258pt.
-[76
+\openout4 = `week5and6.vrb'.
 
- <./week5and6_files/figure-beamer/ch2-1.png>]
-<week5and6_files/figure-beamer/ch3-1.png, id=617, 712.6625pt x 496.85625pt>
-File: week5and6_files/figure-beamer/ch3-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch3-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch3-1.png  used on input
- line 2139.
-(pdftex.def)             Requested size: 219.08743pt x 152.74258pt.
-[77
+(./week5and6.vrb) [77
 
- <./week5and6_files/figure-beamer/ch3-1.png>]
+]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [78
 
-] [79
-
-] [80
-
 ]
+<week5and6_files/figure-beamer/ch2-1.png, id=631, 712.6625pt x 496.85625pt>
+File: week5and6_files/figure-beamer/ch2-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch2-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch2-1.png  used on input
+ line 2264.
+(pdftex.def)             Requested size: 219.08743pt x 152.74258pt.
+[79
+
+ <./week5and6_files/figure-beamer/ch2-1.png>]
+<week5and6_files/figure-beamer/ch3-1.png, id=640, 712.6625pt x 496.85625pt>
+File: week5and6_files/figure-beamer/ch3-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch3-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch3-1.png  used on input
+ line 2273.
+(pdftex.def)             Requested size: 219.08743pt x 152.74258pt.
+[80
+
+ <./week5and6_files/figure-beamer/ch3-1.png>]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [81
 
+] [82
+
+] [83
+
 ]
 \openout4 = `week5and6.vrb'.
 
-(./week5and6.vrb) [82
+(./week5and6.vrb) [84
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [85
 
 ]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb
-<week5and6_files/figure-beamer/ch8-1.png, id=663, 712.6625pt x 494.84875pt>
+<week5and6_files/figure-beamer/ch8-1.png, id=686, 712.6625pt x 494.84875pt>
 File: week5and6_files/figure-beamer/ch8-1.png Graphic file (type png)
 <use week5and6_files/figure-beamer/ch8-1.png>
 Package pdftex.def Info: week5and6_files/figure-beamer/ch8-1.png  used on input
  line 14.
 (pdftex.def)             Requested size: 219.08743pt x 152.12544pt.
-) [83
+) [86
 
- <./week5and6_files/figure-beamer/ch8-1.png>] [84
+ <./week5and6_files/figure-beamer/ch8-1.png>] [87
 
 ]
 pdfTeX warning (ext4): destination with the same identifier (name{what-do-we-re
 ally-want-to-see}) has been already used, duplicate ignored
 <to be read again> 
                    \relax 
-l.2366 \end{frame}
-                   [85
+l.2500 \end{frame}
+                   [88
 
 ]
 \openout4 = `week5and6.vrb'.
 
-(./week5and6.vrb) [86
+(./week5and6.vrb) [89
 
 ]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb) [87
-
-]
-<week5and6_files/figure-beamer/ch10b-1.png, id=699, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/ch10b-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch10b-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch10b-1.png  used on inp
-ut line 2435.
-(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
-[88
-
- <./week5and6_files/figure-beamer/ch10b-1.png>]
-<week5and6_files/figure-beamer/ch10c-1.png, id=708, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/ch10c-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch10c-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch10c-1.png  used on inp
-ut line 2445.
-(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
-[89
-
- <./week5and6_files/figure-beamer/ch10c-1.png>]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [90
 
 ]
-<week5and6_files/figure-beamer/ch11b-1.png, id=724, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/ch11b-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch11b-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch11b-1.png  used on inp
-ut line 2475.
+<week5and6_files/figure-beamer/ch10b-1.png, id=721, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/ch10b-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch10b-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch10b-1.png  used on inp
+ut line 2569.
 (pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
 [91
 
- <./week5and6_files/figure-beamer/ch11b-1.png>]
-<week5and6_files/figure-beamer/ch12-1.png, id=734, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/ch12-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch12-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch12-1.png  used on inpu
-t line 2485.
+ <./week5and6_files/figure-beamer/ch10b-1.png>]
+<week5and6_files/figure-beamer/ch10c-1.png, id=731, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/ch10c-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch10c-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch10c-1.png  used on inp
+ut line 2579.
 (pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
 [92
 
+ <./week5and6_files/figure-beamer/ch10c-1.png>]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [93
+
+]
+<week5and6_files/figure-beamer/ch11b-1.png, id=747, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/ch11b-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch11b-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch11b-1.png  used on inp
+ut line 2609.
+(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
+[94
+
+ <./week5and6_files/figure-beamer/ch11b-1.png>]
+<week5and6_files/figure-beamer/ch12-1.png, id=756, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/ch12-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch12-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch12-1.png  used on inpu
+t line 2619.
+(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
+[95
+
  <./week5and6_files/figure-beamer/ch12-1.png>]
-<week5and6_files/figure-beamer/ch13-1.png, id=743, 712.6625pt x 494.84875pt>
+<week5and6_files/figure-beamer/ch13-1.png, id=765, 712.6625pt x 494.84875pt>
 File: week5and6_files/figure-beamer/ch13-1.png Graphic file (type png)
 <use week5and6_files/figure-beamer/ch13-1.png>
 Package pdftex.def Info: week5and6_files/figure-beamer/ch13-1.png  used on inpu
-t line 2495.
+t line 2629.
 (pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
-[93
+[96
 
- <./week5and6_files/figure-beamer/ch13-1.png>] [94
-
-]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb) [95
+ <./week5and6_files/figure-beamer/ch13-1.png>] [97
 
 ]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb) [96
-
-]
-<week5and6_files/figure-beamer/ch16-1.png, id=773, 706.64pt x 496.85625pt>
-File: week5and6_files/figure-beamer/ch16-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch16-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch16-1.png  used on inpu
-t line 2630.
-(pdftex.def)             Requested size: 298.75394pt x 210.05801pt.
-[97
-
- <./week5and6_files/figure-beamer/ch16-1.png>]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [98
@@ -1700,87 +1693,84 @@ t line 2630.
 (./week5and6.vrb) [99
 
 ]
-\openout4 = `week5and6.vrb'.
+<week5and6_files/figure-beamer/ch16-1.png, id=797, 706.64pt x 496.85625pt>
+File: week5and6_files/figure-beamer/ch16-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch16-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch16-1.png  used on inpu
+t line 2764.
+(pdftex.def)             Requested size: 298.75394pt x 210.05801pt.
+[100
 
-(./week5and6.vrb) [100
-
-]
+ <./week5and6_files/figure-beamer/ch16-1.png>]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [101
 
 ]
-<week5and6_files/figure-beamer/ch20b-1.png, id=812, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/ch20b-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch20b-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch20b-1.png  used on inp
-ut line 2777.
-(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
-[102
+\openout4 = `week5and6.vrb'.
 
- <./week5and6_files/figure-beamer/ch20b-1.png>]
-<week5and6_files/figure-beamer/ch21-1.png, id=821, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/ch21-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/ch21-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/ch21-1.png  used on inpu
-t line 2786.
-(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
-[103
+(./week5and6.vrb) [102
 
- <./week5and6_files/figure-beamer/ch21-1.png>]
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [103
+
+]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [104
 
 ]
-<week5and6_files/figure-beamer/sc1-1.png, id=838, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/sc1-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/sc1-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/sc1-1.png  used on input
- line 2840.
+<week5and6_files/figure-beamer/ch20b-1.png, id=835, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/ch20b-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch20b-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch20b-1.png  used on inp
+ut line 2911.
 (pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
 [105
 
- <./week5and6_files/figure-beamer/sc1-1.png>] [106
+ <./week5and6_files/figure-beamer/ch20b-1.png>]
+<week5and6_files/figure-beamer/ch21-1.png, id=844, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/ch21-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/ch21-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/ch21-1.png  used on inpu
+t line 2920.
+(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
+[106
 
-] [107
+ <./week5and6_files/figure-beamer/ch21-1.png>]
+\openout4 = `week5and6.vrb'.
 
-] [108
+(./week5and6.vrb) [107
 
-] [109
+]
+<week5and6_files/figure-beamer/sc1-1.png, id=860, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/sc1-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc1-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc1-1.png  used on input
+ line 2974.
+(pdftex.def)             Requested size: 298.75394pt x 207.44241pt.
+[108
+
+ <./week5and6_files/figure-beamer/sc1-1.png>] [109
 
 ] [110
 
 ] [111
 
-]
-\openout4 = `week5and6.vrb'.
+] [112
 
-(./week5and6.vrb) [112
+] [113
 
-]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb) [113
+] [114
 
 ]
 \openout4 = `week5and6.vrb'.
 
-(./week5and6.vrb) [114
+(./week5and6.vrb) [115
 
 ]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb
-<week5and6_files/figure-beamer/sc4-1.png, id=913, 696.6025pt x 489.83pt>
-File: week5and6_files/figure-beamer/sc4-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/sc4-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/sc4-1.png  used on input
- line 12.
-(pdftex.def)             Requested size: 258.91765pt x 182.06389pt.
-) [115
-
- <./week5and6_files/figure-beamer/sc4-1.png>]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [116
@@ -1793,33 +1783,26 @@ Package pdftex.def Info: week5and6_files/figure-beamer/sc4-1.png  used on input
 ]
 \openout4 = `week5and6.vrb'.
 
-(./week5and6.vrb) [118
+(./week5and6.vrb
+<week5and6_files/figure-beamer/sc4-1.png, id=937, 696.6025pt x 489.83pt>
+File: week5and6_files/figure-beamer/sc4-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc4-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc4-1.png  used on input
+ line 12.
+(pdftex.def)             Requested size: 258.91765pt x 182.06389pt.
+) [118
+
+ <./week5and6_files/figure-beamer/sc4-1.png>]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [119
 
 ]
 \openout4 = `week5and6.vrb'.
 
-(./week5and6.vrb
-<week5and6_files/figure-beamer/sc6-1.png, id=945, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/sc6-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/sc6-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/sc6-1.png  used on input
- line 14.
-(pdftex.def)             Requested size: 258.91765pt x 179.78394pt.
-) [119
+(./week5and6.vrb) [120
 
- <./week5and6_files/figure-beamer/sc6-1.png>]
-\openout4 = `week5and6.vrb'.
-
-(./week5and6.vrb
-<week5and6_files/figure-beamer/sc7-1.png, id=954, 712.6625pt x 494.84875pt>
-File: week5and6_files/figure-beamer/sc7-1.png Graphic file (type png)
-<use week5and6_files/figure-beamer/sc7-1.png>
-Package pdftex.def Info: week5and6_files/figure-beamer/sc7-1.png  used on input
- line 13.
-(pdftex.def)             Requested size: 258.91765pt x 179.78394pt.
-) [120
-
- <./week5and6_files/figure-beamer/sc7-1.png>]
+]
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb) [121
@@ -1828,15 +1811,44 @@ Package pdftex.def Info: week5and6_files/figure-beamer/sc7-1.png  used on input
 \openout4 = `week5and6.vrb'.
 
 (./week5and6.vrb
-<week5and6_files/figure-beamer/sc8-1.png, id=971, 712.6625pt x 495.8525pt>
+<week5and6_files/figure-beamer/sc6-1.png, id=968, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/sc6-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc6-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc6-1.png  used on input
+ line 14.
+(pdftex.def)             Requested size: 258.91765pt x 179.78394pt.
+) [122
+
+ <./week5and6_files/figure-beamer/sc6-1.png>]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb
+<week5and6_files/figure-beamer/sc7-1.png, id=977, 712.6625pt x 494.84875pt>
+File: week5and6_files/figure-beamer/sc7-1.png Graphic file (type png)
+<use week5and6_files/figure-beamer/sc7-1.png>
+Package pdftex.def Info: week5and6_files/figure-beamer/sc7-1.png  used on input
+ line 13.
+(pdftex.def)             Requested size: 258.91765pt x 179.78394pt.
+) [123
+
+ <./week5and6_files/figure-beamer/sc7-1.png>]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb) [124
+
+]
+\openout4 = `week5and6.vrb'.
+
+(./week5and6.vrb
+<week5and6_files/figure-beamer/sc8-1.png, id=993, 712.6625pt x 495.8525pt>
 File: week5and6_files/figure-beamer/sc8-1.png Graphic file (type png)
 <use week5and6_files/figure-beamer/sc8-1.png>
 Package pdftex.def Info: week5and6_files/figure-beamer/sc8-1.png  used on input
  line 11.
 (pdftex.def)             Requested size: 258.91765pt x 180.1486pt.
-) [122
+) [125
 
- <./week5and6_files/figure-beamer/sc8-1.png>] [123
+ <./week5and6_files/figure-beamer/sc8-1.png>] [126
 
 ]
 \openout4 = `week5and6.vrb'.
@@ -1846,7 +1858,7 @@ Overfull \hbox (1.25352pt too wide) in paragraph at lines 29--29
  []|\T1/lmss/m/n/6 (-20) mspe_ratio| 
  []
 
-) [124
+) [127
 
 ]
 \tf@nav=\write6
@@ -1860,10 +1872,10 @@ Overfull \hbox (1.25352pt too wide) in paragraph at lines 29--29
 
 (./week5and6.aux) ) 
 Here is how much of TeX's memory you used:
- 30500 strings out of 478268
- 597603 string characters out of 5846347
- 951098 words of memory out of 5000000
- 47356 multiletter control sequences out of 15000+600000
+ 30515 strings out of 478268
+ 597840 string characters out of 5846347
+ 951150 words of memory out of 5000000
+ 47357 multiletter control sequences out of 15000+600000
  586221 words of font info for 190 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,16n,122p,1006b,793s stack positions out of 10000i,1000n,20000p,200000b,200000s
@@ -1892,10 +1904,10 @@ fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/
 local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></
 usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pf
 b>
-Output written on week5and6.pdf (124 pages, 4487169 bytes).
+Output written on week5and6.pdf (127 pages, 4493843 bytes).
 PDF statistics:
- 1194 PDF objects out of 1200 (max. 8388607)
- 956 compressed objects within 10 object streams
- 378 named destinations out of 1000 (max. 500000)
+ 1219 PDF objects out of 1440 (max. 8388607)
+ 978 compressed objects within 10 object streams
+ 388 named destinations out of 1000 (max. 500000)
  69856 words of extra memory for PDF output out of 74296 (max. 10000000)
 

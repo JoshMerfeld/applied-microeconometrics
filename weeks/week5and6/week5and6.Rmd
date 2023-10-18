@@ -550,20 +550,59 @@ boot_reg
 
 
 
-
-## Multi-way clustering, too!
+## Can change null hypothesis, like cdl = 0.1
 
 ```{r wcb5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
-reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = c("state", "year"))
-reg1
-boot_reg <- boottest(
+(reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = "state"))
+(boot_reg <- boottest(
                     reg1, 
                     clustid = c("state"), 
                     param = "cdl", 
+                    r = 0.1, # null hypothesis is cdl = 0.1
                     B = 10000,
                     type = "rademacher" # default weighting, by the way
-                    )
-boot_reg
+                    ))
+```
+
+
+
+
+
+
+
+## Multi-way clustering, too!
+
+```{r wcb6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+(reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = c("state", "year")))
+(boot_reg <- boottest(
+                    reg1, 
+                    clustid = c("state", "year"), 
+                    param = "cdl", 
+                    B = 10000,
+                    type = "rademacher" # default weighting, by the way
+                    ))
+```
+
+
+
+
+
+
+
+
+## Example with random subset of 12 clusters
+
+```{r wcb7, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+set.seed(13489)
+randomclusters <- unique(df$state)[sample(1:length(unique(df$state)), 8, replace = F)]
+(reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df[df$state %in% randomclusters,], cluster = c("state", "year")))
+(boot_reg <- boottest(
+                    reg1, 
+                    clustid = c("state", "year"), 
+                    param = "cdl", 
+                    B = 10000,
+                    type = "rademacher" # default weighting, by the way
+                    ))
 ```
 
 
@@ -574,17 +613,17 @@ boot_reg
 
 ## Finally, Webb weights (Webb, 2023) -- but using Rademacher weights is the norm
 
-```{r wcb6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
-reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = c("state", "year"))
-reg1
-boot_reg <- boottest(
+```{r wcb8, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+set.seed(13489)
+randomclusters <- unique(df$state)[sample(1:length(unique(df$state)), 8, replace = F)]
+(reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df[df$state %in% randomclusters,], cluster = c("state", "year")))
+(boot_reg <- boottest(
                     reg1, 
-                    clustid = c("state"), 
+                    clustid = c("state", "year"), 
                     param = "cdl", 
                     B = 10000,
-                    type = "webb"
-                    )
-boot_reg
+                    type = "webb" # webb weights, six-point distribution
+                    ))
 ```
 
 
@@ -692,17 +731,19 @@ kable(
       yield3ivmain_lead,
       align = "cc", booktabs = TRUE, linesep = ""
       ) %>%
-  footnote(
-           "Note: Standard errors are in parentheses and are clustered at the village level. * p<0.10 ** p<0.05 *** p<0.01", 
-            general_title = "",
-            threeparttable = TRUE,
-            footnote_as_chunk = TRUE
-            ) %>%
   column_spec(1, width = "7.4cm") %>%
   column_spec(c(2:3),width = "2cm") %>%
   row_spec(c(8), hline_after = TRUE) %>%
   row_spec(c(6), bold = TRUE) %>%
-  kable_classic_2()
+  kable_classic_2() %>%
+  footnote("* p < 0.1, ** p < 0.05, *** p < 0.01.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            ) %>%
+  footnote("Note: Standard errors are in parentheses and are clustered at the village level", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            )
 
 ```
 
@@ -758,10 +799,10 @@ kable(
 
 
 ## Panel data
-```{r panel1, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+```{r panel1, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
 df <- read_dta("castle.dta")
 # homicide_c to rate
-df$homicide_c <- (df$homicide_c/df$population)*1000
+df$homicide_c <- (df$homicide_c/df$population)*100000
 # and log
 df$homicide_c <- log(df$homicide_c)
 ggplot(df) + 
@@ -790,7 +831,7 @@ ggplot(df) +
 - The regression is of the form:
 \begin{gather} y_{it} = \alpha_i + \beta x_{it} + \varepsilon_{it}, \end{gather}
 
-where $\alpha_i$ is the fixed effect for unit $i$. Note the subscript! No t!
+where $\alpha_i$ is the fixed effect for unit $i$. Note the subscript! No $t$!
 \vfill
 
 
@@ -888,6 +929,49 @@ etable(reg1, reg2,
 
 
 
+
+## The "effect" of castle doctrine laws, two-way fixed effects
+```{r fe3b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = c("state"))
+reg2 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state, data = df, cluster = c("state"))
+reg3 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state + year, data = df, cluster = c("state"))
+table <- etable(reg1, reg2, reg3,
+        # standard errors, digits, fit statistics, put SE below coefficients (the norm)
+        digits = 3, fitstat = "n", se.below = TRUE, depvar = FALSE,
+        # change significance codes to the norm
+        signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+        # rename the variables
+        dict = c("cdl" = "Castle doctrine law", "log(population)" = "Population (log)", "log(income)" = "Income (log)", "unemployrt" = "Unemp. rate",
+                "state" = "State", "year" = "Year"))
+table <- table[-c(1:2),]
+table[9,2:4] <- ""
+table <- table[c(1:11, 14),]
+colnames(table) <- c("", "(1)", "(2)", "(3)")
+kable(table, caption = "CDL laws and homicide rates",
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+  column_spec(1,width = "3cm") %>%
+  column_spec(c(2:4),width = "2cm") %>%
+  row_spec(9, bold = TRUE) %>%
+  row_spec(11, hline_after = TRUE) %>%
+  kable_styling() %>%
+  footnote("* p < 0.1, ** p < 0.05, *** p < 0.01.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            ) %>%
+  footnote("Note: Standard errors clustered at the state level are in parentheses.", general_title = "",
+            footnote_as_chunk = TRUE,
+            escape = FALSE
+            )
+
+```
+
+
+
+
+
+
+
+
 ## Random effects
 \vfill
 - Before turning to recent issues discovered with the two-way fixed effects estimator, let's talk about random effects
@@ -907,11 +991,11 @@ etable(reg1, reg2,
 ## Random effects in `R`
 ```{r fe4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
 library(lme4)
-reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df, cluster = "state")
-# note iid standard errors for simplicity for random effects 
+reg1 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt, data = df)
+# note iid standard errors for simplicity for random effects and compare to reg1
 # (can use other packages to change the vcov calculation if we think assumptions aren't exactly true...)
-reg2 <- lmer(homicide_c ~ cdl + log(population) + log(income) + unemployrt + (1 | state), data = df) 
-reg3 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state, data = df, cluster = "state")
+reg2 <- lmer(homicide_c ~ cdl + log(population) + log(income) + unemployrt + (1 | state) + (1 | year), data = df) 
+reg3 <- feols(homicide_c ~ cdl + log(population) + log(income) + unemployrt | state + year, data = df, cluster = "state")
 modelsummary(list("None" = reg1, "RE" = reg2, "FE" = reg3), gof_omit = ".*", 
               output = "markdown", coef_omit = c(-2,-3,-4,-5),
               coef_rename = c("cdl" = "Castle laws", "log(population)" = "Population (log)", 
@@ -936,6 +1020,7 @@ Some things about random effects relative to vanilla OLS (not fixed effects):
 - In expectation, coefficients are the same: $\mathbb{E}(\beta_{RE}) = \mathbb{E}(\beta_{OLS})$
   
   - Random effects is estimated using (feasible) generalized least squares, which essentially reweights the observations
+  - In practice with finite samples, this means the coefficients will not be exactly the same
 \vfill
 
 
