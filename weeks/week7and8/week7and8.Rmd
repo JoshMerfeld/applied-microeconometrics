@@ -1,0 +1,429 @@
+---
+title:  |
+    | Microeconometrics (Causal Inference)
+    | Weeks 7 and 8 - Instrumental variables
+author:
+  |
+    | Joshua D. Merfeld
+    | KDI School of Public Policy and Management
+date: "`r Sys.Date()`"
+
+# Output type and options
+output: 
+  beamer_presentation:
+    theme: Montpellier
+classoption: "aspectratio=169"
+
+# This includes latex arguments
+header-includes:
+  - \AtBeginDocument{\title[Weeks 7 and 8 - IV]{Microeconometrics (Causal Inference) \\ Weeks 7 and 8 - Instrumental variables}}
+  - \AtBeginDocument{\author[Josh Merfeld - KDI School]{Joshua D. Merfeld \\ KDI School of Public Policy and Management}}
+  - \input{header.tex}
+  - \usepackage[flushleft]{threeparttable}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+
+
+library(tidyverse)
+library(kableExtra)
+library(fixest)
+library(ggpubr)
+library(RColorBrewer)
+library(haven)
+library(fwildclusterboot)
+library(modelsummary)
+
+
+
+```
+
+
+
+
+## What are we doing today?
+\vfill
+- Introduction to IVs
+  - Requirements/assumptions
+\vfill
+- IVs and RCTs
+\vfill
+- In a world of LATE
+\vfill
+- Weak instruments
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Instrumental variables
+\vfill
+- Instrumental variables (IVs) are a way to estimate causal effects when we have endogeneity
+  - The endogeneity can take many forms: omitted variables, measurement error, simultaneity, etc.
+\vfill
+- Consider my paper: effects of pollution on agricultural productivity
+  - What's the problem with simply regression productivity on pollution?
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+## Endogeneity in the pollution example
+\vfill
+\center
+\includegraphics[width = 0.5\textwidth]{assets/pollution1.png}
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+## Endogeneity in the pollution example
+\vfill
+\center
+\includegraphics[width = 0.5\textwidth]{assets/pollution2.png}
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+## Differences in differences?
+\vfill
+- One solution is to use a differences-in-differences (DiD) approach
+\vfill
+- This requires the assumption of parallel trends
+  - That is, the trends in the outcome variable would have been the same in the absence of the treatment
+\vfill
+- But what if changing economic growth is leading to changes in both pollution and productivity?
+  - Then the parallel trends assumption is violated since areas with more pollution are also experiencing faster economic growth
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+## Control for growth?
+\vfill
+- If you're willing to make assumptions about what the omitted variables are, maybe you could control for theme
+\vfill
+- But this is a strong assumption
+  - No matter what we do, we'll have to make assumptions, though
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+## Enter: instruments
+\vfill
+- Let's take a different approach
+\vfill
+- We'll use an instrument
+  - A variable that is correlated with the endogenous variable (pollution) but is not correlated with the error term
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+## Instrument in the pollution example
+\vfill
+\center
+\includegraphics[width = 0.75\textwidth]{assets/pollution3.png}
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+## Requirements of an instrument
+\vfill
+- I very purposefully created the example so that the instrument is correlated with pollution
+  - But it's not *directly* correlated with productivity
+  - And it's not correlated with the omitted variable (the error term... will show you this in a second)
+\vfill
+- Let's look at these more formally
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Putting structure on this
+\vfill
+- What we really want to estimate is this:
+\begin{gather} \label{eq:iv1} productivity_{it} = \beta_0 + \beta_1 pollution_{it} + \beta_2 X_{it} + \epsilon_{it} \end{gather}
+
+- But if we don't properly control for everything, we are really estimating this:
+\begin{gather} \label{eq:iv2} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it}, \end{gather}
+where $\eta_{it} = \beta_2 X_{it} + \epsilon_{it}$.
+
+\vfill
+- Note that $\beta\neq\tilde{\beta}$, so we have a problem of endogeneity.
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Putting structure on this
+\vfill
+\begin{gather} \tag{2} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it} \end{gather}
+
+- Can we estimate a version of equation \autoref{eq:iv2} -- that is, without controlling for $X_{it}$ -- and still get causal effects?
+\vfill
+- Maybe, if we can find a valid instrument.
+\vfill
+- So what makes an instrument valid?
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Requirements for an instrument
+\vfill
+\begin{gather} \tag{2} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it} \end{gather}
+
+1. The instrument must be correlated with the endogenous variable (pollution)
+\vfill
+2. The instrument must not be correlated with the error term ($\eta_{it}$)
+      - Note that this implies two things:
+        - The instrument must not be correlated with any omitted variable (here $X_{it}$)
+        - The instrument must not directly affect the outcome ($productivity_{it}$)
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Using an instrument
+\vfill
+- If we can find a valid instrument, we can use it to estimate the causal effect of pollution on productivity
+\vfill
+- The simplest example uses two stages:
+  1. $pollution_{it} = \pi_0 + \pi_1 instrument_{it} + \nu_{it}$
+  2. $productivity_{it} = \phi_0 + \phi_1 pollution_{it} + \zeta_{it}$
+\vfill
+- We can then estimate $\phi_1$ using OLS
+  - Note that only under certain circumstances will $\phi_1=\beta_1$
+  - More on this later
+\vfill
+
+
+
+
+
+
+
+
+
+
+## The intuition with venn diagrams
+\center
+\includegraphics[width = 0.65\textwidth]{assets/iv1.png}
+
+
+
+
+
+
+
+
+
+
+## The IV only affects productivity through pollution
+\center
+\includegraphics[width = 0.65\textwidth]{assets/iv2.png}
+
+
+
+
+
+
+
+
+
+
+## This doesn't work. Direct effects on productivity!
+\center
+\includegraphics[width = 0.65\textwidth]{assets/iv3.png}
+
+
+
+
+
+
+
+
+
+
+## This doesn't work. Correlated with growth!
+\center
+\includegraphics[width = 0.65\textwidth]{assets/iv4.png}
+
+
+
+
+
+
+
+
+
+
+## Back to our "two stages", redefining names
+\vfill
+$$\text{Stage}\;1:\;T_{it} = \pi_0 + \pi_1 Z_{it} + \nu_{it}$$
+$$\text{Stage}\;2:\;Y_{it} = \phi_0 + \phi_1 T_{it} + \zeta_{it}$$
+\vfill
+
+- Requirements:
+  - $cov(Z_{it}, T_{it}) \neq 0$
+  - $cov(Z_{it}, \zeta_{it}) = 0$
+\vfill
+- We first regress T on the instrument to get $\hat{T}_{it}$
+- Then, we use the predicted values of T to estimate the effects on Y
+  - If the IV is valid, these predicted values *are unrelated to the omitted variables!*
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Some comments
+$$\text{Stage}\;1:\;T_{it} = \pi_0 + \pi_1 Z_{it} + \nu_{it}$$
+
+\vfill
+\begin{gather}cov(Z_{it}, T_{it}) \neq 0\end{gather}
+
+- This is the first requirement
+\vfill
+- We can test this!
+  - F-test of all *excluded instruments* in the first stages
+  - I say all excluded instruments because you can technically have more than one
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Some comments
+$$\text{Stage}\;1:\;T_{it} = \pi_0 + \pi_1 Z_{it} + \nu_{it}$$
+$$\text{Stage}\;2:\;Y_{it} = \phi_0 + \phi_1 T_{it} + \zeta_{it}$$
+
+\begin{gather}cov(Z_{it}, \zeta_{it}) = 0\end{gather}
+
+- This is the second requirement
+\vfill
+- We cannot explicitly test this
+  - This is an identifying *assumption*
+  - We need this to be true to attribute causality to the second stage
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+
+
+
