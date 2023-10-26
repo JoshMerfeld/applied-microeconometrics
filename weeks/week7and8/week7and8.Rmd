@@ -126,6 +126,68 @@ library(modelsummary)
 
 
 
+## Putting structure on this
+\vfill
+- What we really want to estimate is this:
+\begin{gather} \label{eq:iv1} productivity_{it} = \beta_0 + \beta_1 pollution_{it} + \epsilon_{it} \end{gather}
+where $\beta_1$ is the causal effect of pollution on productivity.
+
+\vfill
+- Endogeneity is defined as $cov(pollution_{it}, \epsilon_{it})\neq0$
+  - That is, the error term is correlated with the endogenous variable
+  - A common example is omitted variables
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Putting structure on this
+\vfill
+\begin{gather} \tag{1} productivity_{it} = \beta_0^* + \beta_1^* pollution_{it} + \epsilon_{it}^* \end{gather}
+
+- When we estimate this, due to the way OLS works, the residuals and pollution will be orthogonal
+  - That is, $cov(pollution_{it}, \epsilon_{it}^*)=0$
+  - This is a property of OLS
+
+\vfill
+- However, the issue is that under endogeneity, $\beta^*_1\neq\beta_1$
+  - That is, the OLS estimate of $\beta_1$ is biased *for the true structural parameter*
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Putting structure on this
+- Another way to think about it is that what we want to estimate is this:
+\begin{gather} productivity_{it} = \beta_0 + \beta_1 pollution_{it} + \beta_2 X + \epsilon_{it} \end{gather}
+
+- But if we don't properly control for everything -- in this case $X$ -- we are really estimating this:
+\begin{gather} \label{eq:iv2} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it}, \end{gather}
+where $\eta_{it} = \beta_2 X_{it} + \epsilon_{it}$.
+
+\vfill
+
+
+
+
+
+
+
+
+
+
 
 ## Differences in differences?
 \vfill
@@ -218,33 +280,11 @@ library(modelsummary)
 
 
 
-## Putting structure on this
+## Back to our problem
 \vfill
-- What we really want to estimate is this:
-\begin{gather} \label{eq:iv1} productivity_{it} = \beta_0 + \beta_1 pollution_{it} + \beta_2 X_{it} + \epsilon_{it} \end{gather}
+\begin{gather} \tag{3} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it} \end{gather}
 
-- But if we don't properly control for everything, we are really estimating this:
-\begin{gather} \label{eq:iv2} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it}, \end{gather}
-where $\eta_{it} = \beta_2 X_{it} + \epsilon_{it}$.
-
-\vfill
-- Note that $\beta\neq\tilde{\beta}$, so we have a problem of endogeneity.
-\vfill
-
-
-
-
-
-
-
-
-
-
-## Putting structure on this
-\vfill
-\begin{gather} \tag{2} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it} \end{gather}
-
-- Can we estimate a version of equation \autoref{eq:iv2} -- that is, without controlling for $X_{it}$ -- and still get causal effects?
+- Can we estimate a version of this equation -- that is, without controlling for $X_{it}$ -- and still get causal effects?
 \vfill
 - Maybe, if we can find a valid instrument.
 \vfill
@@ -260,9 +300,66 @@ where $\eta_{it} = \beta_2 X_{it} + \epsilon_{it}$.
 
 
 
+## What else can instruments help with?
+\vfill
+- It turns out IVs can also help with measurement error
+  - If we have a variable that is measured with error, we can use an instrument to correct for this
+\vfill
+- From Hansen, consider the model:
+\begin{gather} X = Q + u, \end{gather}
+where $X$ is the variable we observe, $Q$ is the variable we want to measure, and $u$ is measurement error.
+
+- Assume that $cov(u, Q)=0$, so that the measurement error is *random*, i.e. uncorrelated with the true value of $Q$.
+  - This is known as classical measurement error
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Classical measurement error and attenuation bias
+\vfill
+- We want to estimate:
+\begin{gather} Y = \beta_0 + \beta_1 Q + \epsilon, \end{gather}
+but what we really estimate is:
+\begin{gather} Y = \tilde{\beta}_0 + \tilde{\beta}_1 X + \tilde{\epsilon} = \tilde{\beta}_0 + \tilde{\beta}_1 (Q + u) + \tilde{\epsilon} \end{gather}
+\vfill
+
+
+
+
+
+
+
+
+
+## Classical measurement error and attenuation bias
+\vfill
+- This is what we get:
+\begin{gather} \tilde{\beta}_1 = \beta_1\left(1-\frac{\mathbb{E}(u^2)}{\mathbb{E}(X^2)}\right) \end{gather}
+
+- By definition, $\mathbb{E}(X^2)>\mathbb{E}(u^2)$, so $\tilde{\beta}_1<\beta_1$.
+  - Why is this true? \vfill
+  - That is, the OLS estimate of $\beta_1$ is biased *towards zero*
+  - This is called attenutation bias, but is only guaranteed with the measurement error is classical (random)
+\vfill
+
+
+
+
+
+
+
+
+
 ## Requirements for an instrument
 \vfill
-\begin{gather} \tag{2} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it} \end{gather}
+\begin{gather} \tag{3} productivity_{it} = \tilde{\beta_0} + \tilde{\beta_1} pollution_{it} + \eta_{it} \end{gather}
 
 1. The instrument must be correlated with the endogenous variable (pollution)
 \vfill
@@ -418,6 +515,1020 @@ $$\text{Stage}\;2:\;Y_{it} = \phi_0 + \phi_1 T_{it} + \zeta_{it}$$
 
 
 
+
+
+
+
+
+## Some comments
+$$\text{Stage}\;1:\;T_{it} = \pi_0 + \pi_1 Z_{it} + \nu_{it}$$
+$$\text{Stage}\;2:\;Y_{it} = \phi_0 + \phi_1 T_{it} + \zeta_{it}$$
+
+\begin{gather}cov(Z_{it}, \zeta_{it}) = 0\end{gather}
+
+- Note that we will use $Z_{it}$ to predict $T_{it}$.
+  - We cannot actually observe $cov(Z_{it}, \zeta_{it})$
+\vfill
+- So if $cov(Z_{it}, \zeta_{it})\neq0$...
+  - Then this correlation will be contained in the predicted values, $\hat{T}_{it}$
+  - i.e. the predicted values will still be endogenous
+\vfill
+
+
+
+
+
+
+
+
+
+
+## IVs in supply and demand
+\vfill
+- Economists have long been interested in supply and demand
+  - Obviously...
+\vfill
+- How does a change in supply affect prices?
+  - Not a straightforward question to answer, because prices are determined jointly by supply and demand
+  - We can't determine what is changing when we observe market prices
+  - One option: an instrument that moves only one side of the market
+\vfill
+- Small note: this is how IVs originally came about in economics
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Favara and Imbs, 2015 (*American Economic Review*)
+\vfill
+- How does the availability of credit affect house prices?
+\vfill
+- They use a change in deregulation of banks in the US
+  - This deregulation led to an increase in credit supply
+  - But it did not affect credit demand, since it was a supply-side change
+\vfill
+- Idea: show the change in credit availability for banks affected by the change
+  - And no change for banks not affected by the change
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Deregulation index across states and years
+\center
+\includegraphics[width = 0.9\textwidth]{assets/deregulation1.png}
+
+
+
+
+
+
+
+
+
+
+## Two stages: predict credit supply, then predict house prices
+\begin{align} &\text{Stage 1: } credit_{ct} = \delta_0 + \delta_1 deregulation_{ct} + \delta_2 X_{ct} + \alpha_c + \gamma_t + \nu_{ct} \\
+              &\text{Stage 2: } price_{ct} = \beta_0 + \beta_1 credit_{ct} + \beta_2 X_{ct} + \phi_c + \eta_t + \zeta_{ct} \end{align}
+
+- They instrument for $credit$ using $deregulation$
+  - $deregulation$ is correlated with $credit$ but not with $\zeta_{ct}$, according to the authors
+  - (Let's ignore whether this is true for now since it's so contextual)
+\vfill
+- They control for $X_{ct}$, which is a vector of controls
+- This is also a two-way fixed effects specification:
+  - $\alpha_c$ and $\gamma_t$ ($\phi_c$ and $\eta_t$ in stage 2) are county and year fixed effects
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Replication data: `hmda_merged.dta`
+```{r rep1, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(haven)
+df <- read_dta("hmda_merged.dta")
+head(df)
+
+# key controls: LDl_hpi Dl_inc LDl_inc Dl_pop LDl_pop Dl_her_v LDl_her_v
+# instrument: Linter_bra
+# endogenous variables: Dl_nloans_b Dl_vloans_b Dl_lir_b
+# weights: w1
+# restriction: border counties only (border==1)
+# county and year FE
+# cluster on state
+```
+
+
+
+
+
+
+
+
+
+
+## Reduced form
+\vfill
+- It is common to estimate the reduced form of the first stage
+  - This is a regression of the outcome of interest on the instrument
+\vfill
+- In this case, this equals
+\begin{gather} price_{ct} = B_0 + B_1 deregulation_{ct} + B_2 X_{ct} + \cdots \end{gather}
+\vfill
+
+
+
+
+
+
+
+
+
+## Reduced form
+```{r rep1b, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+bordercounties <- df %>% filter(border==1)
+summary(feols(Dl_hpi ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+        data = bordercounties, weights = bordercounties$w1,
+        cluster = "state_n"))
+```
+
+
+
+
+
+
+
+
+
+## First stage
+```{r rep2, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+bordercounties <- df %>% filter(border==1)
+reg1 <- feols(Dl_nloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+              data = bordercounties, weights = bordercounties$w1,
+              cluster = "state_n")
+reg2 <- feols(Dl_vloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+              data = bordercounties, weights = bordercounties$w1,
+              cluster = "state_n")
+reg3 <- feols(Dl_lir_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+              data = bordercounties, weights = bordercounties$w1,
+              cluster = "state_n")
+```
+
+
+
+
+
+
+
+
+
+
+## First stage
+```{r rep3, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+bordercounties <- df %>% filter(border==1)
+reg1 <- feols(Dl_nloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+              data = bordercounties, weights = bordercounties$w1,
+              cluster = "state_n")
+reg2 <- feols(Dl_vloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+              data = bordercounties, weights = bordercounties$w1,
+              cluster = "state_n")
+reg3 <- feols(Dl_lir_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+              data = bordercounties, weights = bordercounties$w1,
+              cluster = "state_n")
+table <- etable(reg1, reg2, reg3,
+                digits = 3, fitstat = c("n"), se.below = TRUE, depvar = FALSE,
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1))
+colnames(table) <- c("", "Loans", "Loan volume", "Loan-to-inc. ratio")
+table[c(1,3,5,7,9,11,13,15),1] <- c("IV", "House price (lag)", "Inc. p.c.", "Inc. p.c. (lag)", "Population", "Population (lag)", "Herf. index", "Herf. index (lag)")
+table <- table[-c(17:21),]
+tabletemp <- etable(reg1, reg2, reg3,
+                digits = 10, fitstat = c("n"), se.below = TRUE, depvar = FALSE,
+                coefstat = "tstat",
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1))
+# extract t statistics for first coeffcicient only
+tstats <- as_vector(tabletemp[2,2:4])
+# remove parentheses
+tstats <- gsub("\\(", "", tstats)
+tstats <- gsub("\\)", "", tstats)
+tstats <- as.numeric(tstats)
+# square for F-test
+tstats <- tstats^2
+# round to three digits
+tstats <- round(tstats, 3)
+# add to bottom of table
+table[18,] <- c("F-test for instrument", tstats)
+kable(table, 
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+      row_spec(16, hline_after = TRUE) %>%
+      column_spec(1,width = "3cm") %>%
+      column_spec(c(2:4),width = "2.5cm") %>%
+      kable_styling() %>%
+      footnote("Note: F-test differs from results in paper due to differences in how xtreg calculates standard errors.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                ) %>%
+      footnote("Standard errors clustered on state in parentheses.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                )
+```
+
+
+
+
+
+
+
+
+
+
+## First stage predictions vs. actual values... what do you notice?
+```{r rep4, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+bordercounties <- df %>% filter(border==1)
+reg1 <- feols(Dl_nloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
+              data = bordercounties, weights = bordercounties$w1,
+              cluster = "state_n")
+# predict out of first stage
+bordercounties$credit <- NA
+bordercounties$credit[reg1$obs_selection$obsRemoved] <- predict(reg1)
+bordercounties$credit2 <- NA
+bordercounties$credit2[reg2$obs_selection$obsRemoved] <- predict(reg2)
+bordercounties$credit3 <- NA
+bordercounties$credit3[reg3$obs_selection$obsRemoved] <- predict(reg3)
+
+# create plot with predicted vs. actual
+ggplot(bordercounties, aes(x = Dl_nloans_b, y = credit)) +
+  geom_point(alpha = 0.5) +
+  labs(x = "Actual change", y = "Predicted change") +
+  # same limits on both axes
+  coord_cartesian(xlim = c(min(bordercounties$Dl_nloans_b, na.rm = T), max(bordercounties$Dl_nloans_b, na.rm = T)), 
+                  ylim = c(min(bordercounties$Dl_nloans_b, na.rm = T), max(bordercounties$Dl_nloans_b, na.rm = T))) +
+  theme_minimal()
+
+```
+
+
+
+
+
+
+
+
+
+
+## First stage predictions vs. actual values... what do you notice?
+\vfill
+```{r rep5, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
+sums <- bordercounties %>% 
+          dplyr::select(Dl_nloans_b, credit) %>% 
+          na.omit() %>%
+          summarize(across(everything(), list(min = min, max = max, sd = sd)))
+sums <- rbind(sums, sums)
+sums[2,1:3] <- sums[2,4:6]
+sums <- sums[,1:3]
+sums <- cbind(sums[,1], sums)
+sums[,1] <- c("Actual", "Predicted")
+colnames(sums) <- c("", "min", "max", "SD")
+sums[,2:4] <- round(sums[,2:4], 3)
+kable(sums,
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE
+      ) %>%
+      kable_styling()
+```
+
+\vfill
+- Note how much less variance there is in the predicted values than the actual values
+  - This is the point of using an instrument!
+  - We are able to isolate the variation in the endogenous variable that is not correlated with the error term
+    - This is of course only a subset of the total variation in the endogenous variable
+\vfill
+- This will be important later
+\vfill
+
+
+
+
+
+
+
+
+
+
+## We cannot simply use the predicted values in the second stage... standard errors will be wrong!
+```{r rep6, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+# create a macro for the main regression controls (to avoid repetition and save space)
+setFixest_fml(..controls = ~ LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v)
+# Let's use feols to estimate the two stages
+reg1 <- feols(Dl_hpi ~ ..controls | county + year | Dl_nloans_b ~ Linter_bra, 
+              data = df, weights = df$w1,
+              cluster = "state_n")
+reg2 <- feols(Dl_hpi ~ ..controls | county + year | Dl_vloans_b ~ Linter_bra, 
+              data = df, weights = df$w1,
+              cluster = "state_n")
+reg3 <- feols(Dl_hpi ~ ..controls | county + year | Dl_lir_b ~ Linter_bra, 
+              data = df, weights = df$w1,
+              cluster = "state_n")
+```
+
+
+
+
+
+
+
+
+
+
+## `fixest` will give us the correct standard errors, however (first stage)
+```{r rep7, echo = TRUE, eval = FALSE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+# first stage:
+etable(
+      reg1, reg2, reg3,
+      stage = 1,
+      se.below = TRUE,
+      depvar = FALSE,
+      signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+      digits = "r3",
+      digits.stats = "r0",
+      fitstat = c("ivwald", "n"), # make sure to use ivwald for first-stage F-test
+      coefstat = "se",
+      group = list(controls = "LDl_hpi"),
+      keep = "Linter_bra"
+    )
+```
+
+
+
+
+
+
+
+
+
+
+## `fixest` will give us the correct standard errors, however (first stage)
+```{r rep8, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+# first stage:
+table <- etable(
+              reg1, reg2, reg3,
+              stage = 1,
+              se.below = TRUE,
+              depvar = FALSE,
+              signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+              digits = "r3",
+              digits.stats = "r3",
+              fitstat = c("ivwald", "n"), # make sure to use ivwald for first-stage F-test
+              coefstat = "se",
+              group = list(controls = "LDl_hpi"),
+              keep = "Linter_bra"
+            )
+table[1,1] <- "IV (deregulation index)"
+colnames(table) <- c("", "Loans", "Loan volume", "Loan-to-inc. ratio")
+table[4,2:4] <- ""
+table <- table[-c(7:8),]
+kable(table, 
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+      row_spec(6, hline_after = TRUE) %>%
+      column_spec(1,width = "3cm") %>%
+      column_spec(c(2:4),width = "2.5cm") %>%
+      kable_styling() %>%
+      footnote("Note: The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                ) %>%
+      footnote("Standard errors clustered on state in parentheses.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                )
+```
+
+
+
+
+
+
+
+
+
+
+## `fixest` will give us the correct standard errors, however (second stage)
+```{r rep9, echo = TRUE, eval = FALSE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+# second stage:
+etable(
+      reg1, reg2, reg3,
+      stage = 2,
+      se.below = TRUE,
+      depvar = FALSE,
+      signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+      digits = "r3",
+      digits.stats = "r3",
+      fitstat = c("ivwald", "n"), # make sure to use ivwald for first-stage F-test
+      coefstat = "se",
+      group = list(controls = "LDl_hpi"),
+      keep = c("Dl_nloans_b", "Dl_vloans_b", "Dl_lir_b")
+    )
+```
+
+
+
+
+
+
+
+
+
+
+## `fixest` will give us the correct standard errors, however (second stage)
+```{r rep10, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+# first stage:
+table <- etable(
+              reg1, reg2, reg3,
+              stage = 2,
+              se.below = TRUE,
+              depvar = FALSE,
+              signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+              digits = "r3",
+              digits.stats = "r3",
+              fitstat = c("ivwald", "n"),
+              coefstat = "se",
+              group = list(controls = "LDl_hpi"),
+              keep = c("Dl_nloans_b", "Dl_vloans_b", "Dl_lir_b")
+            )
+table[c(1, 3, 5),1] <- c("Loans", "Loan volume", "Loan-to-inc. ratio")
+colnames(table) <- c("", "(1)", "(2)", "(3)")
+table[8,2:4] <- ""
+table <- table[-c(11:12),]
+table[11,3] <- table[12,3]
+table[11,4] <- table[13,4]
+table <- table[-c(12:13),]
+table[11,1] <- "Wald (1st stage)"
+kable(table, 
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+      row_spec(10, hline_after = TRUE) %>%
+      column_spec(1,width = "3cm") %>%
+      column_spec(c(2:4),width = "2.5cm") %>%
+      kable_styling() %>%
+      footnote("Standard errors clustered on state in parentheses. The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors. The standard errors here are more conservative.", 
+                general_title = "",
+                threeparttable = TRUE,
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                )
+```
+
+
+
+
+
+
+
+
+
+
+## Note the syntax for `fixest`
+\vfill
+`feols(y ~ x | fe1 + fe2 | endogenousvar ~ z, ...)`
+\vfill
+`feols(y ~ x | fe1 + fe2 | endogenousvar1 + endogenousvar2 ~ z1 + z2, ...)`
+\vfill
+
+- All controls should be in the first stage, as well as the second
+  - `fixest` does this for us automatically
+
+- The package also automatically calculates correct standard errors in the second stage
+  - For the "generated regressor"
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Estimating it all together
+\vfill
+- With just a single instrument and a single endogenous variable, there is a single first stage
+\vfill
+- Let's continue with our outcome $Y$, our endogenous variable $X$, and our exogenous variables $Z$ (which includes the instrument)
+\vfill
+- It turns out that we can write $\hat{\beta}_{IV}$ as:
+\begin{gather} \hat{\beta}_{IV}=\left((Z'Z)^{-1}(Z'X)\right)^{-1}\left((Z'Z)^{-1}(Z'Y)\right) \end{gather}
+\vfill
+
+
+
+
+
+
+
+## Estimating it all together
+\vfill
+\begin{gather} \tag{14} \hat{\beta}_{IV}=\left((Z'Z)^{-1}(Z'X)\right)^{-1}\left((Z'Z)^{-1}(Z'Y)\right) \end{gather}
+
+- We can immediately see two things:
+\vfill
+  - The requirement that $Z$ predicts $X$ is necessary to invert the first term
+\vfill
+  - The IV estimate *scales the reduced form by the first stage*
+\vfill
+
+
+
+
+
+
+
+## Just a quick note that this simplifies
+\begin{align} \tag{14} \hat{\beta}_{IV}&=\left((Z'Z)^{-1}(Z'X)\right)^{-1}\left((Z'Z)^{-1}(Z'Y)\right) \\
+                                        &=(Z'X)^{-1}(Z'Z)(Z'Z)^{-1}(Z'Y) \\
+                                        &=(Z'X)^{-1}(Z'Y) \end{align}
+
+
+
+
+
+
+
+
+## Binary instrument and binary treatment
+\vfill
+- Let's consider a binary instrument and a binary treatment
+  - $Z$ and $D$ are binary, i.e. $Z,D\in\{0,1\}$
+\vfill
+- It turns out there is a very real case where we can find a valid instrument that is binary
+  - Treatment assignment in an RCT!
+\vfill
+
+
+
+
+
+
+
+
+## RCTs and IV
+\vfill
+- Banerjee et al. (2015): The Miracle of Microfinance? Evidence from a Randomized Evaluation (*AEJ: Applied*)
+\vfill
+- They are interested in the effects of access to credit on outcomes
+  - They randomly assign households (sort of) to microcredit *access*
+\vfill
+- Z: whether or not the household was offered microcredit
+  - This is a binary instrument
+- X: whether or not the household received credit
+  - This is a binary endogenous variable
+\vfill
+
+
+
+
+
+
+
+
+## RCTs and IV
+\vfill
+- Banerjee et al. (2015): The Miracle of Microfinance? Evidence from a Randomized Evaluation (*AEJ: Applied*)
+\vfill
+- They are interested in the effects of access to credit on outcomes
+  - They randomly assign households (sort of) to microcredit *access*
+\vfill
+- Z: whether or not the household was offered microcredit
+  - This is a binary instrument
+- X: whether or not the household received credit
+  - This is a binary endogenous variable
+\vfill
+
+
+
+
+
+
+
+
+## Effects of the program on outcomes in endline 1
+```{r micro1, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+df <- read_dta("banerjeeetal.dta")
+# create a macro for the main regression controls (to avoid repetition and save space)
+setFixest_fml(..controls = ~ area_pop_base + area_debt_total_base + area_business_total_base + area_exp_pc_mean_base + 
+                              area_literate_head_base + area_literate_base)
+# they control for baseline values of NEIGHBORHOOD means of these variables
+```
+```{r microb, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+df <- df %>% dplyr::select(areaid, treatment, w1, starts_with("area_"), anymfi_1, anyloan_1, bizassets_1, bizprofit_1, any_biz_1)
+# make sure we have same sample
+df <- df[complete.cases(df),]
+```
+
+
+- They estimate:
+\begin{gather} y_{in} = \beta_0 + \beta_1 Z_{n} + \sum_{k=1}^K\gamma_k X_k + \varepsilon_{n}, \end{gather}
+where $Z_{i}$ is the treatment variable (microcredit access) and standard errors are clustered at the areaid (neighborhood)
+
+
+
+
+
+
+
+
+## Reduced form
+```{r micro2, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(any_biz_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg2 <- feols(bizassets_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg3 <- feols(bizprofit_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+table <- etable(reg1, reg2, reg3,
+                digits = 3, fitstat = c("n"), se.below = TRUE, depvar = FALSE,
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                group = list(controls = "area_pop_base"), keep = "treatment")
+```
+
+
+
+
+
+
+
+
+## Reduced form, clean table
+```{r micro3, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(any_biz_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg2 <- feols(bizassets_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg3 <- feols(bizprofit_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+table <- etable(reg1, reg2, reg3,
+                digits = 3, fitstat = c("n"), se.below = TRUE, depvar = FALSE,
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                group = list(controls = "area_pop_base"), keep = "treatment")
+colnames(table) <- c("", "Any biz?", "Biz assets", "Biz profits")
+table <- table[-c(4:5),]
+kable(table, 
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+      row_spec(3, hline_after = TRUE) %>%
+      column_spec(1,width = "2cm") %>%
+      column_spec(c(2:4),width = "1.5cm") %>%
+      kable_styling() %>%
+      footnote("Standard errors clustered on neighborhood in parentheses.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                )
+```
+
+
+
+
+
+
+
+
+## First stage
+```{r micro4, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(anymfi_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg2 <- feols(anyloan_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+table <- etable(reg1, reg2,
+                digits = 3, fitstat = c("n"), se.below = TRUE, depvar = FALSE,
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                group = list(controls = "area_pop_base"), keep = "treatment")
+```
+
+
+
+
+
+
+
+
+## First stage, clean table
+```{r micro5, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(anymfi_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg2 <- feols(anyloan_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+table <- etable(reg1, reg2,
+                digits = 3, fitstat = c("n"), se.below = TRUE, depvar = FALSE,
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                group = list(controls = "area_pop_base"), keep = "treatment")
+colnames(table) <- c("", "Any MFI loan?", "Any loan?")
+table <- table[-c(4:5),]
+kable(table, 
+      align = "lcc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+      row_spec(3, hline_after = TRUE) %>%
+      column_spec(1,width = "2cm") %>%
+      column_spec(c(2:3),width = "1.5cm") %>%
+      kable_styling() %>%
+      footnote("Standard errors clustered on neighborhood in parentheses.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                )
+```
+
+
+
+
+
+
+
+
+## IV results
+```{r micro6, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg2 <- feols(bizassets_1 ~ ..controls | anymfi_1 ~ treatment, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg3 <- feols(bizprofit_1 ~ ..controls | anymfi_1 ~ treatment, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+
+table <- etable(reg1, reg2, reg3,
+                digits = 3, fitstat = c("ivwald", "n"), se.below = TRUE, depvar = FALSE,
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                group = list(controls = "area_pop_base"), keep = "anymfi_1")
+```
+
+
+
+
+
+
+
+
+## IV results, clean table
+```{r micro7, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg2 <- feols(bizassets_1 ~ ..controls | anymfi_1 ~ treatment, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+reg3 <- feols(bizprofit_1 ~ ..controls | anymfi_1 ~ treatment, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+
+table <- etable(reg1, reg2, reg3,
+                digits = 3, fitstat = c("ivwald", "n"), se.below = TRUE, depvar = FALSE,
+                # change significance codes to the norm
+                signif.code = c("***" = 0.01, "**" = 0.05, "*" = 0.1),
+                group = list(controls = "area_pop_base"), keep = "anymfi_1")
+colnames(table) <- c("", "Any biz?", "Biz assets", "Biz profits")
+table <- table[-c(4:5),]
+table[1,1] <- "Has MFI loan"
+table[4,1] <- "Wald (1st stage)"
+kable(table, 
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
+      row_spec(3, hline_after = TRUE) %>%
+      column_spec(1,width = "2cm") %>%
+      column_spec(c(2:4),width = "1.5cm") %>%
+      kable_styling() %>%
+      footnote("Standard errors clustered on neighborhood in parentheses.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                )
+```
+
+
+
+
+
+
+
+
+## Putting them together
+```{r micro8, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
+# reduced form
+reg1 <- feols(any_biz_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+# first stage
+reg2 <- feols(anymfi_1 ~ treatment + ..controls, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+# IV result
+reg3 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment, 
+              data = df, weights = df$w1,
+              cluster = "areaid")
+```
+
+- Coefficient on reduced form: `r paste0(reg1$coefficients[2])`
+\vfill
+- Coefficient on first stage: `r paste0(reg2$coefficients[2])`
+\vfill
+- Coefficient on IV: `r paste0(reg3$coefficients[2])`
+  - Can you figure out how this is related to the RF and FS? \pause
+  - This is a ratio: $\frac{\hat{\beta}_{RF}}{\hat{\beta}_{FS}} = \hat{\beta}_{IV}$
+  - The IV result *scales the reduced form by the first stage*
+\vfill
+
+
+
+
+
+
+
+
+## Putting them together, the intuition
+\vfill
+- The IV estimate is a ratio of two coefficients
+  - The reduced form coefficient and the first stage coefficient
+\vfill
+- In this example, treatment increases MFI loan take-up by 8.2 percentage points.
+  - In other words, the treatment effect is driven by a change in MFI loan take-up among 8.2 percent of households
+\vfill
+- If the probability of owning a business goes up by 0.005 (0.5 p.p.), what is the change in probability of owning a business for those who take up the MFI loan?
+  - 0.005/0.082! This is the IV estimate
+\vfill
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+## Interpreting IV estimates
+\vfill
+- So this IV estimate is driven by the change in MFI loan take-up among 8.2 percent of households
+  - What does this mean for the effect of MFI loans on business ownership?
+\vfill
+- Two worlds:
+  - Homogeneous treatment effects
+  - Heterogeneous treatment effects
+\vfill
+- Remember how I said an IV identifies just certain kinds of variation?
+  - This will come into play here
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Homogeneous treatment effects
+\vfill
+- We had a similar discussion when we talked about DiD
+\vfill
+- If everyone has the same treatment effect, then it doesn't matter what variation we isolate
+  - All variation will be identifying the same effect
+\vfill
+- In this case, the IV is estimated the average treatment effect
+\vfill
+- But what if effects are not homogeneous?
+\vfill
+
+
+
+
+
+
+
+
+
+## Heterogeneous treatment effects
+\vfill
+- What if not everyone has the same treatment effect?
+  - In other words, what if different types of variation are identifying different effects?
+\vfill
+- Imagine a world in which we have an endogenous variable, $D$
+  - Imagine we also have multiple *valid* instruments: $Z_1$ and $Z_2$
+\vfill
+- If $Z_1$ and $Z_2$ are correlated with different "parts" of $D$, then they can be isolating different variation in $D$
+  - This also means that they IV results can lead to different estimates, even though both instruments are valid!
+\vfill
+
+
+
+
+
+
+
+
+
+## Defining the LATE
+\vfill
+- We need to define four separate groups:
+  - Compliers
+  - Always-takers
+  - Never-takers
+  - Defiers
+\vfill
+
+
+
+
+
+
+
+
+
+## Compliers
+\center
+\includegraphics[width = 0.85\textwidth]{assets/late1.png}
+
+
+
+
+
+
+
+
+
+## Never-takers
+\center
+\includegraphics[width = 0.85\textwidth]{assets/late2.png}
+
+
+
+
+
+
+
+
+
+## Always-takers
+\center
+\includegraphics[width = 0.85\textwidth]{assets/late3.png}
+
+
+
+
+
+
+
+
+
+## Defiers
+\center
+\includegraphics[width = 0.85\textwidth]{assets/late4.png}
+
+
+
+
+
+
+
+
+
+## Comparing the four groups
+\center
+\includegraphics[width = 0.55\textwidth]{assets/late5.png}
 
 
 
