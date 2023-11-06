@@ -49,11 +49,10 @@ You can find the slides (and any data we will be using) for each week under thei
 - Week 3: You can find the slides for the the week [here](weeks/week3/week3.pdf).
 - Week 4: You can find the slides for the the week [here](weeks/week4/week4.pdf).
 - Weeks 5 and 6: You can find the slides for the the two weeks [here](weeks/week5and6/week5and6.pdf).
+- Weeks 7 and 8: You can find the slides for the the two weeks [here](weeks/week7and8/week7and8.pdf).
 
 ## Assignments
 
 I will also post your assignments here, under the [assignments folder](assignments/).
 
-- Assignment 1: Due during week 2.
-  - You can find the assignment in the [assignment 1 folder](assignments/assignment1/)
 
