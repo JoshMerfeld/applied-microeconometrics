@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  25 OCT 2023 09:23
+This is pdfTeX, Version 3.141592653-2.6-1.40.24 (TeX Live 2022) (preloaded format=pdflatex 2023.3.20)  6 NOV 2023 12:10
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1412,47 +1412,170 @@ l.2 \protect\hypertarget{putting-them-together}{}
 
 ] [64
 
+] [65
+
 ]
-<assets/late1.png, id=522, 885.3075pt x 483.8075pt>
+<assets/late1.png, id=529, 885.3075pt x 483.8075pt>
 File: assets/late1.png Graphic file (type png)
 <use assets/late1.png>
-Package pdftex.def Info: assets/late1.png  used on input line 1733.
-(pdftex.def)             Requested size: 338.59023pt x 185.03731pt.
-[65
-
- <./assets/late1.png>]
-<assets/late2.png, id=531, 885.3075pt x 483.8075pt>
-File: assets/late2.png Graphic file (type png)
-<use assets/late2.png>
-Package pdftex.def Info: assets/late2.png  used on input line 1740.
+Package pdftex.def Info: assets/late1.png  used on input line 1754.
 (pdftex.def)             Requested size: 338.59023pt x 185.03731pt.
 [66
 
- <./assets/late2.png>]
-<assets/late3.png, id=540, 885.3075pt x 483.8075pt>
-File: assets/late3.png Graphic file (type png)
-<use assets/late3.png>
-Package pdftex.def Info: assets/late3.png  used on input line 1747.
+ <./assets/late1.png>]
+<assets/late2.png, id=538, 885.3075pt x 483.8075pt>
+File: assets/late2.png Graphic file (type png)
+<use assets/late2.png>
+Package pdftex.def Info: assets/late2.png  used on input line 1761.
 (pdftex.def)             Requested size: 338.59023pt x 185.03731pt.
 [67
 
- <./assets/late3.png>]
-<assets/late4.png, id=551, 885.3075pt x 483.8075pt>
-File: assets/late4.png Graphic file (type png)
-<use assets/late4.png>
-Package pdftex.def Info: assets/late4.png  used on input line 1754.
+ <./assets/late2.png>]
+<assets/late3.png, id=549, 885.3075pt x 483.8075pt>
+File: assets/late3.png Graphic file (type png)
+<use assets/late3.png>
+Package pdftex.def Info: assets/late3.png  used on input line 1768.
 (pdftex.def)             Requested size: 338.59023pt x 185.03731pt.
 [68
 
- <./assets/late4.png>]
-<assets/late5.png, id=560, 604.2575pt x 584.1825pt>
-File: assets/late5.png Graphic file (type png)
-<use assets/late5.png>
-Package pdftex.def Info: assets/late5.png  used on input line 1761.
-(pdftex.def)             Requested size: 219.08743pt x 211.80307pt.
+ <./assets/late3.png>]
+<assets/late4.png, id=558, 885.3075pt x 483.8075pt>
+File: assets/late4.png Graphic file (type png)
+<use assets/late4.png>
+Package pdftex.def Info: assets/late4.png  used on input line 1775.
+(pdftex.def)             Requested size: 338.59023pt x 185.03731pt.
 [69
 
- <./assets/late5.png>]
+ <./assets/late4.png>]
+<assets/hansenlate.png, id=567, 906.38625pt x 304.13625pt>
+File: assets/hansenlate.png Graphic file (type png)
+<use assets/hansenlate.png>
+Package pdftex.def Info: assets/hansenlate.png  used on input line 1782.
+(pdftex.def)             Requested size: 338.59023pt x 113.60994pt.
+[70
+
+ <./assets/hansenlate.png>]
+<assets/late5.png, id=576, 604.2575pt x 584.1825pt>
+File: assets/late5.png Graphic file (type png)
+<use assets/late5.png>
+Package pdftex.def Info: assets/late5.png  used on input line 1789.
+(pdftex.def)             Requested size: 219.08743pt x 211.80307pt.
+[71
+
+ <./assets/late5.png>] [72
+
+] [73
+
+] [74
+
+] [75
+
+] [76
+
+] [77
+
+] [78
+
+]
+<assets/angristkrueger1.png, id=635, 1171.37625pt x 710.655pt>
+File: assets/angristkrueger1.png Graphic file (type png)
+<use assets/angristkrueger1.png>
+Package pdftex.def Info: assets/angristkrueger1.png  used on input line 2057.
+(pdftex.def)             Requested size: 358.50229pt x 217.49225pt.
+
+Overfull \vbox (2.32657pt too high) detected at line 2057
+ []
+
+[79
+
+ <./assets/angristkrueger1.png>]
+<assets/angristkrueger2.png, id=645, 1171.37625pt x 710.655pt>
+File: assets/angristkrueger2.png Graphic file (type png)
+<use assets/angristkrueger2.png>
+Package pdftex.def Info: assets/angristkrueger2.png  used on input line 2064.
+(pdftex.def)             Requested size: 358.50229pt x 217.49225pt.
+
+Overfull \vbox (2.32657pt too high) detected at line 2064
+ []
+
+[80
+
+ <./assets/angristkrueger2.png>] [81
+
+] [82
+
+] [83
+
+] [84
+
+]
+<assets/bound1.png, id=685, 1600.98125pt x 717.68124pt>
+File: assets/bound1.png Graphic file (type png)
+<use assets/bound1.png>
+Package pdftex.def Info: assets/bound1.png  used on input line 2156.
+(pdftex.def)             Requested size: 398.3386pt x 178.56569pt.
+[85
+
+ <./assets/bound1.png>] [86
+
+]
+<assets/bound2.png, id=702, 829.0975pt x 504.88625pt>
+File: assets/bound2.png Graphic file (type png)
+<use assets/bound2.png>
+Package pdftex.def Info: assets/bound2.png  used on input line 2191.
+(pdftex.def)             Requested size: 298.75394pt x 181.92839pt.
+[87
+
+ <./assets/bound2.png>] [88
+
+] [89
+
+]
+<assets/weak_iv_tauhat_hist.png, id=726, 4131.435pt x 2391.93625pt>
+File: assets/weak_iv_tauhat_hist.png Graphic file (type png)
+<use assets/weak_iv_tauhat_hist.png>
+Package pdftex.def Info: assets/weak_iv_tauhat_hist.png  used on input line 225
+9.
+(pdftex.def)             Requested size: 358.50229pt x 207.5274pt.
+[90
+
+ <./assets/weak_iv_tauhat_hist.png>]
+<assets/weak_iv_tauhat_betahat.png, id=735, 4131.435pt x 2391.93625pt>
+File: assets/weak_iv_tauhat_betahat.png Graphic file (type png)
+<use assets/weak_iv_tauhat_betahat.png>
+Package pdftex.def Info: assets/weak_iv_tauhat_betahat.png  used on input line 
+2266.
+(pdftex.def)             Requested size: 358.50229pt x 207.5274pt.
+[91
+
+ <./assets/weak_iv_tauhat_betahat.png>]
+<assets/weak_iv_betahat_hist.png, id=745, 4131.435pt x 2391.93625pt>
+File: assets/weak_iv_betahat_hist.png Graphic file (type png)
+<use assets/weak_iv_betahat_hist.png>
+Package pdftex.def Info: assets/weak_iv_betahat_hist.png  used on input line 22
+73.
+(pdftex.def)             Requested size: 358.50229pt x 207.5274pt.
+[92
+
+ <./assets/weak_iv_betahat_hist.png>] [93
+
+] [94
+
+] [95
+
+] [96
+
+] [97
+
+]
+pdfTeX warning (ext4): destination with the same identifier (name{overidentific
+ation-tests-2}) has been already used, duplicate ignored
+<to be read again> 
+                   \relax 
+l.2443 \end{frame}
+                   [98
+
+]
 \tf@nav=\write6
 \openout6 = `week7and8.nav'.
 
@@ -1464,11 +1587,11 @@ Package pdftex.def Info: assets/late5.png  used on input line 1761.
 
 (./week7and8.aux) ) 
 Here is how much of TeX's memory you used:
- 28270 strings out of 478268
- 551432 string characters out of 5846347
+ 28488 strings out of 478268
+ 555340 string characters out of 5846347
  919568 words of memory out of 5000000
- 45442 multiletter control sequences out of 15000+600000
- 558382 words of font info for 164 fonts, out of 8000000 for 9000
+ 45556 multiletter control sequences out of 15000+600000
+ 558887 words of font info for 169 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  128i,13n,122p,1006b,701s stack positions out of 10000i,1000n,20000p,200000b,200000s
 {/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-ma
@@ -1478,28 +1601,29 @@ thit.enc}{/usr/local/texlive/2022/texmf-dist/fonts/enc/dvips/lm/lm-rm.enc}{/usr
 ist/fonts/enc/dvips/lm/lm-mathex.enc}{/usr/local/texlive/2022/texmf-dist/fonts/
 enc/dvips/lm/lm-mathsy.enc}</usr/local/texlive/2022/texmf-dist/fonts/type1/publ
 ic/lm/lmex10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi
-10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></us
-r/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/local/te
-xlive/2022/texmf-dist/fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2022
-/texmf-dist/fonts/type1/public/lm/lmss8.pfb></usr/local/texlive/2022/texmf-dist
-/fonts/type1/public/lm/lmss9.pfb></usr/local/texlive/2022/texmf-dist/fonts/type
-1/public/lm/lmssbo10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public
-/lm/lmssbx10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmss
-o10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></
-usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso9.pfb></usr/local/
-texlive/2022/texmf-dist/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/20
-22/texmf-dist/fonts/type1/public/lm/lmsy7.pfb></usr/local/texlive/2022/texmf-di
-st/fonts/type1/public/lm/lmsy8.pfb></usr/local/texlive/2022/texmf-dist/fonts/ty
-pe1/public/lm/lmtk10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public
-/lm/lmtt10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt8.
-pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr
-/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb><
-/usr/local/texlive/2022/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.p
-fb>
-Output written on week7and8.pdf (69 pages, 861478 bytes).
+10.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi6.pfb></us
+r/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmmi7.pfb></usr/local/tex
+live/2022/texmf-dist/fonts/type1/public/lm/lmmi8.pfb></usr/local/texlive/2022/t
+exmf-dist/fonts/type1/public/lm/lmss10.pfb></usr/local/texlive/2022/texmf-dist/
+fonts/type1/public/lm/lmss12.pfb></usr/local/texlive/2022/texmf-dist/fonts/type
+1/public/lm/lmss8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm
+/lmss9.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmssbo10.p
+fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmssbx10.pfb></usr
+/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmsso10.pfb></usr/local/te
+xlive/2022/texmf-dist/fonts/type1/public/lm/lmsso8.pfb></usr/local/texlive/2022
+/texmf-dist/fonts/type1/public/lm/lmsso9.pfb></usr/local/texlive/2022/texmf-dis
+t/fonts/type1/public/lm/lmsy10.pfb></usr/local/texlive/2022/texmf-dist/fonts/ty
+pe1/public/lm/lmsy7.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/
+lm/lmsy8.pfb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtk10.p
+fb></usr/local/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt10.pfb></usr/l
+ocal/texlive/2022/texmf-dist/fonts/type1/public/lm/lmtt8.pfb></usr/local/texliv
+e/2022/texmf-dist/fonts/type1/public/lm/lmtti10.pfb></usr/local/texlive/2022/te
+xmf-dist/fonts/type1/public/amsfonts/symbols/msam10.pfb></usr/local/texlive/202
+2/texmf-dist/fonts/type1/public/amsfonts/symbols/msbm10.pfb>
+Output written on week7and8.pdf (98 pages, 1967446 bytes).
 PDF statistics:
- 715 PDF objects out of 1000 (max. 8388607)
- 557 compressed objects within 6 object streams
- 208 named destinations out of 1000 (max. 500000)
- 51319 words of extra memory for PDF output out of 51595 (max. 10000000)
+ 971 PDF objects out of 1000 (max. 8388607)
+ 762 compressed objects within 8 object streams
+ 294 named destinations out of 1000 (max. 500000)
+ 51359 words of extra memory for PDF output out of 51595 (max. 10000000)
 

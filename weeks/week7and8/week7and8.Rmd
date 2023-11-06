@@ -1391,6 +1391,21 @@ reg3 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment,
 
 
 
+## The Wald estimator
+\vfill
+- This is sometimes referred to as the wald estimator (Wald 1940)
+\begin{gather} \beta = \frac{\mathbb{E}\left[Y\mid Z=1\right]-\mathbb{E}\left[Y\mid Z=0\right]}{\mathbb{E}\left[X\mid Z=1\right]-\mathbb{E}\left[X\mid Z=0\right]} \end{gather}
+
+- Note that these expectations are not observed
+  - We estimate them with the reduced form and first stage
+\vfill
+
+
+
+
+
+
+
 
 
 
@@ -1469,6 +1484,8 @@ reg3 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment,
   - Never-takers
   - Defiers
 \vfill
+- Let's look at these four groups assuming a binary treatment
+\vfill
 
 
 
@@ -1526,6 +1543,18 @@ reg3 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment,
 
 
 
+## In Hansen, where X is treatment assignment
+\center
+\includegraphics[width = 0.85\textwidth]{assets/hansenlate.png}
+
+
+
+
+
+
+
+
+
 ## Comparing the four groups
 \center
 \includegraphics[width = 0.55\textwidth]{assets/late5.png}
@@ -1533,6 +1562,464 @@ reg3 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment,
 
 
 
+
+
+
+
+
+## What are we estimating?
+\vfill
+- Never takers *never* take up the treatment
+  - If we have no variation in treatment for them, we can't estimate the effect of the treatment on them
+  - Same goes for always takers
+\vfill
+- That leaves us with two groups: compliers and defiers
+  - Let's make one more assumption: $P(X(1)-X(0)<0)=0$ (or $>0$)
+  - i.e. there are no defiers
+\vfill
+
+
+
+
+
+
+
+
+
+## What are we estimating?
+\vfill
+- This is called the local average treatment effect (LATE)
+\vfill
+- This is the *effect of the treatment on compliers*
+  - i.e. the effect of the treatment on those who are induced to take up treatment because of the instrument
+\vfill
+- Again, if treatment is homogeneous, the effect on compliers is the same on others
+  - In this case, the LATE is the ATE
+  - But, do we really think this is ever true?
+\vfill
+
+
+
+
+
+
+
+
+
+## Different instruments, different effects
+\vfill
+- One implication of LATE is that different instruments can identify different effects
+  - In other words, the group of "compliers" can differ across instruments, even if all the instruments are valid
+\vfill
+- Example:
+  - Interested in the effects of going to college
+  - Instrument 1: whether or not you live close to a college
+  - Instrument 2: whether or not you have a scholarship
+\vfill
+
+
+
+
+
+
+
+
+
+## This might be okay, though
+\vfill
+- When we think about interventions, we often think about the *margins* of the intervention
+  - In other words, we are interested in the effect of the intervention on those who are induced to take up the intervention
+\vfill
+- If a government is considering a new program/policy, then the effects will always be driven by those who are induced to take up the program/policy
+  - In other words, the compliers
+  - So identifying a LATE might actually be policy relevant in some contexts!
+\vfill
+- One final note:
+  - The LATE interpretation also holds for non-binary instruments
+  - Interpretation of what it means to be a "complier" is a bit more complicated, though
+\vfill
+
+
+
+
+
+
+
+
+
+## Some notes on compliers under LATE
+\vfill
+- The first stage tells us the complier share of the overall population (if it's binary)
+  - A small note: the more compliers there are, the less problematic violations of the exclusion restriction are (Angrist et al., 1996)
+\vfill
+- We can learn a bit about characteristics of compliers, too, using a similar intuition
+  - Works with discrete characteristics
+\vfill
+
+
+
+
+
+
+
+
+
+## Weak instruments
+\vfill
+- Let's return to our discussion about the first stage: $Z$ must be correlated with $X$
+  - If $Z$ is not correlated with $X$, then we cannot identify the effect of $X$ on $Y$
+\vfill
+- We often think about this in terms of the first stage F-statistic
+  - Is the F-statistic is high "enough"?
+  - What is high "enough" in this context?]
+\vfill
+- We used to think about $F>10$, but recent literature argues it should be even higher!
+  - e.g. Plfueger and Wang (2013) closer to 23
+  - Lee et al. (2020) argue for 100 or higher
+    - Focus on t-statistic, not the coefficient
+    - Lower F-statistics mean the critical value should actually be higher than 1.96
+  - No "right" answer, but higher is better
+\vfill
+
+
+
+
+
+
+
+
+
+## Compulsory school attendance and earnings
+\vfill
+- Let's look at an example: Angrist and Krueger (1991)
+  - They are interested in the returns to schooling
+\vfill
+- Basic idea:
+  - School attendance laws require students to stay in school until a certain age
+  - Consider a school year that starts on August 1st
+    - Someone who was born on July 31st will be one year older at the start of the school year than someone born on August 2nd
+\vfill
+- Instrument for school attendance using the time of birth
+  - "Individuals born in the beginning of the year start school at an older age, and can therefore drop out after completing less schooling than individuals born near the end of the year."
+\vfill
+
+
+
+
+
+
+
+
+
+## Compulsory school attendance and earnings, year/quarter of birth
+\center
+\includegraphics[width = 0.9\textwidth]{assets/angristkrueger1.png}
+
+
+
+
+
+
+
+
+
+## Compulsory school attendance and earnings, reduced form
+\center
+\includegraphics[width = 0.9\textwidth]{assets/angristkrueger2.png}
+
+
+
+
+
+
+
+
+
+## The model
+\vfill
+\begin{gather} y = \beta s + \varepsilon \\
+                s = \gamma Z + \eta, \end{gather}
+
+- $y$ is earnings
+- $s$ is years of schooling
+- $Z$ is the instrument
+  - They  use interactions between year and quarter of birth
+\vfill
+
+
+
+
+
+
+
+
+
+## Bias in OLS
+\vfill
+- If $\varepsilon$ and s are correlated, then OLS gives biased estimates
+\vfill
+- The bias is:
+  \begin{gather} E\left[\hat\beta_{OLS}-\beta\right] = \frac{Cov(s,\varepsilon)}{Var(s)} \end{gather}
+
+- Let's rename this ratio as $\frac{\sigma_{\varepsilon\eta}}{\sigma_{s}^2}$
+\vfill
+
+
+
+
+
+
+
+
+
+## Bias in OLS and first stage F-statistics
+\vfill
+- It turns out we can approximate the bias in 2SLS as:
+\begin{gather}\frac{\sigma_{\varepsilon\eta}}{\sigma_{s}^2}\frac{1}{F+1} \end{gather}
+
+- Note that if the first stage is weak, $F$ is closer to zero and the 2SLS bias is closer to the OLS bias
+  - If the first stage is strong, $F$ is larger and the bias gets closer to zero
+\vfill
+
+
+
+
+
+
+
+
+
+## Bound et al. (1995), *JASA*
+\vfill
+- Bound et al. (1995) were the first to point this problem out
+  - You see, Angrist and Krueger, added a *lot* of instruments to some of their specifications
+  - The addition of more instruments can be a problem: it tends to decrease the first-stage F-statistic
+\vfill
+- Let's take a look at their results
+\vfill
+
+
+
+
+
+
+
+
+
+## Note what happens to the IV coefficient as F decreases
+\center
+\includegraphics[width = \textwidth]{assets/bound1.png}
+
+
+
+
+
+
+
+
+
+## A weak first stage won't necessarily lead to large standard errors
+\vfill
+- I used to think a weak first stage would lead to large standard errors
+  - This is not necessarily true
+\vfill
+- Bound et al. do a simulation exercise where they create *completely random instruments*
+  - In other words, by construction, the instruments should not predict the endogenous variable
+\vfill
+
+
+
+
+
+
+
+
+
+## Random instruments and standard errors
+\center
+\includegraphics[width = 0.75\textwidth]{assets/bound2.png}
+
+
+
+
+
+
+
+
+## More problems with weak instruments
+\begin{gather*} \hat{\beta}_{2SLS} = \frac{Cov(Y, Z)}{Cov(X, Z)} \end{gather*}
+
+- We've seen this before: the IV estimate is a ratio of covariances (or the ratio of the reduced form and the first stage)
+\vfill
+- With weak instruments, $Cov(X,Z)$ is small
+  - This means that small changes in $Cov(Y,Z)$ can lead to large changes in $\hat{\beta}_{2SLS}$
+  - Asymptotically, this isn't a problem. But in small samples...
+  - We're back to something we've seen before: might need relatively large sample sizes to reliably estimate what you want to estimate!
+\vfill
+- This is a problem with ratios more generally. Try bootstrapping a ratio where the numerator is small and see what happens.
+\vfill
+
+
+
+
+
+
+
+
+
+## Example from Goldsmith-Pinkham's slides
+\vfill
+- Rather than create my own, I'm going to use Paul's example
+  - https://github.com/paulgp/applied-methods-phd
+\vfill
+- Let's look at three things:
+  - The behavior of the first stage when the instrument is weak (he calls this Pi hat)
+  - The relationship between the first stage and the second stage
+  - The behavior of the 2SLS estimator as a whole when the instrument is weak
+\vfill
+
+
+
+
+
+
+
+
+
+## Marginally significant first stage, simulations
+\center
+\includegraphics[width = 0.9\textwidth]{assets/weak_iv_tauhat_hist.png}
+
+
+
+
+
+
+
+
+
+## Marginally significant first stage, simulations
+\center
+\includegraphics[width = 0.9\textwidth]{assets/weak_iv_tauhat_betahat.png}
+
+
+
+
+
+
+
+
+
+## Marginally significant first stage, simulations
+\center
+\includegraphics[width = 0.9\textwidth]{assets/weak_iv_betahat_hist.png}
+
+
+
+
+
+
+
+
+
+## Marginally significant first stage, simulations
+\vfill
+- The distribution of $\hat\beta$ is absolutely not normal
+  - Asymptotics won't save you here!
+\vfill
+- Note that this problem can (mostly) disappear when the first stage is strong
+  - For example, a larger sample size will lead to better behavior of the estimator
+\vfill
+- Again, asymptotic approximations -- just like with the CLT and skewed distributions -- won't necessary apply
+\vfill
+
+
+
+
+
+
+
+
+
+## Takewaways
+\vfill
+- Looking at the second stage won't *necessarily* tell you if the first stage is weak
+\vfill
+- Nowadays, it is very common to report the first stage F-statistic
+  - You can't write a paper without reporting it
+\vfill
+- The key idea is that many instruments can increase bias, even if it isn't obvious
+  - Part of the problem is related to overfitting, which we'll cover in a few Weeks
+  - In fact, Angrist and Kolesar (2023) argue that weak instruments may not be a huge problem in the just-identified (i.e. one instrument) case!
+\vfill
+- Chernozhukov and Hansen (2008) detail a routine to calculate confidence intervals that are valid regardless of the strength of the first stage (in the just-identified case).
+  - Packages in both Stata and R
+\vfill
+
+
+
+
+
+
+
+
+
+
+## Overidentification tests
+\vfill
+- In the previous case, we had many instruments
+  - This is called overidentification
+\vfill
+- With overidentification, it is possible to test the "validity" of the instruments...
+  - ... if we are willing to assume at least one of the instruments is valid!
+\vfill
+- The intuition: different instruments should give us the same result
+\vfill
+
+
+
+
+
+
+
+
+
+## Overidentification tests
+\vfill
+- Consider a single endogenous $X$ and two instruments, $Z_1$ and $Z_2$:
+\begin{gather} \mathbb{E}\left[Z_1\right]=\mathbb{E}\left[Z_1X\right]\beta \\
+                \mathbb{E}\left[Z_2\right]=\mathbb{E}\left[Z_2X\right]\beta \end{gather}
+
+- Assumption for overidentification are saying that $\beta$ solves both equations simultaneously
+  - In other words, $\beta$ is the same for both instruments
+\vfill
+- If one instrument is valid and the other isn't, they should give us different results
+  - We can test this!
+  - Sometimes referred to as an overidentification test, a Sargan test (or Sargan's J), or a Sargan-Hansen test
+\vfill
+
+
+
+
+
+
+
+
+
+## Overidentification tests
+\vfill
+- Consider a single endogenous $X$ and two instruments, $Z_1$ and $Z_2$:
+\begin{gather} \tag{23} \mathbb{E}\left[Z_1\right]=\mathbb{E}\left[Z_1X\right]\beta \\
+                \tag{24} \mathbb{E}\left[Z_2\right]=\mathbb{E}\left[Z_2X\right]\beta \end{gather}
+
+- But there's a problem...
+  - And I already mentioned it. What's the problem?
+\vfill\pause
+- In a world of LATEs, the instruments can identify different effects
+  - So we can't really test the validity of the instruments!
+\vfill
+- TLDR: overidentification tests are not very useful (my take, anyway)
+\vfill
 
 
 
