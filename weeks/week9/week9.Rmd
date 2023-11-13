@@ -1,0 +1,675 @@
+---
+title:  |
+    | Microeconometrics (Causal Inference)
+    | Week 9 - Regression discontinuity
+author:
+  |
+    | Joshua D. Merfeld
+    | KDI School of Public Policy and Management
+date: "`r Sys.Date()`"
+
+# Output type and options
+output: 
+  beamer_presentation:
+    theme: Montpellier
+classoption: "aspectratio=169"
+
+# This includes latex arguments
+header-includes:
+  - \AtBeginDocument{\title[Week 9 - RD]{Microeconometrics (Causal Inference) \\Week 9 - Regression discontinuity}}
+  - \AtBeginDocument{\author[Josh Merfeld - KDI School]{Joshua D. Merfeld \\ KDI School of Public Policy and Management}}
+  - \input{header.tex}
+  - \usepackage[flushleft]{threeparttable}
+
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+
+
+library(tidyverse)
+library(kableExtra)
+library(fixest)
+library(ggpubr)
+library(RColorBrewer)
+library(haven)
+library(fwildclusterboot)
+library(modelsummary)
+
+kdisgreen <- rgb(0, 99, 52, maxColorValue = 260)
+kdisplatinum <- rgb(167, 169, 172, maxColorValue = 260)
+
+```
+
+
+
+
+## What are we doing today?
+\vfill
+- Regression discontinuity
+  - Requirements/assumptions
+\vfill
+- Sharp and fuzzy RD
+  - IVs and RDs
+\vfill
+
+
+
+
+## Motivation - standardized tests (fictitious data)
+```{r testscores, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+
+set.seed(7892)
+scores <- rnorm(5000, 50, 12) 
+wages <- 10 + 0.1*scores + rnorm(5000, 0, 1)
+wages <- wages + ifelse(round(scores)>=60, rnorm(5000, 2, 1), 0)
+collegesharp <- ifelse(round(scores)>=60, 1, 0)
+collegefuzzy <- ifelse(round(scores)>=60, rbinom(5000, 1, 0.8), rbinom(5000, 1, 0.3))
+
+ggplot() +
+  geom_density(aes(x = scores), color = kdisgreen, fill = kdisplatinum, alpha = 0.5) +
+  geom_vline(xintercept = 60, color = "black", linetype = "dashed") +
+  theme_minimal() +
+  labs(x = "Test score", y = "Density", title = "Test scores and admissions cut-off")
+
+```
+
+
+
+
+## Motivation - standardized tests
+\vfill
+- In our example, you get into college if you score 60 or higher on a standardized test
+\vfill
+- On average, "smarter" (in a broad sense) students will score higher on the test
+\vfill
+- However, there is a lot of variation in scores among students with similar "smartness"
+  - If one of us took the test multiple times, we'd probably get slightly different scores each time
+  - We each have our own "distribution"
+  - On a given day, how well (or not) we do is somewhat random
+\vfill
+
+
+
+
+## Motivation - standardized tests
+\vfill
+- Continuing with the example, imagine all of the students around the cut-off score of 60
+\vfill
+- On average, students just below and just above the cut-off score are similar
+  - They have similar "smartness"
+  - They should also be similar on other variables!
+\vfill
+- This is especially true if the test is a one-off test that you can't retake
+  - Or if we don't know what the cut-off is
+  - If we know the cut-off is 60 *and* we can take the test multiple times, what might we do?
+\vfill
+
+
+
+
+## Returns to college - RD example, two possibilities
+```{r testscorescollege, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+
+means <- as_tibble(cbind(scoresrounded = round(scores), collegeprob = collegesharp, type = "Sharp"))
+means <- rbind(means, as_tibble(cbind(scoresrounded = round(scores), collegeprob = collegefuzzy, type = "Fuzzy")))
+means$scoresrounded <- as.numeric(means$scoresrounded)
+means$collegeprob <- as.numeric(means$collegeprob)
+
+means <- means %>%
+          group_by(scoresrounded, type) %>%
+          summarize(collegeprob = mean(collegeprob, na.rm = T)) %>%
+          ungroup()
+
+ggplot(means %>% filter(scoresrounded %in% c(40:80))) +
+  geom_point(aes(x = scoresrounded, y = collegeprob, color = type), alpha = 0.5) +
+  geom_vline(xintercept = 60, color = "black", linetype = "dashed") +
+  theme_minimal() +
+  scale_color_manual(values = c("Sharp" = kdisgreen, "Fuzzy" = kdisplatinum)) +
+  labs(x = "Test score", y = "P(college)", title = "P(college) by test score", color = "RD type") +
+  theme(legend.position = c(0.15, 0.8))
+
+```
+
+
+
+
+## Returns to college - RD example
+```{r testscoreswages, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+
+ggplot() +
+  geom_point(aes(x = scores, y = log(wages)), color = kdisplatinum, alpha = 0.5) +
+  geom_smooth(aes(x = scores[scores<60], y = log(wages[scores<60])), method = "lm", color = kdisgreen, se = FALSE, alpha = 0.5) +
+  geom_smooth(aes(x = scores[scores>=60], y = log(wages[scores>=60])), method = "lm", color = kdisgreen, se = FALSE, alpha = 0.5) +
+  geom_vline(xintercept = 60, color = kdisgreen, linetype = "dashed") +
+  theme_minimal() +
+  labs(x = "Test score", y = "log(wage)", title = "Test score and wages")
+
+```
+
+
+
+
+## Regression discontinuity assumptions
+\vfill
+- RD only works in a very specific context: when there is a clear cut-off in some variable (called the running or forcing variable) that determines treatment
+\vfill
+- The best-case scenario is something we already discussed:
+  - People don't know the cut-off at the time
+  - The cut-off is not something you can manipulate (for example if you can only take a test once)
+\vfill
+- In these cases, we can assume that people just above and just below the cut-off are similar
+  - Implication: they should be similar on variables unaffected by treatment
+    - We can check this!
+  - Implication: density on either side of the cut-off should be similar
+    - We can check this!
+\vfill
+
+
+
+
+## Example: Bleemer and Mehta
+\vfill
+- Bleemer and Mehta (2022): Will studying economics make you rich? A regression discontinuity analysis of the returns to college major
+  - *AEJ: Applied*
+\vfill
+- Note: The data is confidential, so we can't replicate the results
+  - We'll just go through the paper and discuss
+\vfill
+- We'll replicate a common RD design later
+\vfill
+
+
+
+
+## Background for Bleemer and Mehta
+\vfill
+- Data from UC Santa Cruz
+  - Public university
+\vfill
+- Starting in 2003, the econ department instituted a GPA restriction
+  - Common for majors that are oversubscribed
+  - Students with a GPA below 2.8 were not allowed to declare an econ major
+    - (It's a little more complicated than that, but we'll just go with this for)
+\vfill
+- Originally, grades in Economics 1 and 2 were counted
+  - Added calculus in 2013
+\vfill
+
+
+
+
+## Data
+\vfill
+- They have information on individual students from their time in school
+  - Information on econ GPA (EGPA) as well as other grades
+  - Gender, ethnicity, cohort year, home address, residency status, high school, and SAT score
+\vfill
+- They link the data to employment records from the California Employment Development Department
+  - Annual wages and six-digit industry (NAICS) code
+\vfill
+- You can probably tell by now why the data is confidential
+\vfill
+
+
+
+
+## Looking at the data
+\center
+\includegraphics[width = 0.9\textwidth]{assets/bleemermehta1.png}
+
+
+
+
+## This is a fuzzy regression discontinuity
+\vfill
+- There appears to be a clear jump at the cut-off
+\vfill
+- However, The jump is not from 0 to 1
+  - The department actually had some discretion in who they let in below 2.8
+\vfill
+
+
+
+
+## Earnings and EGPA
+\center
+\includegraphics[width = 0.9\textwidth]{assets/bleemermehta2.png}
+
+
+
+
+
+## Estimating RD empirically
+\vfill
+- Graphs are nice, but we want to estimate the effect of majoring in economics on earnings
+\vfill
+- Simplest specification:
+\begin{gather} \label{eq:rd} y_{it} = \alpha_0 + \alpha_1 EGPA + \alpha_2 \mathbb{I}(EGPA \geq 2.8) + \alpha_3 \mathbb{I}(EGPA \geq 2.8)\times EGPA + \epsilon_{it} \end{gather}
+
+- $EGPA$ is the student's econ GPA
+- $\mathbb{I}(EGPA \geq 2.8)$ is an indicator for whether the student had a GPA high enough to declare an econ major
+- We are allowing the effect of EGPA to be different for students above and below the cut-off
+- Usually first check the intermediate outcome (econ major) and then final outcome (wages)
+- NOTE: Common to recenter the running variable to zero at the cut-off
+\vfill
+
+
+
+
+
+## With our fictitious data - test score and wages
+```{r empiricsexample, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+df <- as_tibble(cbind(scores = scores, wages = wages))
+# Recenter running
+df$scores <- df$scores - 60
+df$abovecut <- ifelse(df$scores>=0, 1, 0)
+(reg1 <- feols(log(wages) ~ scores + abovecut*scores, 
+              data = df, 
+              vcov = "HC1"))
+
+```
+
+
+
+
+
+## With our fictitious data - test score (recentered) and wages
+```{r empiricsexamplegraph, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+
+ggplot() +
+  geom_point(aes(x = scores - 60, y = log(wages)), color = kdisplatinum, alpha = 0.5) +
+  geom_smooth(aes(x = scores[scores<60] - 60, y = log(wages)[scores<60]), method = "lm", color = kdisgreen, se = FALSE, alpha = 0.5) +
+  geom_smooth(aes(x = scores[scores>=60] - 60, y = log(wages)[scores>=60]), method = "lm", color = kdisgreen, se = FALSE, alpha = 0.5) +
+  geom_vline(xintercept = 0, color = kdisgreen, linetype = "dashed") +
+  theme_minimal() +
+  annotate("text", x = 25 - 60, y = (3.25 + 0.0175), color = "black", size = 4, 
+            label = paste("slope~is~alpha[2]"), parse = TRUE) +
+  annotate("text", x = 25 - 60, y = (3.25 - 0.0175), color = "black", size = 4, 
+            label = paste(round(as.numeric(reg1$coefficients[2]), 3)), parse = TRUE) +
+  annotate("text", x = 60 - 60, y = (3.25 + 0.0175), color = "black", size = 4, 
+            label = paste("jump~is~alpha[3]"), parse = TRUE) +
+  annotate("text", x = 60 - 60, y = (3.25 - 0.0175), color = "black", size = 4, 
+            label = paste(round(as.numeric(reg1$coefficients[3]), 3)), parse = TRUE) +
+  annotate("text", x = 75 - 60, y = (3.25 + 0.0175), 
+            color = "black", size = 4, 
+            label = paste("slope~is~alpha[3]~'+'~alpha[4]"), parse = TRUE) +
+  annotate("text", x = 75 - 60, y = (3.25 - 0.0175), 
+            color = "black", size = 4, 
+            label = paste(round(as.numeric(reg1$coefficients[2]), 3), "+", round(as.numeric(reg1$coefficients[4]), 3)), parse = TRUE) +
+  labs(x = "Test score", y = "log(wage)", title = "Test score and wages")
+
+```
+
+
+
+
+
+## But there's a problem
+\vfill
+- There's an issue with fitting a regression like this
+\vfill
+- RD is really only valid *around the cut-off*
+  - But when we fit a regression like this, we're using all of the data
+  - This includes points far from the cut-off
+\vfill
+- So in practice nowadays, it's more common to use a local linear regression
+\vfill
+
+
+
+
+
+## Local linear regression
+\vfill
+- This is an example of *non-parametric estimation*
+\vfill
+- You're actually all familiar with this, even if you didn't realize it
+  - Density estimates as commonly implemented are a non-parametric estimator
+\vfill
+- Consider a histogram:
+\begin{gather} \hat{f}(x) = \frac{\sum_i\mathbb{I}(x_i\in \mathrm{interval}\;k)}{n} \end{gather}
+
+\vfill
+
+
+
+
+
+## Histograms with different bin widths (0.25 and 1)
+```{r histogram, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+
+ggplot() +
+  geom_histogram(aes(x = scores, after_stat(density)), binwidth = 0.25, fill = kdisplatinum, alpha = 0.35) +
+  geom_histogram(aes(x = scores, after_stat(density)), binwidth = 1, fill = kdisgreen, alpha = 0.35) +
+  theme_minimal() +
+  labs(x = "Test score", y = "density", title = "Test score and wages")
+
+```
+
+
+
+
+
+## Bin width clearly matters for how the density looks
+\vfill
+- The size of each bin affects how the density looks
+\vfill
+- We can manually choose the bin width
+  - It's really somewhat arbitrary
+\vfill
+- There's a trade-off between bias and variance
+  - The larger the width, the more the bias but the less the variance
+\vfill
+- We can call the width of the bin the *bandwidth*
+  - Now let's see how this works with non-parametric estimators
+\vfill
+
+
+
+
+## Histograms with different bin widths, adding non-parametric
+```{r histogram2, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+
+ggplot() +
+  geom_histogram(aes(x = scores, after_stat(density)), binwidth = 1, fill = kdisplatinum, alpha = 0.5) +
+  geom_density(aes(x = scores), color = kdisgreen, alpha = 0.5) +
+  theme_minimal() +
+  labs(x = "Test score", y = "density", title = "Test score and wages")
+
+```
+
+
+
+
+
+## From Goldsmith-Pinkham's slides
+\vfill
+- Define the density estimator as:
+\begin{gather} \hat{f}(x) = \frac{1}{nh}\sum_i K\left(\frac{x-x_i}{h}\right), \end{gather}
+
+where $K$ is a kernel function and $h$ is the bandwidth.
+
+\vfill
+- The kernel function decides how to weight observations within the bandwidth
+\vfill
+- Kernels often weight observations closer to $x$ more heavily
+  - Uniform, traingular, and Epanechnikov are most common
+\vfill
+- The intuition: take different values of x and calculate the (weighted) average of the observations within the bandwidth using a given kernel
+\vfill
+
+
+
+
+## Kernel examples (Wikipedia)
+\center
+\includegraphics[width = 0.65\textwidth]{assets/kernels.png}
+
+
+
+
+## A note on kernels
+\vfill
+- The specific kernel *usually* doesn't make a big difference
+\vfill
+- If it does, you probably have a bigger problem
+  - You're probably not in a good situation for RD
+  - Your results are too sensitive
+\vfill
+
+
+
+
+## Non-parametric regression
+\vfill
+- Let's stick to the simple example of estimating the effect of EGPA on wages
+  - Just the two variables, nothing more
+\vfill
+- Consider a general non-parametric estimator, where $K_h()$ is a kernel weight and $h$ is the bandwidth:
+\begin{gather} \min_{\alpha,\beta} \sum_{i|x_i\in[x-h, x+h]} (y_i - \alpha - \beta(x_i-x))^2K_h(x-x_i) \end{gather}
+
+\vfill
+
+
+
+
+## Non-parametric regression in R using `geom_smooth`
+```{r smooth, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+
+ggplot() +
+  geom_smooth(aes(x = scores, log(wages)), color = kdisgreen) +
+  theme_minimal() +
+  labs(x = "Test score", y = "log(wages)", title = "Test score and wages")
+
+```
+
+
+
+
+## Non-parametric regression in RD
+\vfill
+- What we are essentially going to do with RD is estimate the previous equation separately for $x < x_0$ and $x\geq x_0$, where $x_0$ is the cut-off
+  - We are going to only look right around the cut-off!
+\vfill
+- In other words, we are going to estimate:
+\begin{gather} \min_{\alpha_l,\beta_l} \sum_{i|c-h<x_i<c} (y_i - \alpha - \beta(x_i-c))^2K_h(c-x_i) \\
+                \min_{\alpha_r,\beta_r} \sum_{i|c<x_i<c+h} (y_i - \alpha - \beta(x_i-c))^2K_h(c-x_i) \end{gather}
+
+\vfill
+- The RD estimate will be $\hat{\alpha}_r - \hat{\alpha}_l$
+\vfill
+
+
+
+
+## Example with data from Cunningham
+\vfill
+- Cunningham has provided data from Lee, Moretti, and Butler (2004)
+  - Do voters affect or elect policies? Evidence from the US House
+  - *Quarterly Journal of Economics*
+\vfill
+- On github: `lmb-data.dta`
+\vfill
+
+
+
+
+## Example with data from Cunningham
+```{r lmb, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "75%", fig.align = "center"}
+library(haven)
+df <- read_dta("lmb-data.dta")
+
+# recenter vote (straightforward in US context)
+df$demvoteshare <- df$demvoteshare - 0.5
+```
+
+
+
+
+## Example with data from Cunningham
+```{r lmb2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+
+ggplot(data = df) + 
+  geom_point(aes(x = demvoteshare, y = democrat), color = kdisgreen) +
+  theme_minimal() +
+  labs(x = "Democratic vote share (recentered)", y = "Democrat elected?", title = "Democratic vote share and results")
+```
+
+
+
+
+## Example with data from Cunningham
+\vfill
+- Let's look at the ADA score, which measures how "liberal" a representative is
+\vfill
+
+
+
+
+## Example with data from Cunningham
+```{r lmb3, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+
+ggplot(data = df) + 
+  geom_point(aes(x = demvoteshare, y = realada), color = kdisplatinum, alpha = 0.5) +
+  theme_minimal() +
+  labs(x = "Democratic vote share (recentered)", y = "ADA score", title = "Democratic vote share and ADA score")
+```
+
+
+
+
+## Estimating the simple linear RD
+```{r lmb4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+df$abovecutoff <- ifelse(df$demvoteshare>=0, 1, 0)
+
+(reg1 <- feols(realada ~ demvoteshare + abovecutoff + abovecutoff*demvoteshare, 
+                data = df, 
+                cluster = "state"))
+
+```
+
+
+
+
+## Improving RD estimates using `rdrobust` in `R`
+```{r lmb5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(rdrobust)
+rd1 <- rdrobust(df$realada, df$demvoteshare, c = 0, cluster = df$state)
+summary(rd1)
+
+```
+
+
+
+
+## Plotting the estimates
+```{r lmb6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+rdplot(df$realada, df$demvoteshare, c = 0)
+```
+
+
+
+
+## Checking variables unrelated to treatment - population
+```{r lmb7, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+rdplot(log(df$votingpop), df$demvoteshare, c = 0)
+```
+
+
+
+
+## Checking variables unrelated to treatment - income
+```{r lmb8, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+rdplot(log(df$realincome), df$demvoteshare, c = 0)
+```
+
+
+
+
+## Checking variables unrelated to treatment - percent HS
+```{r lmb9, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+rdplot(df$pcthighschl, df$demvoteshare, c = 0)
+```
+
+
+
+
+## One more thing: checking the density around the cut-off
+```{r lmb10, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(rddensity)
+density <- rddensity(df$demvoteshare, c = 0)
+summary(density)
+```
+
+
+
+
+## One more thing: checking the density around the cut-off
+```{r lmb11, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+rdplotdensity(density, df$demvoteshare)
+```
+
+
+
+
+## Fuzzy regression discontinuity
+\vfill
+- This example is sharp; all Democrats who received the most votes were elected
+\vfill
+- Let's go back to our studying economics example
+  - Are we really interested in the effect of EGPA on wages?
+  - No. We want to know the effect of majoring in economics on wages
+\vfill
+- Well, if people just around the cut-off really are similar, then being just above the cut-off is a valid IV!
+\vfill
+
+
+
+
+## Fuzzy regression discontinuity
+\vfill
+- Leaving out the forcing variable for simplicity:
+\begin{gather} econ = \alpha_0 + \alpha_1 \mathbb{I}(EGPA \geq 2.8) + \varepsilon \\
+              wages = \beta_0 + \beta_1 econ + \upsilon \end{gather}
+
+- We're going to do this non-parametrically, though.
+\vfill
+- Following Hansen and what we learned last week with IVs:
+\begin{gather} \hat{\theta} = \frac{\hat{m}_{c+}-\hat{m}_{c-}}{\hat{p}_{c+}-\hat{p}_{c-}} \end{gather}
+
+- We're going to scale the reduced form by the first stage!
+\vfill
+
+
+
+
+## Returns to majoring in economics
+\center
+\includegraphics[width = \textwidth]{assets/bleemermehta3.png}
+
+
+
+
+## Notice the large standard errors
+\vfill
+- This is a common problem with fuzzy RD using local polynomial regressions
+\vfill
+- More generally, non-parametric estimators are *very* data hungry
+  - The more controls you add, the worse it gets
+  - "The curse of dimensionality"
+  - With RD, we are also estimating at the boundary (edge) of the data, which involves similar issues
+\vfill
+- By making parametric assumptions, we can get more precise estimates
+  - But the estimates may be more biased
+  - Trade off!
+\vfill
+
+
+
+
+## Regression kink
+\vfill
+- We won't go into details here, but regression kink is another similar method
+\vfill
+- This is about changes in *slopes*, not intercepts
+\vfill
+- For more details, see Card et al. (2015 - *Econometrica*) and CI
+\vfill
+
+
+
+
+
+
+
+
