@@ -50,6 +50,7 @@ You can find the slides (and any data we will be using) for each week under thei
 - Week 4: You can find the slides for the the week [here](weeks/week4/week4.pdf).
 - Weeks 5 and 6: You can find the slides for the the two weeks [here](weeks/week5and6/week5and6.pdf).
 - Weeks 7 and 8: You can find the slides for the the two weeks [here](weeks/week7and8/week7and8.pdf).
+- Week 9: You can find the slides for the the week [here](weeks/week9/week9.pdf).
 
 ## Assignments
 
