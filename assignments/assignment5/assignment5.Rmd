@@ -1,0 +1,44 @@
+---
+title: |
+        | Assignment 5
+subtitle: |
+        | Ph.D. Applied Microeconometrics
+        | KDI School Fall 2023
+date: "`r Sys.Date()`"
+# Output type and options (no TOC and yes fig captions)
+output:
+  bookdown::pdf_document2: 
+    toc: false
+    fig_caption: yes
+    # This also keeps the .tex file that is used to make the output (we will eventually need this for publication)
+    keep_tex: yes
+
+# This includes latex arguments
+header-includes:
+  - \input{header.tex}
+
+---
+
+**Due date: Friday, November 24th at 11:59pm**
+
+For this assignment, you will be replicating some results from Chalfin (2015), which is a short piece published in *AER P&P*. You can find the paper as well as the author's replication data and do-file in the assignment folder.
+
+Below is a list of tasks. I would like you to create a properly formated PDF file, as if it were a paper. This means that raw code should not appear in the PDF file. In a change, *this week I would like you to format this more like a paper.* I want a short introduction (you can use `# Introduction` in your R Markdown file), and then a separate section for each task. Each section should have a title, and then a discussion of the results. You do not need a conclusion section here.
+
+Tasks: 
+
+1. Read the paper (it is very short). Discuss the identification strategy. What is the instrument? What is the argument for use of the instrument? Do you think this is reasonable?
+2. Replicate Table 1 columns (1) through (5). Feel free to use the author's do-file to help you (you will more than likely need it!). Discuss the results. Why do authors usually report the first-stage results in an IV paper? Is there a weak instruments problem? How do you know?
+3. Replicate *all* of Table 2. Discuss the results.
+
+As before, please submit the following files:
+
+- Your R Markdown file
+- Your knitted PDF file
+- Any other scripts you used to complete the assignment
+
+
+
+
+
+
