@@ -80,7 +80,7 @@ I do not specify how to deal with standard errors. I will leave that up to you.
 
 Consider the following regression:
 \begin{gather} \label{eq:reg} log(yield_{it}) = \alpha_i + \gamma_t + \beta_1 pm25_{it} + \beta_2 rain_{it} + \beta_3 temp_{it} + \epsilon_{it}, \end{gather}
-where $\alpha_i$ is village fixed effects and $gamma_t$ is year fixed effects.
+where $\alpha_i$ is village fixed effects and $\gamma_t$ is year fixed effects.
 
 - Estimate the regression and output the results in a table.
 - Interpret the coefficient on $pm25$.
