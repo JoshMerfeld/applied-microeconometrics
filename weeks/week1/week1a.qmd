@@ -65,7 +65,7 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
   - You **must** bring a laptop to class. If you cannot do this, please speak with me.
 \vfill
 
-- Course website: https://github.com/JoshMerfeld/applied-microeconometrics
+- Course website: [https://github.com/JoshMerfeld/applied-microeconometrics](https://github.com/JoshMerfeld/applied-microeconometrics)
   - You can find slides, assignments, and other materials here
 \vfill
 
@@ -73,7 +73,7 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 
 ## Course Overview
 
-- This is a brand new class, so I will likely be making changes as we go
+- This is the second time I'm teaching this class, so I may make a few changes throughout the semester
 
 - Please check the course website regularly for updates
 
@@ -84,16 +84,19 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 \vfill
 1. Linear regression (week 2)
    - Inference (confidence intervals, hypothesis testing, bootstrapping, etc.)
+   
 \vfill
   
 2. Maximum likelihood estimation (week 3)
    - Discrete choice (logit, probit, multinomial logit, etc.)
+   
 \vfill
   
 3. Introduction to causality (week 4)
    - Potential outcomes framework
    - Problems with simple regression
    - Why randomization works
+   
 \vfill
 
 
@@ -105,6 +108,7 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
    - Fixed effects, including two-way fixed effects
    - Event studies
    - Synthetic control
+   
 \vfill
 
 5. Instrumental variables (weeks 7 and 8)
@@ -113,6 +117,7 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
    - Some examples
    - Weak instruments
    - Bartik (shift-share) instruments
+   
 \vfill
 
 
@@ -123,6 +128,7 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 6. Regression discontinuity (week 9)
    - Canonical regression discontinuity
    - Parametric vs. non-parametric
+   
 \vfill
 
 7. Machine learning in economics (week 10)
@@ -130,6 +136,8 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
    - Cross validation
    - Heterogeneous treatment effects
    - Brief introductionto other supervised ML (time dependent)
+   - Note: last year I replaced this with a "class requested" session
+   
 \vfill
 
 
@@ -141,7 +149,7 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 - The homeworks form the main grading component of the course
 - The goal is to get you comfortable with coding *and writing* in R
   - I will also ask you to interpret things to make sure you understand what you are doing statistically
-- I expect you to do your homeworks in R Markdown and turn in the code along with a pdf output$^1$]
+- I expect you to do your homeworks in R Markdown and turn in the code along with a pdf output$^1$
 - I expect you will have four or five homeworks throughout the semester
 - For those of you without a background in R, the first few weeks will take a bit of effort. It will get easier, I promise.
 
@@ -176,13 +184,14 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 
 
 
-## Next class
+## Next up: R and RStudio!
 
 \vfill
-- For next class, please come with R and R Studio installed
-  - Another code editor is also acceptable. I use VS Code -- not R Studio -- for example.
+- We need to have R and RStudio installed for what's next
+  - Another code editor is also acceptable: VS Code, for example
+  
 \vfill
-- Course website: https://github.com/JoshMerfeld/applied-microeconometrics
+- Course website: [https://github.com/JoshMerfeld/applied-microeconometrics](https://github.com/JoshMerfeld/applied-microeconometrics)
 \vfill
 
 
