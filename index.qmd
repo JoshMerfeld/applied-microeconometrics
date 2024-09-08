@@ -1,0 +1,32 @@
+---
+format: 
+  revealjs:
+    self-contained: true
+    slide-number: false
+    progress: false
+    theme: [serif, custom.scss]
+    width: 1500
+    code-copy: true
+    code-fold: show
+    code-overflow: wrap
+    highlight-style: github
+execute:
+  echo: false
+  warnings: false
+
+# to print as pdf: localhost:6106/?print-pdf (will have to change the local host number)
+
+---
+
+```{r}
+#| label: setup
+widthdefault <- getOption("width")
+options(width = 1500)
+library(tidyverse)
+```
+
+
+
+## Welcome to the website!
+
+- Here, you can find the slides and data used in applied microeconometrics (causal inference)

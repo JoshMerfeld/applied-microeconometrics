@@ -1,0 +1,338 @@
+/*-- scss:defaults --*/
+
+
+$kdisgreen: #006334;
+$accent: #340063;
+$accent2: #633400;
+$kdisgray: #A7A9AC;
+$right-arrow: "\2192"; // Unicode character for right arrow
+$hyphen: "\2010"; // Unicode character for right arrow
+$openbullet: "\25CB";
+
+$font-family-sans-serif: "Roboto", sans-serif !default;
+$presentation-heading-font: "Roboto", sans-serif !default;
+
+$presentation-heading-color: $kdisgreen !default;
+$presentation-heading-font-weight: lighter;
+//$presentation-heading-line-height: 2;
+//$presentation-block-margin: 28px;
+$presentation-font-size-root: 32px;
+
+// colors
+//$body-bg: #f0f1eb !default;
+$body-color: $kdisgreen !default;
+$link-color: $accent !default;
+$link-font-style: bold;
+$selection-bg: #26351c !default;
+$code-block-bg: mix($kdisgray, white, 40%) !default;
+$code-block-border-color: $accent2 !default;
+$btn-code-copy-color: $accent2 !default;
+$code-color: $accent !default;
+
+
+
+
+/*-- scss:rules --*/
+
+/* This changes the size of the code block chunks (the font) */
+code.sourceCode {
+  font-size: 1.0em;
+  /* or try font-size: xx-large; */
+  margin-bottom: 0px;
+}
+
+// change color of details button (code fold)
+details {
+  background-color: mix($kdisgreen, white, 25%);
+  padding: 5px;
+}
+
+details > summary {
+  color: $accent2;
+}
+
+.reveal a {
+  line-height: 1.5em;
+}
+
+.reveal p {
+  // font-weight: 300;
+  font-weight: lighter;
+  margin-top: 1.25em;
+}
+
+.reveal .slide blockquote {
+  border-left: 3px solid $text-muted;
+  padding-left: 0.5em;
+}
+
+
+// title and headings
+
+#title-slide {
+
+  .title {
+    color: $body-color;
+    font-size: 1.8em;
+    font-style: bold;
+    // font-weight: 350;
+    font-weight: lighter;
+    // margin-bottom: 3cm;
+  }
+  
+  .subtitle {
+    color: $body-color;
+    font-size: 1.4em;
+    font-style: bold;
+    font-weight: lighter;
+    margin-top: 0em;
+    margin-bottom: 2cm;
+  }
+  
+  .author,
+    .quarto-title-author-name {
+      color: $body-color;
+  }
+  
+  .quarto-title-authors {
+    display: flex;
+
+    .quarto-title-author {
+      padding-left: 0em;
+      padding-right: 0em;
+      width: 100%;
+      }
+  }
+
+}
+
+
+
+.reveal h2 {
+  // font-weight: 350;
+  font-weight: lighter;
+  font-size: 2em;
+  margin-top: 0cm; /* Adjust this value as needed */
+  margin-bottom: 1cm; /* Adjust this value as needed */
+}
+
+.reveal h3 {
+  color: $kdisgreen;
+  font-style: italic;
+  // font-weight: 350;
+  font-weight: lighter;
+  font-size: 0.95em;
+  margin-bottom: 1cm; /* Adjust this value as needed */
+}
+
+.reveal h4 {
+  color: $accent2;
+  // font-weight: 350;
+  font-weight: normal;
+  margin-top: 1.25em;
+}
+
+// alerts etc.
+
+.alert {
+  color: $accent2;
+}
+
+.fg {
+  color: var(--col, $kdisgreen);
+}
+
+.bg {
+  background-color: var(--col, #fff);
+  padding: 0.1em;
+  border-radius: 5px;
+  display: inline-block;
+}
+
+// lists
+
+// Unordered lists
+
+
+.reveal ul {
+  // font-weight: 300;
+  font-weight: lighter;
+  padding-left: 16px;
+
+  li::marker {
+    color: $kdisgreen;
+  }
+}
+
+.reveal ul ul {
+  list-style: none;
+
+  li:before {
+    content: $openbullet;
+    color: $kdisgreen;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    margin-right: 0em;
+  }
+}
+
+.reveal ul ul ul {
+  list-style: none;
+
+  li:before {
+    content: $hyphen;
+    color: $kdisgreen;
+    display: inline-block;
+    width: 1em;
+    margin-left: -1em;
+    margin-right: 0em;
+  }
+}
+
+// Ordered lists
+
+.reveal ol {
+  // font-weight: 300;
+  font-weight: lighter;
+  padding-left: 16px;
+
+  li::marker {
+    color: $kdisgreen;
+  }
+}
+
+// Move "hamburger" menu button to top right
+
+.reveal .slide-menu-button {
+  position: fixed;
+  top: 6px;
+  right: 0;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.reveal .slide-menu-button > * {
+  pointer-events: auto;
+}
+
+
+// Same for chalkboard buttons (with an offset)
+
+.reveal .slide-chalkboard-buttons {
+  position: fixed;
+  top: 12px;
+  right: 24px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: flex-start;
+  pointer-events: none;
+}
+
+.reveal .slide-chalkboard-buttons > * {
+  pointer-events: auto;
+}
+
+// Beamer-style button link environment
+
+.button {
+  display: inline-block;
+  padding: 6px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  font-weight: 400;
+  line-height: 1.42857143;
+  text-align: center;
+  white-space: nowrap;
+  vertical-align: middle;
+  cursor: pointer;
+  background-color: $accent;
+  border: 1px solid $accent;
+  color: #fff !important;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: all 0.2s ease-in-out;
+}
+
+.button:hover {
+  background-color: #0056b3;
+  border-color: #0056b3;
+}
+
+.button::before {
+  content: "▶";
+  margin-right: 5px;
+}
+
+// tables
+
+.reveal table {
+  // height: auto; /* Adjust table width to fit content up to the available slide space */
+  margin: auto;
+  border-collapse: collapse;
+  border-spacing: 0;
+  font-size: 0.8em;
+}
+
+.reveal table th,
+.reveal table td {
+  border: none; /* Remove internal row lines */
+  padding: .23em; /* Adjust padding as needed */
+  text-align: left; /* Adjust text alignment as needed */
+  font-weight: lighter; /* Lighter font weight for main table text */
+}
+
+/* Adds a bottom border to the table header row for distinction */
+.reveal table thead th,
+.reveal .slides table tr:last-child td,
+.reveal .slides table {
+  border-bottom: 2px solid #D3D3D3; /* Dark grey color for the bottom border */
+}
+
+/* Make column headers bold */
+.reveal table thead th {
+  font-weight: bold;
+}
+
+/* Styling table captions */
+.reveal table caption {
+  color: #666666; /* Dark grey color for the caption */
+  font-variant: small-caps; /* Use small caps for the caption text */
+}
+
+// Special catch for etable environment to ensure these table images
+// don't overflow the slide.
+// See: https://lrberge.github.io/fixest/articles/etable_new_features.html
+
+.etable {
+  width: 100%;
+  height: calc(100% - 3em); /* Adjust 3em based on the height of your header, if necessary */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.etable img {
+  max-width: 100%;
+  max-height: 100%;
+  width: auto;
+  height: auto;
+  object-fit: contain;
+}
+
+
+
+// This makes a class that allows us to create scrollable output
+.hscroll {
+  overflow-x: auto;
+  overflow-y: auto;
+  white-space: nowrap;
+}
+
+.pause {
+  margin-bottom: 0 !important;
+  margin-top: 0 !important;
+}
+
