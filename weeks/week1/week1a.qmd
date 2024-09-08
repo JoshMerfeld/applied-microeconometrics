@@ -1,22 +1,17 @@
 ---
 title:  |
-    | Microeconometrics (Causal Inference)
+    | Microeconometrics
     | Week 1 - Introduction
-author:
-  |
-    | Joshua D. Merfeld
-    | KDI School
+author: "Josh Merfeld"
+institute: "KDI School"
 date: "`r Sys.Date()`"
 
-# Output type and options (no TOC and yes fig captions)
-output: 
-  beamer_presentation:
-    theme: Montpellier
-classoption: "aspectratio=169"
+format: 
+  beamer:
+    aspectratio: 169
 
 # This includes latex arguments
 header-includes:
-  - \AtBeginDocument{\title[Week 1 - Introduction]{Microeconometrics (Causal Inference) \\ Week 1 - Introduction}}
   - \input{header.tex}
 
 ---
@@ -189,6 +184,7 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 \vfill
 - Course website: https://github.com/JoshMerfeld/applied-microeconometrics
 \vfill
+
 
 
 

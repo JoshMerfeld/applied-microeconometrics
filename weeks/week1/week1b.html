@@ -1,0 +1,2126 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.4.555">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="dcterms.date" content="2024-09-08">
+
+<title>quarto-inputbab89db5</title>
+<style>
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: min(4vw, 1.5em);}
+div.column{flex: auto; overflow-x: auto;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="week1b_files/libs/clipboard/clipboard.min.js"></script>
+<script src="week1b_files/libs/quarto-html/quarto.js"></script>
+<script src="week1b_files/libs/quarto-html/popper.min.js"></script>
+<script src="week1b_files/libs/quarto-html/tippy.umd.min.js"></script>
+<script src="week1b_files/libs/quarto-html/anchor.min.js"></script>
+<link href="week1b_files/libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="week1b_files/libs/quarto-html/quarto-syntax-highlighting.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="week1b_files/libs/bootstrap/bootstrap.min.js"></script>
+<link href="week1b_files/libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="week1b_files/libs/bootstrap/bootstrap.min.css" rel="stylesheet" id="quarto-bootstrap" data-mode="light">
+<script src="week1b_files/libs/kePrint-0.0.1/kePrint.js"></script>
+<link href="week1b_files/libs/lightable-0.0.1/lightable.css" rel="stylesheet">
+</head><body class="fullcontent">\AtBeginDocument{\title[Week 1 - Introduction to R]{Microeconometrics \\ Week 1 - Introduction to R}}
+\input{header.tex}
+
+  <script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN") {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+
+
+
+
+<div id="quarto-content" class="page-columns page-rows-contents page-layout-article">
+
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default">
+<div class="quarto-title">
+<h1 class="title"><div class="line-block">Microeconometrics<br>
+Week 1 - Introduction to R</div></h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p> </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">September 8, 2024</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<section id="introduction" class="level1">
+<h1>Introduction</h1>
+<section id="goal-for-today" class="level2">
+<h2 class="anchored" data-anchor-id="goal-for-today">Goal for today</h2>
+<ul>
+<li><p>The goal for today is to give you a brief introduction to R and R Markdown </p></li>
+<li><p>We will be using two small datasets to get you familiar with the program</p>
+<ul>
+<li>Class website </li>
+</ul></li>
+<li><p>A note: if you are completely new to R, the first few weeks will be a slog</p>
+<ul>
+<li>It will get better, I promise </li>
+</ul></li>
+<li><p>Much of the material covered today comes from two (free!) sources:</p>
+<ul>
+<li><a href="https://r4ds.hadley.nz/"></a></li>
+<li><a href="https://bookdown.org/yihui/rmarkdown/"></a> </li>
+</ul></li>
+</ul>
+</section>
+<section id="what-are-r-and-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="what-are-r-and-rstudio">What are R and RStudio?</h2>
+<ul>
+<li>R is a commonly used statistical program (and language)
+<ul>
+<li>It is free and open source, which means you can use this after graduation, without paying for it</li>
+<li>R is CaSe SeNsItIvE </li>
+</ul></li>
+<li>To work with R, we want to use an accompaniment called RStudio
+<ul>
+<li>RStudio is what is referred to as an integrated development environment (IDE)</li>
+<li>It is not the only option (I use VS Code, for example), but it is the most common</li>
+<li>It makes working with R much easier </li>
+</ul></li>
+<li>Whenever you start R, you want to start RStudio
+<ul>
+<li>RStudio will start R for you </li>
+</ul></li>
+</ul>
+</section>
+<section id="some-important-considerations" class="level2">
+<h2 class="anchored" data-anchor-id="some-important-considerations">Some important considerations</h2>
+<ul>
+<li>One of our goals is to make <strong>reproducible</strong> research
+<ul>
+<li>This means that we want to be able to share our code and have others be able to replicate our results</li>
+<li>To do this, we will use “scripts” that contain our code</li>
+</ul></li>
+</ul>
+<ul>
+<li>A script should be self contained
+<ul>
+<li>This means that it should contain all of the code necessary to run the analysis</li>
+<li>A well-written script should allow me to do everything without any additional information</li>
+</ul></li>
+</ul>
+<ul>
+<li>We will also use R Markdown to create documents
+<ul>
+<li>R Markdown is a way to combine text and code</li>
+<li>This allows us to create documents that are reproducible</li>
+<li>We will use R Markdown to create our homework assignments</li>
+<li>More on this in a bit </li>
+</ul></li>
+</ul>
+</section>
+<section id="the-rstudio-interface" class="level2">
+<h2 class="anchored" data-anchor-id="the-rstudio-interface">The RStudio interface</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-rstudio-interface-1" class="level2">
+<h2 class="anchored" data-anchor-id="the-rstudio-interface-1">The RStudio interface</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-rstudio-interface-2" class="level2">
+<h2 class="anchored" data-anchor-id="the-rstudio-interface-2">The RStudio interface</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-rstudio-interface-3" class="level2">
+<h2 class="anchored" data-anchor-id="the-rstudio-interface-3">The RStudio interface</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="but-were-missing-something-what-is-it" class="level2">
+<h2 class="anchored" data-anchor-id="but-were-missing-something-what-is-it">But we’re missing something… what is it?</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio5.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="the-script" class="level2">
+<h2 class="anchored" data-anchor-id="the-script">The script</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio6.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="some-notes" class="level2">
+<h2 class="anchored" data-anchor-id="some-notes">Some notes</h2>
+<ul>
+<li>You can add comments to your script using a hashtag (#)
+<ul>
+<li>At the top of ALL my scripts, I have a comment that says what the script does.</li>
+<li>At the top of your script, write a comment. It should say “# Week 1 - Introduction to R”</li>
+<li>I put LOTS of comments in my scripts. This is good practice. </li>
+</ul></li>
+<li>You can run a line of code by clicking the “Run” button
+<ul>
+<li>There are also shortcuts. On Mac it is command + enter. On windows it is control + enter. You can change these if you want. </li>
+</ul></li>
+<li>You can run multiple lines of code by highlighting them and clicking the “Run” button (or the shortcut) </li>
+<li>We will practice these later </li>
+</ul>
+</section>
+</section>
+<section id="r-basics" class="level1">
+<h1>R Basics</h1>
+<section id="object-types" class="level2">
+<h2 class="anchored" data-anchor-id="object-types">Object types</h2>
+<ul>
+<li>R has a few different types of objects
+<ul>
+<li>The most common are vectors, matrices, and data frames
+<ul>
+<li>A “tibble” is a type of data frame used by the tidyverse package (more below)</li>
+</ul></li>
+<li>We will use data frames almost exclusively since we are working with datasets, but vectors are common, too</li>
+</ul></li>
+<li>You can create a vector using the c() function:
+<ul>
+<li>Note how we create a new object using the assignment operator, &lt;-. You can also use =.</li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb1"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a>vec</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 1 2 3 4</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="object-types-1" class="level2">
+<h2 class="anchored" data-anchor-id="object-types-1">Object types</h2>
+<ul>
+<li>You can check what type of object something is by using the class() function
+<ul>
+<li>For example, if I want to check what type of object vec is, I would write class(vec)</li>
+<li>Note that the output is “numeric”</li>
+<li>This is because vec is a vector of numbers</li>
+</ul></li>
+<li>If I want to check whether it is a vector, I can write is.vector(vec)
+<ul>
+<li>Note that the output is TRUE</li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb3"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a>vec <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">2</span>, <span class="dv">3</span>, <span class="dv">4</span>)</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb5"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" aria-hidden="true" tabindex="-1"></a><span class="fu">is.vector</span>(vec)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] TRUE</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="first-things-first-the-working-directory" class="level2">
+<h2 class="anchored" data-anchor-id="first-things-first-the-working-directory">First things first: the working directory</h2>
+<ul>
+<li>The working directory is the folder that R is currently working in
+<ul>
+<li>This is where R will look for files</li>
+<li>This is where R will save files</li>
+<li>This is where R will create files</li>
+</ul></li>
+<li>You can always write out an entire file path, but this is tedious
+<ul>
+<li>More importantly, it makes your code less reproducible since the path is specific to YOUR computer</li>
+</ul></li>
+<li>One nice thing about R is that the working directory will automatically be where you open the script from
+<ul>
+<li>Let’s try this. Save your script to a folder on your computer, then open the script from that folder.</li>
+</ul></li>
+</ul>
+</section>
+<section id="first-things-first-the-working-directory-1" class="level2">
+<h2 class="anchored" data-anchor-id="first-things-first-the-working-directory-1">First things first: the working directory</h2>
+<p>The working directory should be where you opened the file from. Check it like this:</p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb7"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" aria-hidden="true" tabindex="-1"></a><span class="fu">getwd</span>()</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "/Users/Josh/Dropbox/KDIS/Classes/applied-microeconometrics/weeks/week1"</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="r-packages" class="level2">
+<h2 class="anchored" data-anchor-id="r-packages">R packages</h2>
+<ul>
+<li>R is a language that is built on packages
+<ul>
+<li>Packages are collections of functions that do specific things</li>
+<li>R comes with a set of “base” packages that are installed automatically </li>
+</ul></li>
+<li>We are going to use one package consistently, called the “tidyverse”
+<ul>
+<li>This consists of a set of packages that are designed to work together, with data cleaning in mind </li>
+</ul></li>
+</ul>
+</section>
+<section id="r-packages-1" class="level2">
+<h2 class="anchored" data-anchor-id="r-packages-1">R packages</h2>
+<p>The one exception to always using a script? I install packages in the CONSOLE. You can install packages like this: </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb9"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="loading-r-packages-in-your-script" class="level2">
+<h2 class="anchored" data-anchor-id="loading-r-packages-in-your-script">Loading R packages in your script</h2>
+<p>We need to load any R packages we want to use at the very top of the script. You should have a comment on line one, so on line two write: </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb10"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(<span class="st">"tidyverse"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+<p>This will load the tidyverse package. </p>
+</section>
+<section id="loading-data" class="level2">
+<h2 class="anchored" data-anchor-id="loading-data">Loading data</h2>
+<ul>
+<li>Go to the class website and download the data for today.
+<ul>
+<li>Put it in your WORKING DIRECTORY (where the script is) </li>
+</ul></li>
+<li>We will use the read_csv() function to load the data
+<ul>
+<li>This function is part of the tidyverse package</li>
+<li>It will create a data frame</li>
+<li>We need to NAME the object (data frame). As before, note the assignment operator (&lt;-). You can actually use = though. </li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb11"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(tidyverse)</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a><span class="co"># read in the data</span></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> <span class="fu">read_csv</span>(<span class="st">"data.csv"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="objects-in-memory" class="level2">
+<h2 class="anchored" data-anchor-id="objects-in-memory">Objects in memory</h2>
+<p>The data frame should show up in the upper right hand corner of RStudio.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio7.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="objects-in-memory-1" class="level2">
+<h2 class="anchored" data-anchor-id="objects-in-memory-1">Objects in memory</h2>
+<p>Click on the arrow and it will show more information.</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rstudio8.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="objects-in-memory-2" class="level2">
+<h2 class="anchored" data-anchor-id="objects-in-memory-2">Objects in memory</h2>
+<ul>
+<li>The data frame is a matrix
+<ul>
+<li>Each row is an observation and each column is a variables </li>
+</ul></li>
+<li>We can also see the names of the columns like this: </li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb12"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "res_id"                 "ability"                "age"                   
+ [4] "educyears"              "isfarmer"               "yearsfarming"          
+ [7] "yearsmanagingfarm"      "outsidewage"            "worriedaboutcropprices"
+[10] "worriedaboutcropyields"</code></pre>
+</div>
+</div>
+<p></p>
+<ul>
+<li>This is the kind of thing I might do in the console since it’s not really required for the script. </li>
+</ul>
+</section>
+<section id="calling-variables-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="calling-variables-in-r">Calling variables in R</h2>
+<ul>
+<li>Some of you might be used to Stata</li>
+<li>One big difference between the two is that Stata generally only has one data frame in memory at a time
+<ul>
+<li>This means that you can call a variable <em>without referencing the data frame</em></li>
+</ul></li>
+<li>In R, if you want to look at a variable, you have to tell R which data frame it is in
+<ul>
+<li>This is done with the $ operator</li>
+<li>For example, if I want to look at the variable “age” in the data frame “data”, I would write data$age</li>
+<li>Let’s look at summary statistics for age: </li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb14"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data<span class="sc">$</span>age)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max. 
+  18.00   34.00   42.00   43.54   52.00   87.00 </code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="summary-statistics-for-the-entire-data-frame" class="level2">
+<h2 class="anchored" data-anchor-id="summary-statistics-for-the-entire-data-frame">Summary statistics for the entire data frame</h2>
+<ul>
+<li>You can also use summary on the data frame instead of a single column
+<ul>
+<li>It helps to think of a data frame as rows and columns. For variables, you want to call specific columns.</li>
+</ul></li>
+<li>Look at the difference here (it cuts off because of the size of the slide): </li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb16"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>     res_id        ability            age         educyears        
+ Min.   : 501   Min.   : 10.00   Min.   :18.00   Length:7209       
+ 1st Qu.:2783   1st Qu.: 51.00   1st Qu.:34.00   Class :character  
+ Median :4714   Median : 59.00   Median :42.00   Mode  :character  
+ Mean   :4775   Mean   : 58.66   Mean   :43.54                     
+ 3rd Qu.:6764   3rd Qu.: 67.00   3rd Qu.:52.00                     
+ Max.   :8955   Max.   :100.00   Max.   :87.00                     
+                                                                   
+   isfarmer          yearsfarming   yearsmanagingfarm  outsidewage       
+ Length:7209        Min.   :-9.00   Min.   :-9.00     Min.   :2.000e+03  
+ Class :character   1st Qu.:18.00   1st Qu.: 6.00     1st Qu.:3.500e+06  
+ Mode  :character   Median :26.00   Median :14.00     Median :1.000e+10  
+                    Mean   :28.02   Mean   :15.94     Mean   :7.156e+09  
+                    3rd Qu.:38.00   3rd Qu.:22.00     3rd Qu.:1.000e+10  
+                    Max.   :70.00   Max.   :70.00     Max.   :1.000e+10  
+                    NA's   :219     NA's   :219       NA's   :216        
+ worriedaboutcropprices worriedaboutcropyields
+ Length:7209            Length:7209           
+ Class :character       Class :character      
+ Mode  :character       Mode  :character      
+                                              
+                                              
+                                              
+                                              </code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="calling-rowscolumns-of-a-data-frame-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="calling-rowscolumns-of-a-data-frame-matrix">Calling rows/columns of a data frame (matrix)</h2>
+<ul>
+<li>Think about how we refer to rows and columns in a matrix.
+<ul>
+<li>We use the row and column number, in that order.</li>
+<li>For example, if I want the first row and second column of a matrix <span class="math inline">\(X\)</span>, mathematically I could write <span class="math inline">\(X_{1,2}\)</span></li>
+</ul></li>
+<li>We do <em>the same thing in R</em></li>
+<li>If I want the first row and second column of the data frame “data”, I would write data[1,2]
+<ul>
+<li>Note that we use square brackets instead of parentheses</li>
+<li>Note that we use a comma to separate the row and column </li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb18"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>data[<span class="dv">1</span>,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 1 × 1
+  ability
+    &lt;dbl&gt;
+1      74</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="calling-columns-of-a-data-frame-matrix" class="level2">
+<h2 class="anchored" data-anchor-id="calling-columns-of-a-data-frame-matrix">Calling columns of a data frame (matrix)</h2>
+<ul>
+<li>We can call entire columns of a data frame by leaving the row blank
+<ul>
+<li>For example, if I want the second column of the data frame “data”, I would write data[,2]</li>
+<li>Note that the second column is the ability variable </li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb20"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(data)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "res_id"                 "ability"                "age"                   
+ [4] "educyears"              "isfarmer"               "yearsfarming"          
+ [7] "yearsmanagingfarm"      "outsidewage"            "worriedaboutcropprices"
+[10] "worriedaboutcropyields"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb22"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a>data[,<span class="dv">2</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 7,209 × 1
+   ability
+     &lt;dbl&gt;
+ 1      74
+ 2      42
+ 3      67
+ 4      54
+ 5      57
+ 6      72
+ 7      51
+ 8      65
+ 9      54
+10      24
+# ℹ 7,199 more rows</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="missing-variables-r" class="level2">
+<h2 class="anchored" data-anchor-id="missing-variables-r">Missing variables R</h2>
+<ul>
+<li>Missing variables are denoted by NA
+<ul>
+<li>This is different from Stata, which uses a period (.)</li>
+</ul></li>
+<li>Note that this is only how the PROGRAM stores missing variables. Sometimes the data itself has different missing values. </li>
+<li>For example, take a look at the first ten rows of the data frame (also note how I call the first ten rows and leave out the first column!): </li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb24"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb24-1"><a href="#cb24-1" aria-hidden="true" tabindex="-1"></a>data[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 9
+   ability   age educyears isfarmer yearsfarming yearsmanagingfarm outsidewage
+     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;           &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt;
+ 1      74    83 16        Yes                60                46     3000000
+ 2      42    27 7         Yes                17                17  9999999999
+ 3      67    49 7         Yes                20                 5     6000000
+ 4      54    50 7         Yes                15                10  9999999999
+ 5      57    70 4         Yes                40                26  9999999999
+ 6      72    45 7         Yes                15                15      800000
+ 7      51    58 7         Yes                30                25     2000000
+ 8      65    41 7         Yes                20                15  9999999999
+ 9      54    45 7         Yes                20                10      300000
+10      24    70 &lt;NA&gt;      Yes                60                50  9999999999
+# ℹ 2 more variables: worriedaboutcropprices &lt;chr&gt;,
+#   worriedaboutcropyields &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="variable-types" class="level2">
+<h2 class="anchored" data-anchor-id="variable-types">Variable types</h2>
+<ul>
+<li>R also has a few different types of variables
+<ul>
+<li>The most common are numeric, character, and logical</li>
+</ul></li>
+<li>Look at the previous code again: </li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb26"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb26-1"><a href="#cb26-1" aria-hidden="true" tabindex="-1"></a>data[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>,<span class="sc">-</span><span class="dv">1</span>]</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 10 × 9
+   ability   age educyears isfarmer yearsfarming yearsmanagingfarm outsidewage
+     &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt;     &lt;chr&gt;           &lt;dbl&gt;             &lt;dbl&gt;       &lt;dbl&gt;
+ 1      74    83 16        Yes                60                46     3000000
+ 2      42    27 7         Yes                17                17  9999999999
+ 3      67    49 7         Yes                20                 5     6000000
+ 4      54    50 7         Yes                15                10  9999999999
+ 5      57    70 4         Yes                40                26  9999999999
+ 6      72    45 7         Yes                15                15      800000
+ 7      51    58 7         Yes                30                25     2000000
+ 8      65    41 7         Yes                20                15  9999999999
+ 9      54    45 7         Yes                20                10      300000
+10      24    70 &lt;NA&gt;      Yes                60                50  9999999999
+# ℹ 2 more variables: worriedaboutcropprices &lt;chr&gt;,
+#   worriedaboutcropyields &lt;chr&gt;</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="variable-types-1" class="level2">
+<h2 class="anchored" data-anchor-id="variable-types-1">Variable types</h2>
+<ul>
+<li>dbl is short for double, which is a numeric variable (the “type” of numeric variable is about how much memory is needed to store it)</li>
+<li>chr is short for character, which is a string of characters (text)
+<ul>
+<li>Surprisingly, in our previous example, educyears was a character string even though it seemed to be a number</li>
+<li>Let’s look at the possible values of educyears using the unique() function, which outputs a vector: </li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb28"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(data<span class="sc">$</span>educyears)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "16"            "7"             "4"             NA             
+ [5] "11"            "6"             "13"            "5"            
+ [9] "8"             "10"            "12"            "9"            
+[13] "2"             "3"             "15"            "14"           
+[17] "20"            "18"            "17"            "1"            
+[21] "Not Mentioned" "19"           </code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="variable-types-2" class="level2">
+<h2 class="anchored" data-anchor-id="variable-types-2">Variable types</h2>
+<ul>
+<li>Interesting! It seems that there is a “Not Mentioned” value.
+<ul>
+<li>What if we want to replace those with missing, instead?</li>
+</ul></li>
+<li>Let’s talk through the following code
+<ul>
+<li>First note how it refers to a specific column and then a specific row</li>
+<li>Also note how it uses two equal signs (==) to check whether the value is “Not Mentioned”
+<ul>
+<li>This is similar to Stata! </li>
+</ul></li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb30"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a><span class="co"># replace "Not Mentioned" with NA</span></span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>educyears[data<span class="sc">$</span>educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>] <span class="ot">&lt;-</span> <span class="cn">NA</span>  </span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a><span class="co"># check that it worked by looking at the unique values</span></span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a><span class="fu">unique</span>(data<span class="sc">$</span>educyears)              </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code> [1] "16" "7"  "4"  NA   "11" "6"  "13" "5"  "8"  "10" "12" "9"  "2"  "3"  "15"
+[16] "14" "20" "18" "17" "1"  "19"</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb32"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a><span class="co"># turn into numeric</span></span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>data<span class="sc">$</span>educyears <span class="ot">&lt;-</span> <span class="fu">as.numeric</span>(data<span class="sc">$</span>educyears)</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a><span class="fu">class</span>(data<span class="sc">$</span>educyears)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] "numeric"</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="pipes" class="level2">
+<h2 class="anchored" data-anchor-id="pipes">Pipes</h2>
+<ul>
+<li>One of the most useful things in R is the pipe operator (%&gt;%)
+<ul>
+<li>This is part of the tidyverse package</li>
+<li>It allows you to chain commands together</li>
+<li>It makes your code much easier to read</li>
+<li>It makes your code much easier to write</li>
+<li>It makes your code much easier to debug</li>
+<li>It makes your code much easier to share</li>
+<li>It makes your code much easier to reproduce </li>
+</ul></li>
+<li>It’s easy to use but it will take some time for you to get used to the names of the functions we can use with it
+<ul>
+<li>This also goes for other tasks in R, not just with the pipe operator</li>
+</ul></li>
+</ul>
+</section>
+<section id="pipes-example" class="level2">
+<h2 class="anchored" data-anchor-id="pipes-example">Pipes example</h2>
+<p>Here is an example of how we can use pipes with the mutate() function in tidyverse</p>
+<ul>
+<li>We are also going to use ifelse() to make this work </li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb34"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb34-1"><a href="#cb34-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb34-2"><a href="#cb34-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears), <span class="co"># if educyears=="Not Mentioned", replace</span></span>
+<span id="cb34-3"><a href="#cb34-3" aria-hidden="true" tabindex="-1"></a>                <span class="at">educyears =</span> <span class="fu">as.numeric</span>(educyears))    <span class="co"># replace educyears as numeric (instead of character)</span></span>
+<span id="cb34-4"><a href="#cb34-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data<span class="sc">$</span>educyears)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  1.000   7.000   7.000   6.735   7.000  20.000    3113 </code></pre>
+</div>
+</div>
+<p></p>
+<p>Note that we could wrap as.numeric() around the ifelse() command to do it on one line! </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb36"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb36-1"><a href="#cb36-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb36-2"><a href="#cb36-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears))) <span class="co"># wrapped into one line</span></span>
+<span id="cb36-3"><a href="#cb36-3" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data<span class="sc">$</span>educyears)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+  1.000   7.000   7.000   6.735   7.000  20.000    3113 </code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="missings-and-functions-in-r" class="level2">
+<h2 class="anchored" data-anchor-id="missings-and-functions-in-r">Missings and functions in R</h2>
+<p>In Stata, by default, functions ignore missing values</p>
+<ul>
+<li>R does not do this by default. Look at this: </li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb38"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears))) <span class="co"># wrapped into one line</span></span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>educyears)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] NA</code></pre>
+</div>
+</div>
+<p></p>
+<p>If there are any missing values, the function will evalute to missing!</p>
+<ul>
+<li>But we can also do this: </li>
+</ul>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb40"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears))) <span class="co"># wrapped into one line</span></span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a><span class="fu">mean</span>(data<span class="sc">$</span>educyears, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="co"># BE CAREFUL WITH THIS! Make sure it is indeed what you want to do.</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.735107</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="functions-and-storing-values" class="level2">
+<h2 class="anchored" data-anchor-id="functions-and-storing-values">Functions and storing values</h2>
+<p>The mean() function in the previous slide outputs a single value - That means we could store that value as an object: </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb42"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb42-1"><a href="#cb42-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb42-2"><a href="#cb42-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears))) <span class="co"># wrapped into one line</span></span>
+<span id="cb42-3"><a href="#cb42-3" aria-hidden="true" tabindex="-1"></a>meaneduc <span class="ot">&lt;-</span> <span class="fu">mean</span>(data<span class="sc">$</span>educyears, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-4"><a href="#cb42-4" aria-hidden="true" tabindex="-1"></a>sdeduc <span class="ot">&lt;-</span> <span class="fu">sd</span>(data<span class="sc">$</span>educyears, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-5"><a href="#cb42-5" aria-hidden="true" tabindex="-1"></a>meaneduc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 6.735107</code></pre>
+</div>
+<div class="sourceCode cell-code" id="cb44"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb44-1"><a href="#cb44-1" aria-hidden="true" tabindex="-1"></a>sdeduc</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>[1] 2.404086</code></pre>
+</div>
+</div>
+<p></p>
+<p>How is this helpful? We can use these values later in our script!</p>
+</section>
+<section id="functions-and-mutate" class="level2">
+<h2 class="anchored" data-anchor-id="functions-and-mutate">Functions and mutate()</h2>
+<p>We can combine the mean() and sd() functions within mutate to create a new, standardized variable: </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb46"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb46-1"><a href="#cb46-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb46-2"><a href="#cb46-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears)), <span class="co"># wrapped into one line</span></span>
+<span id="cb46-3"><a href="#cb46-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">educyears_std =</span> (educyears <span class="sc">-</span> <span class="fu">mean</span>(educyears))<span class="sc">/</span><span class="fu">sd</span>(educyears))</span>
+<span id="cb46-4"><a href="#cb46-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data<span class="sc">$</span>educyears_std)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+     NA      NA      NA     NaN      NA      NA    7209 </code></pre>
+</div>
+</div>
+<p></p>
+<p>Oh no! what happened?</p>
+</section>
+<section id="functions-and-mutate-1" class="level2">
+<h2 class="anchored" data-anchor-id="functions-and-mutate-1">Functions and mutate()</h2>
+<p>We can combine the mean() and sd() functions within mutate to create a new, standardized variable: </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb48"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb48-1"><a href="#cb48-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb48-2"><a href="#cb48-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears)), <span class="co"># wrapped into one line</span></span>
+<span id="cb48-3"><a href="#cb48-3" aria-hidden="true" tabindex="-1"></a>                 <span class="at">educyears_std =</span> (educyears <span class="sc">-</span> <span class="fu">mean</span>(educyears, <span class="at">na.rm =</span> T))<span class="sc">/</span><span class="fu">sd</span>(educyears, <span class="at">na.rm =</span> T))</span>
+<span id="cb48-4"><a href="#cb48-4" aria-hidden="true" tabindex="-1"></a><span class="fu">summary</span>(data<span class="sc">$</span>educyears_std)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>   Min. 1st Qu.  Median    Mean 3rd Qu.    Max.    NA's 
+-2.3856  0.1102  0.1102  0.0000  0.1102  5.5176    3113 </code></pre>
+</div>
+</div>
+<p></p>
+<p>Note that we can shorten TRUE to T (or FALSE to F).</p>
+</section>
+<section id="visualizations-with-ggplot2" class="level2">
+<h2 class="anchored" data-anchor-id="visualizations-with-ggplot2">Visualizations with ggplot2</h2>
+<ul>
+<li>ggplot2 is a flexible way to create visualizations in R</li>
+<li>The basic idea is that you create a plot object and then add layers to it</li>
+<li>Let’s create a histogram of educyears</li>
+</ul>
+</section>
+<section id="visualizations-with-ggplot2-1" class="level2">
+<h2 class="anchored" data-anchor-id="visualizations-with-ggplot2-1">Visualizations with ggplot2</h2>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb50"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb50-1"><a href="#cb50-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb50-2"><a href="#cb50-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears)))</span>
+<span id="cb50-3"><a href="#cb50-3" aria-hidden="true" tabindex="-1"></a><span class="co"># we call ggplot() and NOT ggplot2()</span></span>
+<span id="cb50-4"><a href="#cb50-4" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span>   <span class="co"># note how we use + here, NOT the pipe operator</span></span>
+<span id="cb50-5"><a href="#cb50-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(<span class="at">data =</span> data, <span class="fu">aes</span>(<span class="at">x =</span> educyears)) <span class="co"># the histogram with geom_histogram</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/ggplot-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
+</figure>
+</div>
+</div>
+<div class="sourceCode cell-code" id="cb51"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb51-1"><a href="#cb51-1" aria-hidden="true" tabindex="-1"></a><span class="co"># data = data tells R to use the data frame "data", and the aes() is the aesthetic</span></span>
+<span id="cb51-2"><a href="#cb51-2" aria-hidden="true" tabindex="-1"></a><span class="co"># only an x value here since a histogram uses just a SINGLE value</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="visualizations-with-ggplot2-2" class="level2">
+<h2 class="anchored" data-anchor-id="visualizations-with-ggplot2-2">Visualizations with ggplot2</h2>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb52"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb52-1"><a href="#cb52-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb52-2"><a href="#cb52-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears)))</span>
+<span id="cb52-3"><a href="#cb52-3" aria-hidden="true" tabindex="-1"></a><span class="co"># we can save the plot as an object</span></span>
+<span id="cb52-4"><a href="#cb52-4" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb52-5"><a href="#cb52-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_histogram</span>(<span class="at">data =</span> data, <span class="fu">aes</span>(<span class="at">x =</span> educyears))</span>
+<span id="cb52-6"><a href="#cb52-6" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/ggplot2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+<section id="visualizations-with-ggplot2-3" class="level2">
+<h2 class="anchored" data-anchor-id="visualizations-with-ggplot2-3">Visualizations with ggplot2</h2>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb53"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb53-1"><a href="#cb53-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb53-2"><a href="#cb53-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears)))</span>
+<span id="cb53-3"><a href="#cb53-3" aria-hidden="true" tabindex="-1"></a><span class="co"># lots of ways to change the plot</span></span>
+<span id="cb53-4"><a href="#cb53-4" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb53-5"><a href="#cb53-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_histogram</span>(<span class="at">data =</span> data, <span class="fu">aes</span>(<span class="at">x =</span> educyears)) <span class="sc">+</span></span>
+<span id="cb53-6"><a href="#cb53-6" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of educyears"</span>,</span>
+<span id="cb53-7"><a href="#cb53-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">"Years of education"</span>,</span>
+<span id="cb53-8"><a href="#cb53-8" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">"Count"</span>)</span>
+<span id="cb53-9"><a href="#cb53-9" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/ggplot3-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+<section id="one-more-example" class="level2">
+<h2 class="anchored" data-anchor-id="one-more-example">One more example</h2>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb54"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb54-1"><a href="#cb54-1" aria-hidden="true" tabindex="-1"></a>data <span class="ot">&lt;-</span> data <span class="sc">%&gt;%</span></span>
+<span id="cb54-2"><a href="#cb54-2" aria-hidden="true" tabindex="-1"></a>          <span class="fu">mutate</span>(<span class="at">educyears =</span> <span class="fu">as.numeric</span>(<span class="fu">ifelse</span>(educyears <span class="sc">==</span> <span class="st">"Not Mentioned"</span>, <span class="cn">NA</span>, educyears)))</span>
+<span id="cb54-3"><a href="#cb54-3" aria-hidden="true" tabindex="-1"></a>g1 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb54-4"><a href="#cb54-4" aria-hidden="true" tabindex="-1"></a>        <span class="fu">geom_histogram</span>(<span class="at">data =</span> data, <span class="fu">aes</span>(<span class="at">x =</span> educyears)) <span class="sc">+</span></span>
+<span id="cb54-5"><a href="#cb54-5" aria-hidden="true" tabindex="-1"></a>        <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">"Histogram of educyears"</span>,</span>
+<span id="cb54-6"><a href="#cb54-6" aria-hidden="true" tabindex="-1"></a>             <span class="at">x =</span> <span class="st">"Years of education"</span>,</span>
+<span id="cb54-7"><a href="#cb54-7" aria-hidden="true" tabindex="-1"></a>             <span class="at">y =</span> <span class="st">"Count"</span>) <span class="sc">+</span></span>
+<span id="cb54-8"><a href="#cb54-8" aria-hidden="true" tabindex="-1"></a>        <span class="fu">theme_minimal</span>()</span>
+<span id="cb54-9"><a href="#cb54-9" aria-hidden="true" tabindex="-1"></a>g1</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/ggplot4-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:45.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+<section id="lets-try-this-with-a-new-dataset" class="level2">
+<h2 class="anchored" data-anchor-id="lets-try-this-with-a-new-dataset">Let’s try this with a NEW dataset</h2>
+<p>First install a new package that has a dataset we will use (you can do this in the console):</p>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb55"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb55-1"><a href="#cb55-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"nycflights13"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+<p>Now let’s see:</p>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb56"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb56-1"><a href="#cb56-1" aria-hidden="true" tabindex="-1"></a><span class="fu">library</span>(nycflights13)</span>
+<span id="cb56-2"><a href="#cb56-2" aria-hidden="true" tabindex="-1"></a><span class="fu">glimpse</span>(flights)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code>Rows: 336,776
+Columns: 19
+$ year           &lt;int&gt; 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2013, 2…
+$ month          &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ day            &lt;int&gt; 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1, 1…
+$ dep_time       &lt;int&gt; 517, 533, 542, 544, 554, 554, 555, 557, 557, 558, 558, …
+$ sched_dep_time &lt;int&gt; 515, 529, 540, 545, 600, 558, 600, 600, 600, 600, 600, …
+$ dep_delay      &lt;dbl&gt; 2, 4, 2, -1, -6, -4, -5, -3, -3, -2, -2, -2, -2, -2, -1…
+$ arr_time       &lt;int&gt; 830, 850, 923, 1004, 812, 740, 913, 709, 838, 753, 849,…
+$ sched_arr_time &lt;int&gt; 819, 830, 850, 1022, 837, 728, 854, 723, 846, 745, 851,…
+$ arr_delay      &lt;dbl&gt; 11, 20, 33, -18, -25, 12, 19, -14, -8, 8, -2, -3, 7, -1…
+$ carrier        &lt;chr&gt; "UA", "UA", "AA", "B6", "DL", "UA", "B6", "EV", "B6", "…
+$ flight         &lt;int&gt; 1545, 1714, 1141, 725, 461, 1696, 507, 5708, 79, 301, 4…
+$ tailnum        &lt;chr&gt; "N14228", "N24211", "N619AA", "N804JB", "N668DN", "N394…
+$ origin         &lt;chr&gt; "EWR", "LGA", "JFK", "JFK", "LGA", "EWR", "EWR", "LGA",…
+$ dest           &lt;chr&gt; "IAH", "IAH", "MIA", "BQN", "ATL", "ORD", "FLL", "IAD",…
+$ air_time       &lt;dbl&gt; 227, 227, 160, 183, 116, 150, 158, 53, 140, 138, 149, 1…
+$ distance       &lt;dbl&gt; 1400, 1416, 1089, 1576, 762, 719, 1065, 229, 944, 733, …
+$ hour           &lt;dbl&gt; 5, 5, 5, 5, 6, 5, 6, 6, 6, 6, 6, 6, 6, 6, 6, 5, 6, 6, 6…
+$ minute         &lt;dbl&gt; 15, 29, 40, 45, 0, 58, 0, 0, 0, 0, 0, 0, 0, 0, 0, 59, 0…
+$ time_hour      &lt;dttm&gt; 2013-01-01 05:00:00, 2013-01-01 05:00:00, 2013-01-01 0…</code></pre>
+</div>
+</div>
+<p></p>
+</section>
+<section id="lets-look-at-some-new-tidyverse-functions" class="level2">
+<h2 class="anchored" data-anchor-id="lets-look-at-some-new-tidyverse-functions">Let’s look at some new tidyverse functions</h2>
+<p>Let’s get the average departure delay by NYC airport: </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb58"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb58-1"><a href="#cb58-1" aria-hidden="true" tabindex="-1"></a>flights <span class="sc">%&gt;%</span> </span>
+<span id="cb58-2"><a href="#cb58-2" aria-hidden="true" tabindex="-1"></a>    <span class="fu">group_by</span>(origin) <span class="sc">%&gt;%</span> <span class="co"># this groups ROWS based on their origin value</span></span>
+<span id="cb58-3"><a href="#cb58-3" aria-hidden="true" tabindex="-1"></a>    <span class="fu">summarize</span>(<span class="at">avg_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T)) <span class="co"># this summarizes the data, creating means absed on the grouping!</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  origin avg_dep_delay
+  &lt;chr&gt;          &lt;dbl&gt;
+1 EWR             15.1
+2 JFK             12.1
+3 LGA             10.3</code></pre>
+</div>
+</div>
+<p></p>
+<p>Note that this does not create a single value. Instead it creates a tibble (a data frame) summarizing the data by our grouping variable. </p>
+</section>
+<section id="lets-look-at-some-new-tidyverse-functions-1" class="level2">
+<h2 class="anchored" data-anchor-id="lets-look-at-some-new-tidyverse-functions-1">Let’s look at some new tidyverse functions</h2>
+<p>What if we want to save that tibble instead? </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb60"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb60-1"><a href="#cb60-1" aria-hidden="true" tabindex="-1"></a>summat <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span> </span>
+<span id="cb60-2"><a href="#cb60-2" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(origin) <span class="sc">%&gt;%</span> <span class="co"># this groups ROWS based on their origin value</span></span>
+<span id="cb60-3"><a href="#cb60-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarize</span>(<span class="at">avg_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T)) <span class="co"># this summarizes the data, creating means based on groups!</span></span>
+<span id="cb60-4"><a href="#cb60-4" aria-hidden="true" tabindex="-1"></a>summat <span class="co"># print the 3x2 matrix in the console</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output cell-output-stdout">
+<pre><code># A tibble: 3 × 2
+  origin avg_dep_delay
+  &lt;chr&gt;          &lt;dbl&gt;
+1 EWR             15.1
+2 JFK             12.1
+3 LGA             10.3</code></pre>
+</div>
+</div>
+<p></p>
+<p>I could then output this to a table if I wanted to (using Markdown, more on this later):</p>
+<p></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="lightable-classic-2 caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: center;" data-quarto-table-cell-role="th">origin</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">avg_dep_delay</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">EWR</td>
+<td style="text-align: center;">15.10795</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">JFK</td>
+<td style="text-align: center;">12.11216</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">LGA</td>
+<td style="text-align: center;">10.34688</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p></p>
+</section>
+<section id="lets-look-at-a-new-plot" class="level2">
+<h2 class="anchored" data-anchor-id="lets-look-at-a-new-plot">Let’s look at a new plot</h2>
+<p>How does departure delay vary by time of day? </p>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb62"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb62-1"><a href="#cb62-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb62-2"><a href="#cb62-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> flights, <span class="fu">aes</span>(<span class="at">x =</span> sched_dep_time, <span class="at">y =</span> dep_delay))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/flights5-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:55.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+<section id="lets-look-at-a-new-plot-1" class="level2">
+<h2 class="anchored" data-anchor-id="lets-look-at-a-new-plot-1">Let’s look at a new plot</h2>
+<p>We can color code by origin, too! </p>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb63"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb63-1"><a href="#cb63-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb63-2"><a href="#cb63-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> flights, <span class="fu">aes</span>(<span class="at">x =</span> sched_dep_time, <span class="at">y =</span> dep_delay, <span class="at">color =</span> origin))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/flights6-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:55.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+<section id="make-it-prettier" class="level2">
+<h2 class="anchored" data-anchor-id="make-it-prettier">Make it prettier</h2>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb64"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb64-1"><a href="#cb64-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ggplot</span>() <span class="sc">+</span> </span>
+<span id="cb64-2"><a href="#cb64-2" aria-hidden="true" tabindex="-1"></a>  <span class="fu">geom_smooth</span>(<span class="at">data =</span> flights, <span class="fu">aes</span>(<span class="at">x =</span> sched_dep_time, <span class="at">y =</span> dep_delay, <span class="at">color =</span> origin), <span class="at">se =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb64-3"><a href="#cb64-3" aria-hidden="true" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">"Scheduled departure time"</span>,</span>
+<span id="cb64-4"><a href="#cb64-4" aria-hidden="true" tabindex="-1"></a>       <span class="at">y =</span> <span class="st">"Departure delay (minutes)"</span>) <span class="sc">+</span></span>
+<span id="cb64-5"><a href="#cb64-5" aria-hidden="true" tabindex="-1"></a>  <span class="fu">theme_minimal</span>() <span class="sc">+</span> <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">title =</span> <span class="st">"Departure airport"</span>))</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/flights7-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:55.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+<p></p>
+</section>
+</section>
+<section id="r-markdown" class="level1">
+<h1>R Markdown</h1>
+<section id="what-is-r-markdown" class="level2">
+<h2 class="anchored" data-anchor-id="what-is-r-markdown">What is R Markdown?</h2>
+<ul>
+<li><p>R Markdown is a way to combine text and code</p>
+<ul>
+<li>This allows us to create documents that are reproducible</li>
+<li>We will use R Markdown to create our homework assignments</li>
+</ul></li>
+<li><p>These slides were all created in R Markdown</p></li>
+<li><p>My papers are written in R Markdown (well, some of them are, anyway)</p>
+<ul>
+<li><a href="https://joshmerfeld.github.io/assets/papers/pollution2023.pdf"></a> is an example</li>
+</ul></li>
+<li><p>Yihui Xie, J. J. Allaire, and Garrett Grolemund have an awesome – free! – resource on R Markdown, <a href="https://bookdown.org/yihui/rmarkdown/"></a></p></li>
+</ul>
+</section>
+<section id="installing-r-markdown" class="level2">
+<h2 class="anchored" data-anchor-id="installing-r-markdown">Installing R Markdown</h2>
+<p>You’ll need to install R Markdown. You can do this in the console: </p>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb65"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb65-1"><a href="#cb65-1" aria-hidden="true" tabindex="-1"></a><span class="fu">install.packages</span>(<span class="st">"rmarkdown"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="creating-an-r-markdown-document-in-rstudio" class="level2">
+<h2 class="anchored" data-anchor-id="creating-an-r-markdown-document-in-rstudio">Creating an R Markdown document in RStudio</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rm1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-an-r-markdown-document-in-rstudio-1" class="level2">
+<h2 class="anchored" data-anchor-id="creating-an-r-markdown-document-in-rstudio-1">Creating an R Markdown document in RStudio</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rm2.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="creating-an-r-markdown-document-in-rstudio-2" class="level2">
+<h2 class="anchored" data-anchor-id="creating-an-r-markdown-document-in-rstudio-2">Creating an R Markdown document in RStudio</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rm3.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="go-ahead-and-save-this-document" class="level2">
+<h2 class="anchored" data-anchor-id="go-ahead-and-save-this-document">Go ahead and save this document</h2>
+<ul>
+<li>Go ahead and save this document in your working directory.
+<ul>
+<li>One think about Markdown files is that it will ALWAYS set the working directory to where the file is saved whenever you “knit” the document.</li>
+</ul></li>
+<li>What is “knitting”?
+<ul>
+<li>Knitting is the process of turning your R Markdown document into a pdf, html, or word document.</li>
+<li>We will just focus on pdfs for now.</li>
+</ul></li>
+</ul>
+</section>
+<section id="knit-it" class="level2">
+<h2 class="anchored" data-anchor-id="knit-it">Knit it!</h2>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="assets/rm4.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:90.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="check-out-the-document-you-just-created" class="level2">
+<h2 class="anchored" data-anchor-id="check-out-the-document-you-just-created">Check out the document you just created</h2>
+<ul>
+<li>Go to your working directory and open the pdf to see what it looks like.
+<ul>
+<li>It will always create the pdf in the same folder as the .Rmd file.</li>
+</ul></li>
+</ul>
+</section>
+<section id="yaml-header" class="level2">
+<h2 class="anchored" data-anchor-id="yaml-header">YAML header</h2>
+<ul>
+<li>At the very top of the document is some information about the document
+<ul>
+<li>This is called the YAML header</li>
+<li>It tells R Markdown what kind of document to create</li>
+<li>It also allows you to set some options</li>
+<li>DO NOT DELETE THE — AT THE TOP AND BOTTOM OF THE YAML HEADER! </li>
+</ul></li>
+<li>You can change the title and date as you please
+<ul>
+<li>For today’s date, you can use Sys.Date() within R inline code (more in a second): </li>
+</ul></li>
+</ul>
+<p></p>
+<div class="cell" data-layout-align="center">
+<div class="sourceCode cell-code" id="cb66"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb66-1"><a href="#cb66-1" aria-hidden="true" tabindex="-1"></a>date<span class="sc">:</span> <span class="st">"`r Sys.Date()`"</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="the-setup-chunk" class="level2">
+<h2 class="anchored" data-anchor-id="the-setup-chunk">The setup chunk</h2>
+<ul>
+<li><p>Just below the YAML header you’ll see a “code chunk” called “setup” (r setup, include = FALSE)</p></li>
+<li><p>Note how it has <span class="math inline">\(```\)</span> and <span class="math inline">\(```\)</span> at the top and bottom. This differentiates the “code chunk” from the rest of the document.</p>
+<ul>
+<li>Whenever you want to add a code chunk, you <em>must</em> have the <span class="math inline">\(```\)</span> at the top and bottom of it, at the beginning of the line.</li>
+</ul></li>
+<li><p>Use the setup code chunk to load any packages or data that you want to use in the rest of the document.</p>
+<ul>
+<li>Later code chunks are “local”: they will be able to access things from the setup chunk <em>but not from other code chunks</em>.</li>
+</ul></li>
+</ul>
+</section>
+<section id="the-setup-chunk-1" class="level2">
+<h2 class="anchored" data-anchor-id="the-setup-chunk-1">The setup chunk</h2>
+<p>This is an example of what the setup chunk looks like.</p>
+<div class="sourceCode" id="cb67"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb67-1"><a href="#cb67-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-2"><a href="#cb67-2" aria-hidden="true" tabindex="-1"></a><span class="in">```{r setup, include=FALSE}</span></span>
+<span id="cb67-3"><a href="#cb67-3" aria-hidden="true" tabindex="-1"></a><span class="in"># universal chunk options.</span></span>
+<span id="cb67-4"><a href="#cb67-4" aria-hidden="true" tabindex="-1"></a><span class="in"># echo = TRUE will show the code in the document.</span></span>
+<span id="cb67-5"><a href="#cb67-5" aria-hidden="true" tabindex="-1"></a><span class="in"># echo = FALSE will not.</span></span>
+<span id="cb67-6"><a href="#cb67-6" aria-hidden="true" tabindex="-1"></a><span class="in">knitr::opts_chunk$set(echo = TRUE)  </span></span>
+<span id="cb67-7"><a href="#cb67-7" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-8"><a href="#cb67-8" aria-hidden="true" tabindex="-1"></a><span class="in"># load any packages you want to use throughout the document.</span></span>
+<span id="cb67-9"><a href="#cb67-9" aria-hidden="true" tabindex="-1"></a><span class="in">library(tidyverse) </span></span>
+<span id="cb67-10"><a href="#cb67-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb67-11"><a href="#cb67-11" aria-hidden="true" tabindex="-1"></a><span class="in"># load any data you want to use throughout the document.</span></span>
+<span id="cb67-12"><a href="#cb67-12" aria-hidden="true" tabindex="-1"></a><span class="in">data &lt;- read_csv("data.csv") </span></span>
+<span id="cb67-13"><a href="#cb67-13" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="code-chunks" class="level2">
+<h2 class="anchored" data-anchor-id="code-chunks">Code chunks</h2>
+<p>Here is an example of a regular code chunk.</p>
+<div class="sourceCode" id="cb68"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb68-1"><a href="#cb68-1" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-2"><a href="#cb68-2" aria-hidden="true" tabindex="-1"></a><span class="in">```{r chunkexample, include = TRUE}</span></span>
+<span id="cb68-3"><a href="#cb68-3" aria-hidden="true" tabindex="-1"></a><span class="in"># note that I named the chunk.</span></span>
+<span id="cb68-4"><a href="#cb68-4" aria-hidden="true" tabindex="-1"></a><span class="in"># all chunks must have a UNIQUE name.</span></span>
+<span id="cb68-5"><a href="#cb68-5" aria-hidden="true" tabindex="-1"></a><span class="in"># you will get an error if they don't</span></span>
+<span id="cb68-6"><a href="#cb68-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb68-7"><a href="#cb68-7" aria-hidden="true" tabindex="-1"></a><span class="in"># I already loaded by data above</span></span>
+<span id="cb68-8"><a href="#cb68-8" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(flights) + </span></span>
+<span id="cb68-9"><a href="#cb68-9" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_histogram(aes(x = air_time), binwidth = 10)</span></span>
+<span id="cb68-10"><a href="#cb68-10" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="code-chunks-1" class="level2">
+<h2 class="anchored" data-anchor-id="code-chunks-1">Code chunks</h2>
+<p>Here is the output of that chunk:</p>
+<div class="cell">
+<div class="cell-output cell-output-stderr">
+<pre><code>Warning: Removed 9430 rows containing non-finite outside the scale range
+(`stat_bin()`).</code></pre>
+</div>
+<div class="cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="week1b_files/figure-html/chunkexample-1.png" class="img-fluid figure-img" width="672"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="code-chunks-2" class="level2">
+<h2 class="anchored" data-anchor-id="code-chunks-2">Code chunks</h2>
+<p>Oh no! It looks bad! Changes:</p>
+<div class="cell" data-layout-align="center">
+<div class="cell-output-display">
+<div class="quarto-figure quarto-figure-center">
+<figure class="figure">
+<p><img src="week1b_files/figure-html/chunkexample2-1.png" class="img-fluid quarto-figure quarto-figure-center figure-img" style="width:55.0%"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="code-chunks-3" class="level2">
+<h2 class="anchored" data-anchor-id="code-chunks-3">Code chunks</h2>
+<p>How did I do that?</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb70-1"><a href="#cb70-1" aria-hidden="true" tabindex="-1"></a><span class="in">```{r chunkexample, include = TRUE, warning = FALSE, out.width = "55%", </span></span>
+<span id="cb70-2"><a href="#cb70-2" aria-hidden="true" tabindex="-1"></a><span class="in">          fig.align = "center"}</span></span>
+<span id="cb70-3"><a href="#cb70-3" aria-hidden="true" tabindex="-1"></a><span class="in"># note that I named the chunk.</span></span>
+<span id="cb70-4"><a href="#cb70-4" aria-hidden="true" tabindex="-1"></a><span class="in"># all chunks must have a UNIQUE name.</span></span>
+<span id="cb70-5"><a href="#cb70-5" aria-hidden="true" tabindex="-1"></a><span class="in"># you will get an error if they don't</span></span>
+<span id="cb70-6"><a href="#cb70-6" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="#cb70-7" aria-hidden="true" tabindex="-1"></a><span class="in"># I already loaded by data above</span></span>
+<span id="cb70-8"><a href="#cb70-8" aria-hidden="true" tabindex="-1"></a><span class="in">ggplot(flights) + </span></span>
+<span id="cb70-9"><a href="#cb70-9" aria-hidden="true" tabindex="-1"></a><span class="in">  geom_histogram(aes(x = air_time), binwidth = 10)</span></span>
+<span id="cb70-10"><a href="#cb70-10" aria-hidden="true" tabindex="-1"></a><span class="in">```</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>NOTE: The start of the chunk must be on ONE line. It is wrapped here just for presentation.</li>
+</ul>
+</section>
+<section id="code-chunks-options" class="level2">
+<h2 class="anchored" data-anchor-id="code-chunks-options">Code chunks options</h2>
+<ul>
+<li><p>There are lots of code chunk options.</p></li>
+<li><p>You can find the code chunk options <a href="https://rpubs.com/Lingling912/870659"></a> (https://rpubs.com/Lingling912/870659)</p></li>
+<li><p>This will get easier to use as you get more and more practice.</p></li>
+</ul>
+</section>
+<section id="starting-new-sectionssubsections" class="level2">
+<h2 class="anchored" data-anchor-id="starting-new-sectionssubsections">Starting new sections/subsections</h2>
+<div class="sourceCode" id="cb71"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb71-1"><a href="#cb71-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># This will create a new section</span></span>
+<span id="cb71-2"><a href="#cb71-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-3"><a href="#cb71-3" aria-hidden="true" tabindex="-1"></a><span class="fu">## This will create a new sub-section</span></span>
+<span id="cb71-4"><a href="#cb71-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb71-5"><a href="#cb71-5" aria-hidden="true" tabindex="-1"></a><span class="fu">### This will create a new sub-sub-section</span></span>
+<span id="cb71-6"><a href="#cb71-6" aria-hidden="true" tabindex="-1"></a>Don't do this.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="you-can-add-r-inline-code" class="level2">
+<h2 class="anchored" data-anchor-id="you-can-add-r-inline-code">You can add R inline code</h2>
+<ul>
+<li>You can add R inline code using the <span class="math inline">\(`r'\)</span> operator.
+<ul>
+<li>For example, if I want to add the date, I can write 2024-09-08</li>
+<li>There are 19 columns in the flights data.</li>
+<li>There are 336776 columns in the flights data.</li>
+</ul></li>
+</ul>
+<div class="sourceCode" id="cb72"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb72-1"><a href="#cb72-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>You can add R inline code using the $`r'$ operator.</span>
+<span id="cb72-2"><a href="#cb72-2" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>For example, if I want to add the date, I can write 2024-09-08</span>
+<span id="cb72-3"><a href="#cb72-3" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>There are 19 columns in the flights data.</span>
+<span id="cb72-4"><a href="#cb72-4" aria-hidden="true" tabindex="-1"></a><span class="ss">  - </span>There are 336776 columns in the flights data.</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="enumerated-listsbullets" class="level2">
+<h2 class="anchored" data-anchor-id="enumerated-listsbullets">Enumerated lists/bullets</h2>
+<ul>
+<li>I like lists.
+<ul>
+<li>With indentations.</li>
+</ul></li>
+</ul>
+<ol type="1">
+<li>Really, I do.
+<ol type="1">
+<li>Indent! It’s just a tab. ````markdown</li>
+</ol></li>
+</ol>
+<ul>
+<li>I like lists.
+<ul>
+<li>With indentations.</li>
+</ul></li>
+</ul>
+<ol type="1">
+<li>Really, I do.
+<ol type="1">
+<li>Indent! It’s just a tab. ```` </li>
+</ol></li>
+</ol>
+</section>
+<section id="latex" class="level2">
+<h2 class="anchored" data-anchor-id="latex">latex</h2>
+<ul>
+<li><p>R Markdown uses latex to create pdfs. This allows you to do some cool things.</p></li>
+<li><p>For example, it is easy to add equations with latex, using $:</p></li>
+</ul>
+<p><span class="math inline">\(y = x + \varepsilon\)</span> </p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb73-1"><a href="#cb73-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>For example, it is easy to add equations with latex, using \$:</span>
+<span id="cb73-2"><a href="#cb73-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb73-3"><a href="#cb73-3" aria-hidden="true" tabindex="-1"></a>$y = x + \varepsilon$</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="latex-1" class="level2">
+<h2 class="anchored" data-anchor-id="latex-1">latex</h2>
+<ul>
+<li>I can center it, too:</li>
+</ul>
+<p><span class="math display">\[y = x + \varepsilon\]</span> </p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb74-1"><a href="#cb74-1" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>I can center it, too:</span>
+<span id="cb74-2"><a href="#cb74-2" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb74-3"><a href="#cb74-3" aria-hidden="true" tabindex="-1"></a>$$y = x + \varepsilon$$ </span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</section>
+<section id="latex-2" class="level2">
+<h2 class="anchored" data-anchor-id="latex-2">latex</h2>
+<p><span class="math display">\[\begin{gather}\label{eq1} y = x + \varepsilon \end{gather}\]</span> - In Equation </p>
+<div class="sourceCode" id="cb75"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb75-1"><a href="#cb75-1" aria-hidden="true" tabindex="-1"></a>\begin{gather}\label{eq1} y = x + \varepsilon \end{gather}</span>
+<span id="cb75-2"><a href="#cb75-2" aria-hidden="true" tabindex="-1"></a><span class="ss">- </span>In Equation \autoref{eq1}</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+<ul>
+<li>You might think, so what? Well what’s cool is that if we add equations before it, the number will automatically update!</li>
+</ul>
+</section>
+<section id="latex-3" class="level2">
+<h2 class="anchored" data-anchor-id="latex-3">latex</h2>
+<ul>
+<li><p>latex is particularly helpful for rendering math</p></li>
+<li><p>You can find a handy reference guide <a href="https://icl.utk.edu/~mgates3/docs/latex.pdf"></a> (https://icl.utk.edu/~mgates3/docs/latex.pdf)</p></li>
+</ul>
+</section>
+<section id="creating-tables" class="level2">
+<h2 class="anchored" data-anchor-id="creating-tables">Creating tables</h2>
+<ul>
+<li>There are lots of ways to create tables in R Markdown.
+<ul>
+<li>I will show you how using the kable() function in the knitr package.</li>
+<li>You do not need to download this package, it is already installed with R Markdown.
+<ul>
+<li>There is extra functionality in the kableExtra package. You need to download this and laod it if you want to use it.</li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+<section id="creating-tables-1" class="level2">
+<h2 class="anchored" data-anchor-id="creating-tables-1">Creating tables</h2>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb76"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb76-1"><a href="#cb76-1" aria-hidden="true" tabindex="-1"></a>summat <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span> </span>
+<span id="cb76-2"><a href="#cb76-2" aria-hidden="true" tabindex="-1"></a>            <span class="co"># this groups ROWS based on their origin value</span></span>
+<span id="cb76-3"><a href="#cb76-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(origin) <span class="sc">%&gt;%</span> </span>
+<span id="cb76-4"><a href="#cb76-4" aria-hidden="true" tabindex="-1"></a>            <span class="co"># create means by group</span></span>
+<span id="cb76-5"><a href="#cb76-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarize</span>(<span class="at">avg_dep_delay =</span> <span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T),</span>
+<span id="cb76-6"><a href="#cb76-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">avg_arr_delay =</span> <span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> T),</span>
+<span id="cb76-7"><a href="#cb76-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">avg_air_time =</span> <span class="fu">mean</span>(air_time, <span class="at">na.rm =</span> T),</span>
+<span id="cb76-8"><a href="#cb76-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">flights =</span> <span class="fu">n</span>())</span>
+<span id="cb76-9"><a href="#cb76-9" aria-hidden="true" tabindex="-1"></a><span class="co"># output </span></span>
+<span id="cb76-10"><a href="#cb76-10" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summat,</span>
+<span id="cb76-11"><a href="#cb76-11" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="st">"cccc"</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="creating-tables-2" class="level2">
+<h2 class="anchored" data-anchor-id="creating-tables-2">Creating tables</h2>
+<p></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<thead>
+<tr class="header">
+<th style="text-align: center;" data-quarto-table-cell-role="th">origin</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">avg_dep_delay</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">avg_arr_delay</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">avg_air_time</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">flights</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">EWR</td>
+<td style="text-align: center;">15.10795</td>
+<td style="text-align: center;">9.107055</td>
+<td style="text-align: center;">153.3000</td>
+<td style="text-align: center;">120835</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">JFK</td>
+<td style="text-align: center;">12.11216</td>
+<td style="text-align: center;">5.551481</td>
+<td style="text-align: center;">178.3490</td>
+<td style="text-align: center;">111279</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">LGA</td>
+<td style="text-align: center;">10.34688</td>
+<td style="text-align: center;">5.783488</td>
+<td style="text-align: center;">117.8258</td>
+<td style="text-align: center;">104662</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p></p>
+</section>
+<section id="i-dont-like-that-at-all-lets-make-it-pretty." class="level2">
+<h2 class="anchored" data-anchor-id="i-dont-like-that-at-all-lets-make-it-pretty.">I don’t like that at all! Let’s make it pretty.</h2>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb77"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb77-1"><a href="#cb77-1" aria-hidden="true" tabindex="-1"></a>summat <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span> </span>
+<span id="cb77-2"><a href="#cb77-2" aria-hidden="true" tabindex="-1"></a>            <span class="co"># this groups ROWS based on their origin value</span></span>
+<span id="cb77-3"><a href="#cb77-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(origin) <span class="sc">%&gt;%</span> </span>
+<span id="cb77-4"><a href="#cb77-4" aria-hidden="true" tabindex="-1"></a>            <span class="co"># create means by group, ROUNDING to two decimal places</span></span>
+<span id="cb77-5"><a href="#cb77-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarize</span>(<span class="at">avg_dep_delay =</span> <span class="fu">round</span>(<span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T), <span class="dv">2</span>),</span>
+<span id="cb77-6"><a href="#cb77-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">avg_arr_delay =</span> <span class="fu">round</span>(<span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> T), <span class="dv">2</span>),</span>
+<span id="cb77-7"><a href="#cb77-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">avg_air_time =</span> <span class="fu">round</span>(<span class="fu">mean</span>(air_time, <span class="at">na.rm =</span> T), <span class="dv">2</span>),</span>
+<span id="cb77-8"><a href="#cb77-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">flights =</span> <span class="fu">n</span>())</span>
+<span id="cb77-9"><a href="#cb77-9" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
+<span id="cb77-10"><a href="#cb77-10" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(summat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Origin"</span>, <span class="st">"Departure Delay"</span>, <span class="st">"Arrival Delay"</span>, <span class="st">"Flight Time"</span>, <span class="st">"Flights"</span>)</span>
+<span id="cb77-11"><a href="#cb77-11" aria-hidden="true" tabindex="-1"></a><span class="co"># output </span></span>
+<span id="cb77-12"><a href="#cb77-12" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summat, <span class="at">caption =</span> <span class="st">"Averages by origin (minutes)"</span>,</span>
+<span id="cb77-13"><a href="#cb77-13" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="st">"ccc"</span>, <span class="at">linesep =</span> <span class="st">""</span>, </span>
+<span id="cb77-14"><a href="#cb77-14" aria-hidden="true" tabindex="-1"></a>      <span class="at">booktabs =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># this is from kablextra. You don't have to use it, but I like it.</span></span>
+<span id="cb77-15"><a href="#cb77-15" aria-hidden="true" tabindex="-1"></a>      <span class="fu">kable_classic_2</span>() <span class="co"># this is also from kablextra</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="i-dont-like-that-at-all-lets-make-it-pretty.-1" class="level2">
+<h2 class="anchored" data-anchor-id="i-dont-like-that-at-all-lets-make-it-pretty.-1">I don’t like that at all! Let’s make it pretty.</h2>
+<p></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="lightable-classic-2 caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Averages by origin (minutes)</caption>
+<thead>
+<tr class="header">
+<th style="text-align: center;" data-quarto-table-cell-role="th">Origin</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Departure Delay</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Arrival Delay</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Flight Time</th>
+<th style="text-align: center;" data-quarto-table-cell-role="th">Flights</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: center;">EWR</td>
+<td style="text-align: center;">15.11</td>
+<td style="text-align: center;">9.11</td>
+<td style="text-align: center;">153.30</td>
+<td style="text-align: center;">120835</td>
+</tr>
+<tr class="even">
+<td style="text-align: center;">JFK</td>
+<td style="text-align: center;">12.11</td>
+<td style="text-align: center;">5.55</td>
+<td style="text-align: center;">178.35</td>
+<td style="text-align: center;">111279</td>
+</tr>
+<tr class="odd">
+<td style="text-align: center;">LGA</td>
+<td style="text-align: center;">10.35</td>
+<td style="text-align: center;">5.78</td>
+<td style="text-align: center;">117.83</td>
+<td style="text-align: center;">104662</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p></p>
+</section>
+<section id="one-more-change" class="level2">
+<h2 class="anchored" data-anchor-id="one-more-change">One more change!</h2>
+<p></p>
+<div class="cell">
+<div class="sourceCode cell-code" id="cb78"><pre class="sourceCode r code-with-copy"><code class="sourceCode r"><span id="cb78-1"><a href="#cb78-1" aria-hidden="true" tabindex="-1"></a>summat <span class="ot">&lt;-</span> flights <span class="sc">%&gt;%</span> </span>
+<span id="cb78-2"><a href="#cb78-2" aria-hidden="true" tabindex="-1"></a>            <span class="co"># this groups ROWS based on their origin value</span></span>
+<span id="cb78-3"><a href="#cb78-3" aria-hidden="true" tabindex="-1"></a>            <span class="fu">group_by</span>(origin) <span class="sc">%&gt;%</span> </span>
+<span id="cb78-4"><a href="#cb78-4" aria-hidden="true" tabindex="-1"></a>            <span class="co"># create means by group, ROUNDING to two decimal places</span></span>
+<span id="cb78-5"><a href="#cb78-5" aria-hidden="true" tabindex="-1"></a>            <span class="fu">summarize</span>(<span class="at">avg_dep_delay =</span> <span class="fu">round</span>(<span class="fu">mean</span>(dep_delay, <span class="at">na.rm =</span> T), <span class="dv">2</span>),</span>
+<span id="cb78-6"><a href="#cb78-6" aria-hidden="true" tabindex="-1"></a>                      <span class="at">avg_arr_delay =</span> <span class="fu">round</span>(<span class="fu">mean</span>(arr_delay, <span class="at">na.rm =</span> T), <span class="dv">2</span>),</span>
+<span id="cb78-7"><a href="#cb78-7" aria-hidden="true" tabindex="-1"></a>                      <span class="at">avg_air_time =</span> <span class="fu">round</span>(<span class="fu">mean</span>(air_time, <span class="at">na.rm =</span> T), <span class="dv">2</span>),</span>
+<span id="cb78-8"><a href="#cb78-8" aria-hidden="true" tabindex="-1"></a>                      <span class="at">flights =</span> <span class="fu">n</span>())</span>
+<span id="cb78-9"><a href="#cb78-9" aria-hidden="true" tabindex="-1"></a>summat<span class="sc">$</span>flights <span class="ot">&lt;-</span> <span class="fu">format</span>(summat<span class="sc">$</span>flights, <span class="at">big.mark =</span> <span class="st">","</span>, <span class="at">scientific =</span> <span class="cn">FALSE</span>)</span>
+<span id="cb78-10"><a href="#cb78-10" aria-hidden="true" tabindex="-1"></a><span class="co"># rename columns</span></span>
+<span id="cb78-11"><a href="#cb78-11" aria-hidden="true" tabindex="-1"></a><span class="fu">colnames</span>(summat) <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="st">"Origin"</span>, <span class="st">"Departure Delay"</span>, <span class="st">"Arrival Delay"</span>, <span class="st">"Flight Time"</span>, <span class="st">"Flights"</span>)</span>
+<span id="cb78-12"><a href="#cb78-12" aria-hidden="true" tabindex="-1"></a>summat <span class="ot">&lt;-</span> <span class="fu">t</span>(summat)</span>
+<span id="cb78-13"><a href="#cb78-13" aria-hidden="true" tabindex="-1"></a><span class="co"># output </span></span>
+<span id="cb78-14"><a href="#cb78-14" aria-hidden="true" tabindex="-1"></a><span class="fu">kable</span>(summat, <span class="at">caption =</span> <span class="st">"Averages by origin (minutes)"</span>,</span>
+<span id="cb78-15"><a href="#cb78-15" aria-hidden="true" tabindex="-1"></a>      <span class="at">align =</span> <span class="st">"ccc"</span>, <span class="at">linesep =</span> <span class="st">""</span>, </span>
+<span id="cb78-16"><a href="#cb78-16" aria-hidden="true" tabindex="-1"></a>      <span class="at">booktabs =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># this is from kablextra. You don't have to use it, but I like it.</span></span>
+<span id="cb78-17"><a href="#cb78-17" aria-hidden="true" tabindex="-1"></a>      <span class="fu">row_spec</span>(<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">4</span>), <span class="at">hline_after =</span> <span class="cn">TRUE</span>) <span class="sc">%&gt;%</span> <span class="co"># this is also from kablextra</span></span>
+<span id="cb78-18"><a href="#cb78-18" aria-hidden="true" tabindex="-1"></a>      <span class="fu">kable_classic_2</span>() <span class="co"># this is also from kablextra</span></span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
+</div>
+<p></p>
+</section>
+<section id="one-more-change-1" class="level2">
+<h2 class="anchored" data-anchor-id="one-more-change-1">One more change!</h2>
+<p></p>
+<div class="cell">
+<div class="cell-output-display">
+<table class="lightable-classic-2 caption-top table table-sm table-striped small" data-quarto-postprocess="true">
+<caption>Averages by origin (minutes)</caption>
+<tbody>
+<tr class="odd">
+<td style="text-align: left;">Origin</td>
+<td style="text-align: center;">EWR</td>
+<td style="text-align: center;">JFK</td>
+<td style="text-align: center;">LGA</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Departure Delay</td>
+<td style="text-align: center;">15.11</td>
+<td style="text-align: center;">12.11</td>
+<td style="text-align: center;">10.35</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Arrival Delay</td>
+<td style="text-align: center;">9.11</td>
+<td style="text-align: center;">5.55</td>
+<td style="text-align: center;">5.78</td>
+</tr>
+<tr class="even">
+<td style="text-align: left;">Flight Time</td>
+<td style="text-align: center;">153.30</td>
+<td style="text-align: center;">178.35</td>
+<td style="text-align: center;">117.83</td>
+</tr>
+<tr class="odd">
+<td style="text-align: left;">Flights</td>
+<td style="text-align: center;">120,835</td>
+<td style="text-align: center;">111,279</td>
+<td style="text-align: center;">104,662</td>
+</tr>
+</tbody>
+</table>
+
+
+</div>
+</div>
+<p></p>
+</section>
+<section id="enough-for-now" class="level2">
+<h2 class="anchored" data-anchor-id="enough-for-now">Enough for now</h2>
+<ul>
+<li><p>That’s enough on tables for now</p></li>
+<li><p>As you can see, there are lots of ways to customize tables</p></li>
+<li><p>Where this becomes really powerful is when you combine it with R code to create tables dynamically</p>
+<ul>
+<li>I will teach you to use a package called fixest that helps automate some of this</li>
+<li>If you change your specification, your tables will update AUTOMATICALLY!</li>
+<li>Ever tried to manually change a table in Word? Never again.</li>
+</ul></li>
+</ul>
+</section>
+<section id="some-tips" class="level2">
+<h2 class="anchored" data-anchor-id="some-tips">Some tips</h2>
+<ul>
+<li><p>When I write a paper in Markdown, I generally do not do all of my analysis in the Markdown document</p></li>
+<li><p>Instead, I do the analysis in another script and then save the resulting tables</p></li>
+<li><p>I then load these tables in the setup chunk of my Markdown document and use them in the document</p>
+<ul>
+<li>For figures, it depends. For a simple summary figure, I might load the data in the Markdown document and create the figure there.</li>
+</ul></li>
+</ul>
+</section>
+<section id="first-assignment" class="level2">
+<h2 class="anchored" data-anchor-id="first-assignment">First assignment</h2>
+<ul>
+<li>Assignment for next week (due one week from today):
+<ul>
+<li>Create a simple markdown document</li>
+<li>You can find the assignment <a href="https://github.com/JoshMerfeld/applied-microeconometrics/blob/main/assignments/assignment1/assignment1.pdf"></a> (on the <a href="https://github.com/JoshMerfeld/applied-microeconometrics"></a>)</li>
+</ul></li>
+<li>Next week, you will turn in on e-KDIS:
+<ul>
+<li>R script (if there is one)</li>
+<li>R Markdown script</li>
+<li>pdf of the R Markdown document</li>
+</ul></li>
+</ul>
+</section>
+</section>
+
+</main>
+<!-- /main column -->
+<script id="quarto-html-after-body" type="application/javascript">
+window.document.addEventListener("DOMContentLoaded", function (event) {
+  const toggleBodyColorMode = (bsSheetEl) => {
+    const mode = bsSheetEl.getAttribute("data-mode");
+    const bodyEl = window.document.querySelector("body");
+    if (mode === "dark") {
+      bodyEl.classList.add("quarto-dark");
+      bodyEl.classList.remove("quarto-light");
+    } else {
+      bodyEl.classList.add("quarto-light");
+      bodyEl.classList.remove("quarto-dark");
+    }
+  }
+  const toggleBodyColorPrimary = () => {
+    const bsSheetEl = window.document.querySelector("link#quarto-bootstrap");
+    if (bsSheetEl) {
+      toggleBodyColorMode(bsSheetEl);
+    }
+  }
+  toggleBodyColorPrimary();  
+  const icon = "";
+  const anchorJS = new window.AnchorJS();
+  anchorJS.options = {
+    placement: 'right',
+    icon: icon
+  };
+  anchorJS.add('.anchored');
+  const isCodeAnnotation = (el) => {
+    for (const clz of el.classList) {
+      if (clz.startsWith('code-annotation-')) {                     
+        return true;
+      }
+    }
+    return false;
+  }
+  const clipboard = new window.ClipboardJS('.code-copy-button', {
+    text: function(trigger) {
+      const codeEl = trigger.previousElementSibling.cloneNode(true);
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+  });
+  clipboard.on('success', function(e) {
+    // button target
+    const button = e.trigger;
+    // don't keep focus
+    button.blur();
+    // flash "checked"
+    button.classList.add('code-copy-button-checked');
+    var currentTitle = button.getAttribute("title");
+    button.setAttribute("title", "Copied!");
+    let tooltip;
+    if (window.bootstrap) {
+      button.setAttribute("data-bs-toggle", "tooltip");
+      button.setAttribute("data-bs-placement", "left");
+      button.setAttribute("data-bs-title", "Copied!");
+      tooltip = new bootstrap.Tooltip(button, 
+        { trigger: "manual", 
+          customClass: "code-copy-button-tooltip",
+          offset: [0, -8]});
+      tooltip.show();    
+    }
+    setTimeout(function() {
+      if (tooltip) {
+        tooltip.hide();
+        button.removeAttribute("data-bs-title");
+        button.removeAttribute("data-bs-toggle");
+        button.removeAttribute("data-bs-placement");
+      }
+      button.setAttribute("title", currentTitle);
+      button.classList.remove('code-copy-button-checked');
+    }, 1000);
+    // clear code selection
+    e.clearSelection();
+  });
+    var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+    var mailtoRegex = new RegExp(/^mailto:/);
+      var filterRegex = new RegExp('/' + window.location.host + '/');
+    var isInternal = (href) => {
+        return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+    }
+    // Inspect non-navigation links and adorn them if external
+ 	var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool)');
+    for (var i=0; i<links.length; i++) {
+      const link = links[i];
+      if (!isInternal(link.href)) {
+        // undo the damage that might have been done by quarto-nav.js in the case of
+        // links that we want to consider external
+        if (link.dataset.originalHref !== undefined) {
+          link.href = link.dataset.originalHref;
+        }
+      }
+    }
+  function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+    const config = {
+      allowHTML: true,
+      maxWidth: 500,
+      delay: 100,
+      arrow: false,
+      appendTo: function(el) {
+          return el.parentElement;
+      },
+      interactive: true,
+      interactiveBorder: 10,
+      theme: 'quarto',
+      placement: 'bottom-start',
+    };
+    if (contentFn) {
+      config.content = contentFn;
+    }
+    if (onTriggerFn) {
+      config.onTrigger = onTriggerFn;
+    }
+    if (onUntriggerFn) {
+      config.onUntrigger = onUntriggerFn;
+    }
+    window.tippy(el, config); 
+  }
+  const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+  for (var i=0; i<noterefs.length; i++) {
+    const ref = noterefs[i];
+    tippyHover(ref, function() {
+      // use id or data attribute instead here
+      let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+      try { href = new URL(href).hash; } catch {}
+      const id = href.replace(/^#\/?/, "");
+      const note = window.document.getElementById(id);
+      if (note) {
+        return note.innerHTML;
+      } else {
+        return "";
+      }
+    });
+  }
+  const xrefs = window.document.querySelectorAll('a.quarto-xref');
+  const processXRef = (id, note) => {
+    // Strip column container classes
+    const stripColumnClz = (el) => {
+      el.classList.remove("page-full", "page-columns");
+      if (el.children) {
+        for (const child of el.children) {
+          stripColumnClz(child);
+        }
+      }
+    }
+    stripColumnClz(note)
+    if (id === null || id.startsWith('sec-')) {
+      // Special case sections, only their first couple elements
+      const container = document.createElement("div");
+      if (note.children && note.children.length > 2) {
+        container.appendChild(note.children[0].cloneNode(true));
+        for (let i = 1; i < note.children.length; i++) {
+          const child = note.children[i];
+          if (child.tagName === "P" && child.innerText === "") {
+            continue;
+          } else {
+            container.appendChild(child.cloneNode(true));
+            break;
+          }
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(container);
+        }
+        return container.innerHTML
+      } else {
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        return note.innerHTML;
+      }
+    } else {
+      // Remove any anchor links if they are present
+      const anchorLink = note.querySelector('a.anchorjs-link');
+      if (anchorLink) {
+        anchorLink.remove();
+      }
+      if (window.Quarto?.typesetMath) {
+        window.Quarto.typesetMath(note);
+      }
+      // TODO in 1.5, we should make sure this works without a callout special case
+      if (note.classList.contains("callout")) {
+        return note.outerHTML;
+      } else {
+        return note.innerHTML;
+      }
+    }
+  }
+  for (var i=0; i<xrefs.length; i++) {
+    const xref = xrefs[i];
+    tippyHover(xref, undefined, function(instance) {
+      instance.disable();
+      let url = xref.getAttribute('href');
+      let hash = undefined; 
+      if (url.startsWith('#')) {
+        hash = url;
+      } else {
+        try { hash = new URL(url).hash; } catch {}
+      }
+      if (hash) {
+        const id = hash.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note !== null) {
+          try {
+            const html = processXRef(id, note.cloneNode(true));
+            instance.setContent(html);
+          } finally {
+            instance.enable();
+            instance.show();
+          }
+        } else {
+          // See if we can fetch this
+          fetch(url.split('#')[0])
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.getElementById(id);
+            if (note !== null) {
+              const html = processXRef(id, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      } else {
+        // See if we can fetch a full url (with no hash to target)
+        // This is a special case and we should probably do some content thinning / targeting
+        fetch(url)
+        .then(res => res.text())
+        .then(html => {
+          const parser = new DOMParser();
+          const htmlDoc = parser.parseFromString(html, "text/html");
+          const note = htmlDoc.querySelector('main.content');
+          if (note !== null) {
+            // This should only happen for chapter cross references
+            // (since there is no id in the URL)
+            // remove the first header
+            if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+              note.children[0].remove();
+            }
+            const html = processXRef(null, note);
+            instance.setContent(html);
+          } 
+        }).finally(() => {
+          instance.enable();
+          instance.show();
+        });
+      }
+    }, function(instance) {
+    });
+  }
+      let selectedAnnoteEl;
+      const selectorForAnnotation = ( cell, annotation) => {
+        let cellAttr = 'data-code-cell="' + cell + '"';
+        let lineAttr = 'data-code-annotation="' +  annotation + '"';
+        const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+        return selector;
+      }
+      const selectCodeLines = (annoteEl) => {
+        const doc = window.document;
+        const targetCell = annoteEl.getAttribute("data-target-cell");
+        const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+        const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+        const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+        const lineIds = lines.map((line) => {
+          return targetCell + "-" + line;
+        })
+        let top = null;
+        let height = null;
+        let parent = null;
+        if (lineIds.length > 0) {
+            //compute the position of the single el (top and bottom and make a div)
+            const el = window.document.getElementById(lineIds[0]);
+            top = el.offsetTop;
+            height = el.offsetHeight;
+            parent = el.parentElement.parentElement;
+          if (lineIds.length > 1) {
+            const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+            const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+            height = bottom - top;
+          }
+          if (top !== null && height !== null && parent !== null) {
+            // cook up a div (if necessary) and position it 
+            let div = window.document.getElementById("code-annotation-line-highlight");
+            if (div === null) {
+              div = window.document.createElement("div");
+              div.setAttribute("id", "code-annotation-line-highlight");
+              div.style.position = 'absolute';
+              parent.appendChild(div);
+            }
+            div.style.top = top - 2 + "px";
+            div.style.height = height + 4 + "px";
+            div.style.left = 0;
+            let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+            if (gutterDiv === null) {
+              gutterDiv = window.document.createElement("div");
+              gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+              gutterDiv.style.position = 'absolute';
+              const codeCell = window.document.getElementById(targetCell);
+              const gutter = codeCell.querySelector('.code-annotation-gutter');
+              gutter.appendChild(gutterDiv);
+            }
+            gutterDiv.style.top = top - 2 + "px";
+            gutterDiv.style.height = height + 4 + "px";
+          }
+          selectedAnnoteEl = annoteEl;
+        }
+      };
+      const unselectCodeLines = () => {
+        const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+        elementsIds.forEach((elId) => {
+          const div = window.document.getElementById(elId);
+          if (div) {
+            div.remove();
+          }
+        });
+        selectedAnnoteEl = undefined;
+      };
+        // Handle positioning of the toggle
+    window.addEventListener(
+      "resize",
+      throttle(() => {
+        elRect = undefined;
+        if (selectedAnnoteEl) {
+          selectCodeLines(selectedAnnoteEl);
+        }
+      }, 10)
+    );
+    function throttle(fn, ms) {
+    let throttle = false;
+    let timer;
+      return (...args) => {
+        if(!throttle) { // first call gets through
+            fn.apply(this, args);
+            throttle = true;
+        } else { // all the others get throttled
+            if(timer) clearTimeout(timer); // cancel #2
+            timer = setTimeout(() => {
+              fn.apply(this, args);
+              timer = throttle = false;
+            }, ms);
+        }
+      };
+    }
+      // Attach click handler to the DT
+      const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+      for (const annoteDlNode of annoteDls) {
+        annoteDlNode.addEventListener('click', (event) => {
+          const clickedEl = event.target;
+          if (clickedEl !== selectedAnnoteEl) {
+            unselectCodeLines();
+            const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+            if (activeEl) {
+              activeEl.classList.remove('code-annotation-active');
+            }
+            selectCodeLines(clickedEl);
+            clickedEl.classList.add('code-annotation-active');
+          } else {
+            // Unselect the line
+            unselectCodeLines();
+            clickedEl.classList.remove('code-annotation-active');
+          }
+        });
+      }
+  const findCites = (el) => {
+    const parentEl = el.parentElement;
+    if (parentEl) {
+      const cites = parentEl.dataset.cites;
+      if (cites) {
+        return {
+          el,
+          cites: cites.split(' ')
+        };
+      } else {
+        return findCites(el.parentElement)
+      }
+    } else {
+      return undefined;
+    }
+  };
+  var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+  for (var i=0; i<bibliorefs.length; i++) {
+    const ref = bibliorefs[i];
+    const citeInfo = findCites(ref);
+    if (citeInfo) {
+      tippyHover(citeInfo.el, function() {
+        var popup = window.document.createElement('div');
+        citeInfo.cites.forEach(function(cite) {
+          var citeDiv = window.document.createElement('div');
+          citeDiv.classList.add('hanging-indent');
+          citeDiv.classList.add('csl-entry');
+          var biblioDiv = window.document.getElementById('ref-' + cite);
+          if (biblioDiv) {
+            citeDiv.innerHTML = biblioDiv.innerHTML;
+          }
+          popup.appendChild(citeDiv);
+        });
+        return popup.innerHTML;
+      });
+    }
+  }
+});
+</script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>
