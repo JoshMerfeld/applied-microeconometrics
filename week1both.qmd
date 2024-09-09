@@ -34,7 +34,7 @@ library(nycflights13)
 library(kableExtra)
 
 # read in the data
-data <- read_csv("data.csv")
+data <- read_csv("weeks/week1/data.csv")
 ```
 
 # Introduction
@@ -48,6 +48,19 @@ data <- read_csv("data.csv")
 - Name, year, program, research interests, etc.
   - Why are you taking this class?
 
+
+
+
+## Quick note on class time
+
+- 3.5 hours is a *long* time
+  - Especially true for a class like this
+  
+- We will try to take at least two breaks of 10-15 minutes each
+  - If you need to step out during class (e.g. for bathroom), please feel free to
+
+- Feel free to bring food
+  - Just make sure it doesn't bother anyone
 
 
 
@@ -185,6 +198,7 @@ data <- read_csv("data.csv")
 ## TA sections
 
 - The goal of TA sections is to help you with R and R Markdown
+  - TA is TBD
 
 - For help with the actual material, please come to my office hours
 
@@ -193,6 +207,16 @@ data <- read_csv("data.csv")
 ## Questions?
 
 - Any questions about the course?
+
+
+
+## Class on October 21st
+
+- I will be in Bangkok for a UN workshop the week of the 21st of October
+
+- I have not decided what to do, but there are two possibilities:
+  - Cancel class and make it up during reading week
+  - Have an online class
 
 
 
@@ -283,7 +307,7 @@ data <- read_csv("data.csv")
 ```{r rstudio1, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio1.png",
+                        path = "weeks/week1/assets/rstudio1.png",
                         auto_pdf = TRUE
                         )
 
@@ -297,7 +321,7 @@ knitr::include_graphics(
 ```{r rstudio2, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio2.png",
+                        path = "weeks/week1/assets/rstudio2.png",
                         auto_pdf = TRUE
                         )
 
@@ -311,7 +335,7 @@ knitr::include_graphics(
 ```{r rstudio3, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio3.png",
+                        path = "weeks/week1/assets/rstudio3.png",
                         auto_pdf = TRUE
                         )
 
@@ -325,7 +349,7 @@ knitr::include_graphics(
 ```{r rstudio4, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio4.png",
+                        path = "weeks/week1/assets/rstudio4.png",
                         auto_pdf = TRUE
                         )
 
@@ -340,7 +364,7 @@ knitr::include_graphics(
 ```{r rstudio5, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio5.png",
+                        path = "weeks/week1/assets/rstudio5.png",
                         auto_pdf = TRUE
                         )
 
@@ -355,7 +379,7 @@ knitr::include_graphics(
 ```{r rstudio6, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio6.png",
+                        path = "weeks/week1/assets/rstudio6.png",
                         auto_pdf = TRUE
                         )
 
@@ -518,7 +542,7 @@ This will load the tidyverse package.
 library(tidyverse)
 
 # read in the data
-data <- read_csv("data.csv")
+data <- read_csv("weeks/week1/data.csv")
 
 ```
 
@@ -533,7 +557,7 @@ The data frame should show up in the upper right hand corner of RStudio.
 ```{r rstudio7, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio7.png",
+                        path = "weeks/week1/assets/rstudio7.png",
                         auto_pdf = TRUE
                         )
 
@@ -549,7 +573,7 @@ Click on the arrow and it will show more information.
 ```{r rstudio8, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rstudio8.png",
+                        path = "weeks/week1/assets/rstudio8.png",
                         auto_pdf = TRUE
                         )
 
@@ -1120,7 +1144,7 @@ install.packages("rmarkdown")
 ```{r rm1, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rm1.png",
+                        path = "weeks/week1/assets/rm1.png",
                         auto_pdf = TRUE
                         )
 
@@ -1135,7 +1159,7 @@ knitr::include_graphics(
 ```{r rm2, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rm2.png",
+                        path = "weeks/week1/assets/rm2.png",
                         auto_pdf = TRUE
                         )
 
@@ -1150,7 +1174,7 @@ knitr::include_graphics(
 ```{r rm3, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rm3.png",
+                        path = "weeks/week1/assets/rm3.png",
                         auto_pdf = TRUE
                         )
 
@@ -1178,7 +1202,7 @@ knitr::include_graphics(
 ```{r rm4, echo = FALSE, message = FALSE, warning = FALSE, out.width = "90%", fig.align = "center"}
 
 knitr::include_graphics(
-                        path = "assets/rm4.png",
+                        path = "weeks/week1/assets/rm4.png",
                         auto_pdf = TRUE
                         )
 
@@ -1247,7 +1271,7 @@ knitr::opts_chunk$set(echo = TRUE)
 library(tidyverse) 
 
 # load any data you want to use throughout the document.
-data <- read_csv("data.csv") 
+data <- read_csv("weeks/week1/data.csv") 
 ```
 ````
 
