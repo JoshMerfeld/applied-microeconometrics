@@ -1538,9 +1538,9 @@ $$y = x + \varepsilon$$
 ## Creating tables
 
 - There are lots of ways to create tables in R Markdown.
-  - I will show you how using the kable() function in the knitr package.
+  - I will show you one way using the kable() function in the knitr package.
   - You do not need to download this package, it is already installed with R Markdown.
-    - There is extra functionality in the kableExtra package. You need to download this and laod it if you want to use it.
+    - There is extra functionality in the kableExtra package. You need to download this and load it if you want to use it.
 
 
 
@@ -1548,7 +1548,7 @@ $$y = x + \varepsilon$$
 
 ## Creating tables
 
-```{r table, include = TRUE, eval = FALSE, warning = FALSE, echo = TRUE, size = "tiny"}
+```{r}
 summat <- flights |> 
             # this groups ROWS based on their origin value
             group_by(origin) |> 
@@ -1566,29 +1566,12 @@ kable(summat,
 
 
 
-## Creating tables
-
-```{r table2, include = TRUE, eval = TRUE, warning = FALSE, echo = FALSE, size = "tiny"}
-summat <- flights |> 
-            # this groups ROWS based on their origin value
-            group_by(origin) |> 
-            # create means by group
-            summarize(avg_dep_delay = mean(dep_delay, na.rm = T),
-                      avg_arr_delay = mean(arr_delay, na.rm = T),
-                      avg_air_time = mean(air_time, na.rm = T),
-                      flights = n())
-# output 
-kable(summat,
-      align = "ccc")
-```
-
-
 
 
 
 ## I don't like that at all! Let's make it pretty.
 
-```{r table3, include = TRUE, eval = FALSE, warning = FALSE, echo = TRUE, size = "tiny"}
+```{r}
 summat <- flights |> 
             # this groups ROWS based on their origin value
             group_by(origin) |> 
@@ -1601,7 +1584,7 @@ summat <- flights |>
 colnames(summat) <- c("Origin", "Departure Delay", "Arrival Delay", "Flight Time", "Flights")
 # output 
 kable(summat, caption = "Averages by origin (minutes)",
-      align = "ccc", linesep = "", 
+      align = "ccc", linesep = "", digits = 2, format.args = list(big.mark = ","),
       booktabs = TRUE) |> # this is from kablextra. You don't have to use it, but I like it.
       kable_classic_2() # this is also from kablextra
 ```
@@ -1610,79 +1593,6 @@ kable(summat, caption = "Averages by origin (minutes)",
 
 
 
-## I don't like that at all! Let's make it pretty.
-
-```{r table4, include = TRUE, eval = TRUE, warning = FALSE, echo = FALSE, size = "tiny"}
-summat <- flights |> 
-            # this groups ROWS based on their origin value
-            group_by(origin) |> 
-            # create means by group
-            summarize(avg_dep_delay = round(mean(dep_delay, na.rm = T), 2),
-                      avg_arr_delay = round(mean(arr_delay, na.rm = T), 2),
-                      avg_air_time = round(mean(air_time, na.rm = T), 2),
-                      flights = n())
-# rename columns
-colnames(summat) <- c("Origin", "Departure Delay", "Arrival Delay", "Flight Time", "Flights")
-# output 
-kable(summat, caption = "Averages by origin (minutes)",
-      align = "ccc", linesep = "", 
-      booktabs = TRUE) |> # this is from kablextra. You don't have to use it, but I like it.
-      kable_classic_2() # this is also from kablextra
-```
-
-
-
-
-
-## One more change!
-
-```{r table5, include = TRUE, eval = FALSE, warning = FALSE, echo = TRUE, size = "tiny"}
-summat <- flights |> 
-            # this groups ROWS based on their origin value
-            group_by(origin) |> 
-            # create means by group, ROUNDING to two decimal places
-            summarize(avg_dep_delay = round(mean(dep_delay, na.rm = T), 2),
-                      avg_arr_delay = round(mean(arr_delay, na.rm = T), 2),
-                      avg_air_time = round(mean(air_time, na.rm = T), 2),
-                      flights = n())
-summat$flights <- format(summat$flights, big.mark = ",", scientific = FALSE)
-# rename columns
-colnames(summat) <- c("Origin", "Departure Delay", "Arrival Delay", "Flight Time", "Flights")
-summat <- t(summat)
-# output 
-kable(summat, caption = "Averages by origin (minutes)",
-      align = "ccc", linesep = "", 
-      booktabs = TRUE) |> # this is from kablextra. You don't have to use it, but I like it.
-      row_spec(c(1, 4), hline_after = TRUE) |> # this is also from kablextra
-      kable_classic_2() # this is also from kablextra
-```
-
-
-
-
-
-## One more change!
-
-```{r table6, include = TRUE, eval = TRUE, warning = FALSE, echo = FALSE, size = "tiny"}
-summat <- flights |> 
-            # this groups ROWS based on their origin value
-            group_by(origin) |> 
-            # create means by group
-            summarize(avg_dep_delay = round(mean(dep_delay, na.rm = T), 2),
-                      avg_arr_delay = round(mean(arr_delay, na.rm = T), 2),
-                      avg_air_time = round(mean(air_time, na.rm = T), 2),
-                      flights = n())
-summat$flights <- format(summat$flights, big.mark = ",", scientific = FALSE)
-# rename columns
-colnames(summat) <- c("Origin", "Departure Delay", "Arrival Delay", "Flight Time", "Flights")
-summat <- t(summat)
-# output 
-kable(summat, caption = "Averages by origin (minutes)",
-      align = "ccc", linesep = "", 
-      booktabs = TRUE) |> # this is from kablextra. You don't have to use it, but I like it.
-      row_spec(c(1, 4), hline_after = TRUE) |> # this is also from kablextra
-      kable_classic_2() # this is also from kablextra
-```
 
 
 
@@ -1716,13 +1626,25 @@ kable(summat, caption = "Averages by origin (minutes)",
 
 
 
+
+
+## Try it!
+
+- Try to knit an R Markdown document
+  - Include one table and one figure
+
+- I'll walk around and help out in a few minutes
+
+
+
+
 ## First assignment
 
 - Assignment for next week (due one week from today):
   - Create a simple markdown document
-  - You can find the assignment [\textcolor{kdisgreen}{here}](https://github.com/JoshMerfeld/applied-microeconometrics/blob/main/assignments/assignment1/assignment1.pdf) (on the [\textcolor{kdisgreen}{course GitHub page}](https://github.com/JoshMerfeld/applied-microeconometrics))
+  - You can find the assignment [here](https://github.com/JoshMerfeld/applied-microeconometrics/blob/main/assignments/assignment1/assignment1.pdf) (on the [course GitHub page](https://github.com/JoshMerfeld/applied-microeconometrics))
 
-- Next week, you will turn in on e-KDIS:
+- Before next class, you will turn in on e-KDIS:
   - R script (if there is one)
   - R Markdown script
   - pdf of the R Markdown document
