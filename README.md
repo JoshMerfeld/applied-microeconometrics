@@ -60,5 +60,5 @@ I will also post your assignments here, under the [assignments folder](assignmen
 
 
 
-[^1]: Note that the original slides from 2023 were written in R markdown. You can find those in the weekly folders [here](applied-microeconometrics/tree/main/weeks).
+[^1]: Note that the original slides from 2023 were written in R markdown. You can find those in the weekly folders [here](https://github.com/JoshMerfeld/applied-microeconometrics/tree/main/weeks).
 
