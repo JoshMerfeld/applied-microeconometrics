@@ -20,14 +20,12 @@ format:
     code-overflow: wrap
     highlight-style: github
 execute:
-  echo: false
+  echo: true
   warnings: false
+  message: false
 ---
 
 ```{r setup, include=FALSE}
-knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
-
-
 
 library(tidyverse)
 library(nycflights13)
@@ -176,11 +174,10 @@ data <- read_csv("weeks/week1/data.csv")
   - The homeworks form the main grading component of the course
   - The goal is to get you comfortable with coding *and writing* in R
     - I will also ask you to interpret things to make sure you understand what you are doing statistically
-  - I expect you to do your homeworks in R Markdown and turn in the code along with a pdf output$^1$]
+  - I expect you to do your homeworks in R Markdown and turn in the code along with a pdf output^[Note: If you have a strong preference for using a different language (e.g. Python), please let me know and we can discuss it. However, you **must** be able to produce a pdf output with your code and results. Using Word is a no-go.]
   - I expect you will have four or five homeworks throughout the semester
   - For those of you without a background in R, the first few weeks will take a bit of effort. It will get easier, I promise.
 
-\footnotesize$^1$ Note: If you have a strong preference for using a different language (e.g. Python), please let me know and we can discuss it. However, you **must** be able to produce a pdf output with your code and results. Using Word is a no-go.
 
 
 
@@ -228,6 +225,9 @@ data <- read_csv("weeks/week1/data.csv")
   
 
 - Course website: [https://github.com/JoshMerfeld/applied-microeconometrics](https://github.com/JoshMerfeld/applied-microeconometrics)
+  - This link is also on e-KDIS
+  - I strongly recommend you have this website open during class
+    - We will sometimes use data from the website
 
 
 
@@ -245,7 +245,6 @@ data <- read_csv("weeks/week1/data.csv")
 
 
 - We will be using two small datasets to get you familiar with the program
-  - Class website
 
 
 - A note: if you are completely new to R, the first few weeks will be a slog
@@ -269,7 +268,7 @@ data <- read_csv("weeks/week1/data.csv")
 
 - To work with R, we want to use an accompaniment called RStudio
   - RStudio is what is referred to as an integrated development environment (IDE)
-  - It is not the only option (I use VS Code, for example), but it is the most common
+  - It is not the only option (VS Code, for example), but it is the most common
   - It makes working with R much easier
 
 - Whenever you start R, you want to start RStudio
@@ -286,17 +285,19 @@ data <- read_csv("weeks/week1/data.csv")
   - This means that we want to be able to share our code and have others be able to replicate our results
   - To do this, we will use "scripts" that contain our code
 
+. . .
 
 - A script should be self contained
   - This means that it should contain all of the code necessary to run the analysis
   - A well-written script should allow me to do everything without any additional information
+  - Note that more complicated projects can have many scripts! For this class: one script per assignment
 
+. . .
 
 - We will also use R Markdown to create documents
   - R Markdown is a way to combine text and code
   - This allows us to create documents that are reproducible
   - We will use R Markdown to create our homework assignments
-  - More on this in a bit
 
 
 
@@ -394,6 +395,30 @@ knitr::include_graphics(
   - At the top of ALL my scripts, I have a comment that says what the script does.
   - At the top of your script, write a comment. It should say "# Week 1 - Introduction to R"
   - I put LOTS of comments in my scripts. This is good practice.
+  
+```{r}
+#| echo: true
+# cleaning the gps data and creating some maps
+# to run this, just set your working directory to the folder this script is located in
+# Author: Josh Merfeld
+# Initial date: September 5th, 2024
+```
+
+```{r}
+#| echo: true
+# lasso --------------------------------------------
+# we have ~60 features. This isn't that many, actually. We didn't create a lot of different possible combinations of the predictors.
+# We also don't have any fixed effects. This is just to fix ideas. Nonetheless, let's try lasso!
+# we use the glmnet package to implement lasso. It also allows ridge, but we want to make sure to use lasso.
+# how do we do this? we want to allocate grid cells across different "folds".
+```
+
+
+
+
+
+
+## Some notes
 
 - You can run a line of code by clicking the "Run" button
   - There are also shortcuts. On Mac it is command + enter. On windows it is control + enter. You can change these if you want.
@@ -401,6 +426,7 @@ knitr::include_graphics(
 - You can run multiple lines of code by highlighting them and clicking the "Run" button (or the shortcut)
 
 - We will practice these later
+
 
 
 
@@ -414,10 +440,11 @@ knitr::include_graphics(
     - A "tibble" is a type of data frame used by the tidyverse package (more below)
   - We will use data frames almost exclusively since we are working with datasets, but vectors are common, too
 - You can create a vector using the c() function:
-  - Note how we create a new object using the assignment operator, <-. You can also use =.
+  - Note how we create a new object using the assignment operator, <-. You can also use =.^[They are technically different. But you can generally treat them as the same.]
 
 
-```{r vector, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
+```{r}
+#| echo: true
 vec <- c(1, 2, 3, 4)
 vec
 ```
@@ -427,18 +454,22 @@ vec
 ## Object types
 
 - You can check what type of object something is by using the class() function
-  - For example, if I want to check what type of object vec is, I would write class(vec)
+  - For example, if I want to check what type of object vec is, I would write `class(vec)`
   - Note that the output is "numeric"
   - This is because vec is a vector of numbers
-- If I want to check whether it is a vector, I can write is.vector(vec)
-  - Note that the output is TRUE
-
-
-```{r vector2, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
+```{r}
+#| echo: true
 vec <- c(1, 2, 3, 4)
 class(vec)
+```
+- If I want to check whether it is a vector, I can write `is.vector(vec)`
+  - Note that the output is TRUE
+
+```{r}
+#| echo: true
 is.vector(vec)
 ```
+
 
 
 
@@ -502,7 +533,7 @@ install.packages("tidyverse")
 
 ```
 
-
+- Note you MUST use quotes around the package name
 
 
 
@@ -515,11 +546,13 @@ We need to load any R packages we want to use at the very top of the script. You
 
 ```{r tidyverse, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny"}
 
-library("tidyverse")
+library(tidyverse)
 
 ```
 
 This will load the tidyverse package.
+
+- Note you do NOT need to use quotes around the package name
 
 
 
@@ -587,16 +620,47 @@ knitr::include_graphics(
 
 - The data frame is a matrix
   - Each row is an observation and each column is a variables
+  - Think of what this would look like if you opened it in Excel or Stata. It's the same.
 
 - We can also see the names of the columns like this:
 
-```{r colnames, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
+```{r}
 
 colnames(data)
 
 ```
 
 - This is the kind of thing I might do in the console since it's not really required for the script.
+
+
+
+
+## Objects in memory
+
+
+- Here's another handy quick-look functions
+
+```{r}
+
+glimpse(data)
+
+```
+
+
+
+
+## Objects in memory
+
+
+- And one more ("structure")
+
+```{r}
+
+str(data)
+
+```
+
+
 
 
 
@@ -610,10 +674,10 @@ colnames(data)
   - This means that you can call a variable *without referencing the data frame*
 - In R, if you want to look at a variable, you have to tell R which data frame it is in
   - This is done with the $ operator
-  - For example, if I want to look at the variable "age" in the data frame "data", I would write data$age
+  - For example, if I want to look at the variable "age" in the data frame "data", I would write `data$age`
   - Let's look at summary statistics for age:
 
-```{r callingvar, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
+```{r}
 
 summary(data$age)
 
@@ -627,9 +691,9 @@ summary(data$age)
 
 - You can also use summary on the data frame instead of a single column
   - It helps to think of a data frame as rows and columns. For variables, you want to call specific columns.
-- Look at the difference here (it cuts off because of the size of the slide):
+- Look at the difference here:
 
-```{r sumstats, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
+```{r}
 
 summary(data)
 
@@ -649,7 +713,7 @@ summary(data)
   - Note that we use square brackets instead of parentheses
   - Note that we use a comma to separate the row and column
 
-```{r rowcolumn, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
+```{r}
 
 data[1,2]
 
@@ -664,11 +728,13 @@ data[1,2]
   - For example, if I want the second column of the data frame "data", I would write data[,2]
   - Note that the second column is the ability variable
 
-```{r column, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
-
+```{r}
+#| class-output: hscroll
 colnames(data)
-data[,2]
+```
 
+```{r}
+data[,2]
 ```
 
 
@@ -681,7 +747,7 @@ data[,2]
 - Note that this is only how the PROGRAM stores missing variables. Sometimes the data itself has different missing values. \textcolor{red}{PAY ATTENTION!}
 - For example, take a look at the first ten rows of the data frame (also note how I call the first ten rows and leave out the first column!):
 
-```{r missing, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
+```{r}
 data[1:10,-1]
 ```
 
@@ -703,10 +769,10 @@ data[1:10,-1]
 
 ## Variable types
 
-- dbl is short for double, which is a numeric variable (the "type" of numeric variable is about how much memory is needed to store it)
-- chr is short for character, which is a string of characters (text)
-  - Surprisingly, in our previous example, educyears was a character string even though it seemed to be a number
-  - Let's look at the possible values of educyears using the unique() function, which outputs a vector:
+- `dbl` is short for double, which is a numeric variable (the "type" of numeric variable is about how much memory is needed to store it)
+- `chr` is short for character, which is a string of characters (text)
+  - Surprisingly, in our previous example, `educyears` was a character string even though it seemed to be a number
+  - Let's look at the possible values of `educyears` using the unique() function, which outputs a vector:
 
 ```{r uniqueeducyears, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
 unique(data$educyears)
@@ -726,7 +792,7 @@ unique(data$educyears)
 
 ```{r replace, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
 # replace "Not Mentioned" with NA
-data$educyears[data$educyears == "Not Mentioned"] <- NA  
+data$educyears[data$educyears=="Not Mentioned"] <- NA  
 # check that it worked by looking at the unique values
 unique(data$educyears)              
 # turn into numeric
@@ -741,7 +807,7 @@ class(data$educyears)
 
 ## Pipes
 
-- One of the most useful things in R is the pipe operator (|>)
+- One of the most useful things in R is the pipe operator (`|>`)
   - This is part of the tidyverse package
   - It allows you to chain commands together
   - It makes your code much easier to read
@@ -759,9 +825,9 @@ class(data$educyears)
 
 
 ## Pipes example
-Here is an example of how we can use pipes with the mutate() function in tidyverse
+Here is an example of how we can use pipes with the `mutate()` function in tidyverse
 
-- We are also going to use ifelse() to make this work
+- We are also going to use `ifelse()` to make this work
 
 ```{r replacemutate, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny"}
 data <- data |>
@@ -932,7 +998,7 @@ g1 <- ggplot() +
         labs(title = "Histogram of educyears",
              x = "Years of education",
              y = "Count") +
-        theme_minimal()
+        theme_bw()
 g1
 ```
 
@@ -985,18 +1051,6 @@ head(flights$dep_time_new, n = 20)
 ```
 
 
-
-
-
-
-## Dates with lubridate
-Let's fix that!
-
-```{r lubridate3, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "45%", fig.align = "center"}
-flights$dep_time_new <- hm(sprintf("%02d:%02d", flights$dep_time %/% 100, flights$dep_time %% 100))
-
-head(flights$dep_time_new, n = 20)
-```
 
 
 
@@ -1100,7 +1154,7 @@ ggplot() +
   geom_smooth(data = flights, aes(x = sched_dep_time, y = dep_delay, color = origin), se = FALSE) +
   labs(x = "Scheduled departure time",
        y = "Departure delay (minutes)") +
-  theme_minimal() + guides(color = guide_legend(title = "Departure airport"))
+  theme_bw() + guides(color = guide_legend(title = "Departure airport"))
 ```
 
 
@@ -1192,6 +1246,7 @@ knitr::include_graphics(
 - What is "knitting"?
   - Knitting is the process of turning your R Markdown document into a pdf, html, or word document.
   - We will just focus on pdfs for now.
+  - Note: I am using Quarto in an HTML format for these slides!
 
 
 
@@ -1228,7 +1283,7 @@ knitr::include_graphics(
   - This is called the YAML header
   - It tells R Markdown what kind of document to create
   - It also allows you to set some options
-  - DO NOT DELETE THE --- AT THE TOP AND BOTTOM OF THE YAML HEADER!
+  - DO NOT DELETE THE `---` AT THE TOP AND BOTTOM OF THE YAML HEADER!
   
 - You can change the title and date as you please
   - For today's date, you can use Sys.Date() within R inline code (more in a second):
@@ -1244,7 +1299,7 @@ date: "`r Sys.Date()`"
 
 ## The setup chunk
 
-- Just below the YAML header you'll see a "code chunk" called "setup" (r setup, include = FALSE)
+- Just below the YAML header you'll see a "code chunk" called "setup" (` r setup, include = FALSE`)
   
 - Note how it has $```$ and $```$ at the top and bottom. This differentiates the "code chunk" from the rest of the document.
   - Whenever you want to add a code chunk, you *must* have the $```$ at the top and bottom of it, at the beginning of the line.
@@ -1338,8 +1393,7 @@ How did I do that?
 
 \small
 ````markdown
-`r ''````{r chunkexample, include = TRUE, warning = FALSE, out.width = "55%", 
-          fig.align = "center"}
+`r ''````{r chunkexample, include = TRUE, warning = FALSE, out.width = "55%", fig.align = "center"}
 # note that I named the chunk.
 # all chunks must have a UNIQUE name.
 # you will get an error if they don't

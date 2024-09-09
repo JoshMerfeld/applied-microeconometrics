@@ -66,6 +66,14 @@ details > summary {
   padding-left: 0.5em;
 }
 
+// change color of aside
+.reveal .slide aside .aside-footnotes {
+  color: $kdisgreen;
+}
+.reveal .slide aside, .reveal .slide div.aside {
+  color: $kdisgreen;
+}
+
 
 // title and headings
 
