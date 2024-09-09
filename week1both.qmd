@@ -1413,7 +1413,7 @@ ggplot(flights) +
 
 - There are lots of code chunk options.
 
-- You can find the code chunk options [\textcolor{kdisgreen}{here}](https://rpubs.com/Lingling912/870659) (https://rpubs.com/Lingling912/870659)
+- You can find the code chunk options [here](https://rpubs.com/Lingling912/870659) (https://rpubs.com/Lingling912/870659)
 
 - This will get easier to use as you get more and more practice.
 
@@ -1439,18 +1439,21 @@ Don't do this.
 ## You can add R inline code
 
 
-- You can add R inline code using the $`r'$ operator.
-  - For example, if I want to add the date, I can write `r Sys.Date()`
-  - There are `r ncol(flights)` columns in the flights data.
-  - There are `r nrow(flights)` columns in the flights data.
-
-
 ````markdown
+#| output: asis
+- You can add R inline code using the $`r'$ operator.
+  - For example, if I want to add the date, I can write ` r Sys.Date()` (no space between the ` and the r)
+  - There are ` r ncol(flights)` columns in the flights data. (no space between the ` and the r)
+  - There are ` r nrow(flights)` rows in the flights data. (no space between the ` and the r)
+````
+
 - You can add R inline code using the $`r'$ operator.
   - For example, if I want to add the date, I can write `r Sys.Date()`
   - There are `r ncol(flights)` columns in the flights data.
-  - There are `r nrow(flights)` columns in the flights data.
-````
+  - There are `r nrow(flights)` rows in the flights data.
+
+
+
 
 
 
@@ -1461,13 +1464,11 @@ Don't do this.
 - I like lists.
   - With indentations.
 1. Really, I do.
-   1. Indent! It's just a tab.
 
 ````markdown
 - I like lists.
   - With indentations.
 1. Really, I do.
-   1. Indent! It's just a tab.
 ````
 
 
@@ -1509,7 +1510,7 @@ $$y = x + \varepsilon$$
 ## latex
 
 \begin{gather}\label{eq1} y = x + \varepsilon \end{gather}
-- In Equation \autoref{eq1}
+- In Equation 1
 
 
 ````markdown
@@ -1528,7 +1529,7 @@ $$y = x + \varepsilon$$
 
 - latex is particularly helpful for rendering math
   
-- You can find a handy reference guide [\textcolor{kdisgreen}{here}](https://icl.utk.edu/~mgates3/docs/latex.pdf) (https://icl.utk.edu/~mgates3/docs/latex.pdf)
+- You can find a handy reference guide [here](https://icl.utk.edu/~mgates3/docs/latex.pdf) (https://icl.utk.edu/~mgates3/docs/latex.pdf)
 
 
 
