@@ -344,3 +344,9 @@ details > summary {
   margin-top: 0 !important;
 }
 
+// tabset
+
+.panel-tabset > .tab-content {
+  padding: 12px 12px;
+    background-color: mix($kdisgray, white, 40%);
+}

@@ -1,0 +1,2022 @@
+---
+title:  |
+    | Applied microeconometrics
+subtitle: "Week 2 - Linear regression (OLS) and bootstrapping"
+author: "Josh Merfeld"
+institute: "KDI School"
+date: "2024-09-23"
+date-format: long
+format: 
+  revealjs:
+    self-contained: true
+    slide-number: false
+    progress: false
+    theme: [serif, custom.scss]
+    width: 1500
+    height: 1500*(9/16)
+    code-copy: true
+    code-fold: show
+    code-overflow: wrap
+    highlight-style: github
+execute:
+  echo: true
+  warnings: false
+  message: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+
+
+library(tidyverse)
+library(kableExtra)
+library(fixest)
+library(ggpubr)
+library(RColorBrewer)
+library(fitdistrplus)
+
+data <- read_csv("week2files/data.csv")
+data <- data %>%
+          dplyr::select(country, year, agemployment, servicesemployment, gnipc, lfp, population, urbanpop) %>%
+          filter(gnipc>0)
+data <- data[apply(is.na(data), 1, FUN = sum)==0,]
+
+set.seed(1304697)
+population <- rnorm(100000, mean = 0, sd = 1)
+population2 <- rgamma(100000, shape = 1, scale = 2)
+
+x <- runif(100000, min = 0, max = 5)
+# y is a function of x, plus some random error
+y <- 3*x + rnorm(100000, mean = 0, sd = 1)
+# put it into a data frame
+df <- as_tibble(cbind(y, x))
+lm(y ~ x, data = df)
+beta <- coef(lm(y ~ x, data = df))[2]
+beta
+
+# empty container to hold the estimates
+bootvecsave <- c()
+# get list of countries
+countries <- unique(data$country)
+# This takes longer to run, so just 500 as an example (try to use more)
+for (b in 1:500){
+  # take a sample with replacement (same size as data)
+  samplecountries <- countries[sample(1:length(countries), length(countries), replace = TRUE)]
+  # go through sample countries and get data, appending
+  sample <- c()
+  for (c in samplecountries){
+    sample <- rbind(sample, data %>% filter(data$country==paste0(c)))
+  }
+  # estimate regression
+  reg <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = sample)
+  # add coefficient to vector
+  bootvecsave <- c(bootvecsave, reg$coefficients[2])
+}
+```
+
+
+
+# Introduction
+
+## What are we doing today?
+
+
+- This week we will review linear regression (OLS) and its assumptions
+  - We will also discuss how to interpret the results of a regression
+
+
+- Some of this will be review, but there will be some new stuff, too
+  - For example, we will discuss bootstrapping on Thursday
+
+
+
+
+
+
+## What are we doing today?
+
+- I will be going through some econometric theory this week
+
+- But we will also be using some data throughout the week
+  - This data comes from the [World Development Indicators](https://databank.worldbank.org/source/world-development-indicators) database
+  - I have uploaded the csv file to this week's GitHub folder
+
+
+
+
+
+
+# Fitting lines
+
+## Fitting lines to data
+
+```{r}
+#| echo: False
+#| out.width: 65%
+#| fig.align: center
+
+ggplot(data = data) +
+  geom_point(aes(x = log(gnipc), y = agemployment), color = rgb(167, 169, 172, maxColorValue = 255)) +
+  scale_y_continuous(limits = c(-12.5, 90)) +
+  theme_bw() +
+  labs(x = "Log GNI per capita", y = "Ag. employment")
+
+```
+
+
+## Which line best fits the data?
+
+```{r}
+#| echo: False
+#| out.width: 65%
+#| fig.align: center
+
+ggplot(data = data) +
+  geom_point(aes(x = log(gnipc), y = agemployment), color = rgb(167, 169, 172, maxColorValue = 255)) +
+  geom_smooth(aes(x = log(gnipc), y = agemployment), formula = y ~ x, method = "lm", se = FALSE, color = rgb(0, 99, 52, maxColorValue = 255)) +
+  scale_y_continuous(limits = c(-12.5, 90)) +
+  theme_bw() +
+  labs(x = "Log GNI per capita", y = "Ag. employment")
+
+```
+
+
+
+
+## Ordinary Least Squares (OLS)
+
+
+- OLS is a method for fitting a line to data
+  - It is the most common method for fitting lines to data
+
+
+- You have an outcome, let's call it $y_i$ (where $y$ is the outcome and $i$ is an individual)
+- You also have a set of covariates, let's call them $x_{ik}$ (where $k$ denotes different covariates)
+
+
+- The relationship might look something like this, assuming linearity:
+$$\begin{gather}y_i = \beta_0 + \beta_1 x_{i,1} + \beta_2 x_{i,2} + \dots + \beta_k x_{i,k} + \epsilon_i \end{gather}$$
+
+
+
+
+
+
+## Ordinary Least Squares (OLS)
+
+
+- OLS is about finding the **average** relationship between $Y$ and a set of covariates, $X$
+  - The fit will never be perfect, which is why we have $\epsilon_i$
+  - $\epsilon_i$ is the error term and shows that individuals will deviate from the average relationship
+  - For example, Bill Gates is a high-school drop out but is still a billionaire; this is deviation from an average relationship between education and income
+
+
+
+
+
+## Minimizing the sum of squared errors
+
+
+- In order to find a "line of best fit", we need an objective function
+  - We want to minimize the distance between the line and the data, but how do we define that distance?
+
+- We can define the distance as the sum of squared errors (SSE)
+  - The SSE is the sum of the squared difference between the actual value and the predicted value
+  - The predicted value is the value on the line of best fit
+
+- In other words:
+$$\begin{gather} \text{SSE} = \sum_{i=1}^n (y_i - \hat{y}_i)^2 \end{gather}$$
+
+
+
+
+
+
+## Minimizing the sum of squared errors
+
+
+$$\begin{gather} \text{SSE} = \sum_{i=1}^n (y_i - \hat{y}_i)^2 \end{gather}$$
+
+- $\hat{y}_i$ is the predicted value of $y_i$ for individual $i$
+- But how do we find $\hat{y}_i$?
+  - We need to find the line of best fit
+  - We need to find the values of $\beta_0, \beta_1, \dots, \beta_k$ that minimize the SSE.
+- We can do this by noting that $\hat{y_i} = \hat{\beta_0} + \hat{\beta_1} x_{i,1} + \hat{\beta_2} x_{i,2} + \dots + \hat{\beta_k} x_{i,k}$:
+
+$$\begin{gather} \text{SSE} = \sum_{i=1}^n (y_i - \beta_0 - \hat{\beta_1} x_{i,1} - \hat{\beta_2} x_{i,2} - \dots - \hat{\beta_k} x_{i,k})^2 \end{gather}$$
+
+
+
+
+## In matrix form
+
+
+- Let's rewrite the equation in matrix form:
+- $\mathbf{Y}$ is a vector of outcomes, $\mathbf{X}$ is a matrix of covariates, and $\boldsymbol{\beta}$ is a vector of coefficients:
+$$\begin{gather} \text{SSE} = (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})' (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta}) \end{gather}$$
+
+- It turns out that this becomes an optimization problem
+- We know the $\mathbf{Y}$ and $\mathbf{X}$, so we want to minimize this with respect to $\boldsymbol{\beta}$:
+$$\begin{gather} \min_{\boldsymbol{\beta}} (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta})' (\mathbf{Y} - \mathbf{X} \boldsymbol{\beta}) \end{gather}$$
+
+
+
+
+
+## The solution
+
+- We know the solution to this:
+$$\begin{gather} \hat{\boldsymbol{\beta}} = (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}' \mathbf{Y}  \end{gather}$$
+
+- Seer this formula into your brain!
+
+
+
+
+
+# LLN and CLT
+
+
+## A problem: uncertainty
+
+
+- We have a solution, but we have a problem: uncertainty
+  - We generally do not have the population, which means $\hat{\boldsymbol{\beta}}$ is just a sample estimate of the population parameters $\boldsymbol{\beta}$
+  - Note the use of hats to denote sample estimates
+
+- We need to know how uncertain we are about our estimates
+  - We need to know how much $\hat{\boldsymbol{\beta}}$ will vary from sample to sample
+  - Before we do this, we need to do a little bit of background on probability and statistics
+
+
+
+
+## Two important theorems
+
+
+- There are two important theorems that we need to know about
+  - The Law of Large Numbers
+  - The Central Limit Theorem
+
+- Let's go through these one at a time
+
+
+
+
+
+## Law of Large Numbers (LLN)
+
+
+- The LLN says that as the sample size increases, the sample mean will converge to the population mean
+  - In other words, as $n \rightarrow \infty$, $\bar{x} \rightarrow \mu$ 
+    - where $n$ is the sample size, $\bar{x}$ is the sample mean, $\mu$ is the true population mean
+
+- You don't have to take my word for this, though. Let's see it in action.
+
+
+
+
+
+## LLN as an example
+
+
+Let's create a "population" of 100,000 random numbers from a normal distribution with mean 0 and standard deviation 1
+
+
+```{r}
+
+# note that rnorm is a "random" number generator, so we need to set a seed to make sure we get the same results each time
+set.seed(1304697) 
+# NOTE: just set the seed once, at the top of your script. Then run everything and you will get reproducible results
+population <- rnorm(100000, mean = 0, sd = 1)
+
+mean(population)
+```
+
+
+
+
+
+## LLN as an example
+
+ 
+- So we know the true mean is $\mu = `r mean(population)`$
+
+- Let's see what happens as we take a sample of size 10:
+
+```{r}
+
+sample <- population[sample(1:length(population), 10, replace = FALSE)]
+
+mean(sample)
+```
+
+- Let's see what happens as we take a sample of size 100:
+
+```{r}
+
+sample <- population[sample(1:length(population), 100, replace = FALSE)]
+
+mean(sample)
+```
+
+
+
+
+
+## Suppose we did this a bunch of times...
+
+
+- Let's say we took a sample of size 10, 100 times
+  - We would get 100 different sample means
+  - We can calculate how "far" each sample mean is from the true mean
+  - We can do the same thing for a bunch of different sample sizes
+
+- Let's then plot the average mean squared error (MSE) for each sample size
+  - The MSE is the average squared difference between the sample mean and the true mean
+  - In other words, it is the average of $(\bar{x} - \mu)^2$
+
+
+
+
+
+## The results
+
+```{r}
+
+sample <- c()
+i <- 1
+for (size in seq(from = 10, to = 500, by = 10)) {
+  sample[[i]] <- vector(mode = "double", length = 100)
+  for (j in 1:100){
+    sample[[i]][j] <- (mean(population) - mean(population[sample(1:length(population), size, replace = FALSE)]))^2
+  }
+  i <- i + 1
+}
+
+means <- sapply(sample, mean)
+
+ggplot() + 
+  geom_smooth(aes(x = seq(from = 10, to = 500, by = 10), y = means), se = FALSE, color = rgb(0, 99, 52, maxColorValue = 255)) +
+  theme_bw() +
+  labs(x = "Sample size", y = "Mean squared error")
+
+
+```
+
+
+
+
+
+## The results
+
+```{r}
+#| echo: False
+#| fig.align: center
+
+sample <- c()
+i <- 1
+for (size in seq(from = 10, to = 500, by = 10)) {
+  sample[[i]] <- vector(mode = "double", length = 100)
+  for (j in 1:100){
+    sample[[i]][j] <- (mean(population) - mean(population[sample(1:length(population), size, replace = FALSE)]))^2
+  }
+  i <- i + 1
+}
+
+means <- sapply(sample, mean)
+
+ggplot() + 
+  geom_smooth(aes(x = seq(from = 10, to = 500, by = 10), y = means), se = FALSE, color = rgb(0, 99, 52, maxColorValue = 255)) +
+  theme_bw() +
+  labs(x = "Sample size", y = "Mean squared error")
+
+```
+
+
+
+
+## Non-normal distributions
+
+- This doesn't just work with normal distributions
+- Here's an example with a more skewed distribution
+- Let's create a "population" of 100,000 random numbers from a gamma distribution with a shape ($k$) of 1 and a scale ($\theta$) of 2
+
+```{r}
+
+population2 <- rgamma(100000, shape = 1, scale = 2)
+mean(population2)
+
+```
+
+
+
+
+
+
+## The two populations
+```{r}
+#| echo: False
+#| fig.align: center
+
+g1 <- ggplot() + 
+        geom_density(aes(x = population), color = rgb(0, 99, 52, maxColorValue = 255)) +
+        theme_bw() +
+        labs(x = "Value", y = "Density", title = "Normal distribution (mean = 0, s.d. = 1)")
+g2 <- ggplot() + 
+        geom_density(aes(x = population2), color = rgb(0, 99, 52, maxColorValue = 255)) +
+        theme_bw() +
+        labs(x = "Value", y = "Density", title = "Gamma distribution (shape = 1, scale = 2)") 
+ggarrange(g1, g2)
+```
+
+
+
+
+
+## The results for the gamma distribution
+
+```{r}
+#| echo: False
+#| fig.align: center
+
+sample <- c()
+i <- 1
+for (size in seq(from = 10, to = 500, by = 10)) {
+  sample[[i]] <- vector(mode = "double", length = 100)
+  for (j in 1:100){
+    sample[[i]][j] <- (mean(population2) - mean(population2[sample(1:length(population2), size, replace = FALSE)]))^2
+  }
+  i <- i + 1
+}
+
+means <- sapply(sample, mean)
+
+ggplot() + 
+  geom_smooth(aes(x = seq(from = 10, to = 500, by = 10), y = means), se = FALSE, color = rgb(0, 99, 52, maxColorValue = 255)) +
+  theme_bw() +
+  labs(x = "Sample size", y = "Mean squared error")
+
+```
+
+
+
+
+
+## The takeaway from the LLN
+
+
+- The main takeaway from the LLN is that as the sample size increases, the sample mean will converge to the population mean
+  - In other words, as $n \rightarrow \infty$, $\bar{x} \rightarrow \mu$
+
+- This holds for many different distributions!
+  - Note that it will approach the mean for a normal distribution more quickly than skewed distributions!
+  - Something we will return to is that this also holds for the distribution of $\hat{\boldsymbol{\beta}}$
+
+
+
+
+
+
+## The Central Limit Theorem
+
+
+- The LLN is about the **mean**
+  - The Central Limit Theorem (CLT) is about the **distribution**
+
+- The CLT says that as the sample size increases, the distribution of the sample mean will converge to a normal distribution
+  - In other words, as $n \rightarrow \infty$, $\bar{x} \sim N(\mu, \sqrt{\sigma^2/n})$
+  - where $\mu$ is the true population mean and $\sigma^2$ is the true population variance
+
+
+
+
+
+
+## The CLT, empirically
+
+- We can do something similar to what we did with the LLN
+  - Instead of looking at means, though, we will look at *distributions of the mean*
+  - In other words, we will density functions of the sample means
+
+- I am going to take a sample and find the mean
+  - Then I'm going to do it again
+  - And again
+  - 1,000 times
+
+- Then I will plot the density of the sample means, for four separate sample sizes (10, 50, 100, and 500)
+
+
+
+
+
+## The CLT with four sample sizes: 10, 50, 100, and 500 and 1,000 replications
+```{r}
+#| echo: False
+#| fig.align: center
+
+sample <- as_tibble(matrix(nrow = 4000, ncol = 2))
+colnames(sample) <- c("samplesize", "mean")
+sample$samplesize[1:1000] <- 10
+sample$samplesize[1001:2000] <- 50
+sample$samplesize[2001:3000] <- 100
+sample$samplesize[3001:4000] <- 500
+
+for (size in c(10, 50, 100, 500)) {
+  temp <- c()
+  for (j in 1:1000){
+    temp <- c(temp, mean(population[sample(1:length(population), size, replace = FALSE)]))
+  }
+  sample$mean[sample$samplesize == size] <- temp
+}
+
+ggplot(data = sample) + 
+  geom_density(aes(x = mean, fill = as.factor(samplesize)), alpha = 0.5) +
+  scale_fill_brewer("Sample size", palette = "Set2") +
+  theme_bw() +
+  labs(x = "Mean", y = "Density", title = "From the normally distributed population")
+
+```
+
+
+
+
+
+## The CLT with four sample sizes: 10, 50, 100, and 500 and 1,000 replications
+```{r}
+#| echo: False
+#| fig.align: center
+
+sample <- as_tibble(matrix(nrow = 4000, ncol = 2))
+colnames(sample) <- c("samplesize", "mean")
+sample$samplesize[1:1000] <- 10
+sample$samplesize[1001:2000] <- 50
+sample$samplesize[2001:3000] <- 100
+sample$samplesize[3001:4000] <- 500
+
+for (size in c(10, 50, 100, 500)) {
+  temp <- c()
+  for (j in 1:1000){
+    temp <- c(temp, mean(population2[sample(1:length(population2), size, replace = FALSE)]))
+  }
+  sample$mean[sample$samplesize == size] <- temp
+}
+
+ggplot(data = sample) + 
+  geom_density(aes(x = mean, fill = as.factor(samplesize)), alpha = 0.5) +
+  scale_fill_brewer("Sample size", palette = "Set2") +
+  theme_bw() +
+  labs(x = "Mean", y = "Density", title = "From the gamma distributed population")
+
+```
+
+
+
+
+
+## The CLT lets us quantify uncertainty
+
+
+- The key thing about the CLT is that the math behind us *lets us quantify the uncertainty!*
+- For sample means, the CLT says that the standard error of the mean is:
+  - $\sigma_{\bar{x}} = \frac{\sigma}{\sqrt{n}}$
+    - where $\sigma$ is the population standard deviation and $n$ is the sample size
+
+- Of course, we don't know $\sigma$, but we can estimate it!
+
+
+
+
+
+
+## The CLT lets us quantify uncertainty
+
+
+- We can estimate $\sigma$ with $s$
+  - $s$ is the sample standard deviation
+  - So we can estimate the standard error of the mean as:
+    - $SE_{\bar{x}} = \frac{s}{\sqrt{n}}$
+
+- This "standard error of the mean" is the standard deviation of the distribution of the sample mean
+  - That distribution is called the sampling distribution of the mean
+
+
+
+
+
+# OLS Variance
+
+## Uncertainty in OLS
+
+- Let's go back to our (population) regression equation:
+$$\begin{gather} \mathbf{Y} = \mathbf{X} \boldsymbol{\beta} + \boldsymbol{\epsilon} \end{gather}$$
+
+- What drives uncertainty here? 
+  - The **error term**, $\boldsymbol{\epsilon}$
+  - Note that an error term is a *population* parameter
+  - The sample analog is the **residual**
+
+
+
+
+
+
+## Uncertainty in OLS
+
+- We can see that the error term is responsible for uncertainty by thinking about the deviation of estimated regression coefficients ($\hat{\boldsymbol{\beta}}$) from the true regression coefficients ($\boldsymbol{\beta}$)
+$$\begin{gather*} \boldsymbol{Y} = \boldsymbol{\beta} \mathbf{X} + \boldsymbol{\epsilon} \hspace{2cm} \hat{\boldsymbol{\beta}} = (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}' \boldsymbol{Y}  \\        
+                \hat{\boldsymbol{\beta}} = (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}' (\boldsymbol{\beta} \mathbf{X} + \boldsymbol{\epsilon}) \\
+                \hat{\boldsymbol{\beta}} = (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}'\boldsymbol{\beta} \mathbf{X} + (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}'\boldsymbol{\epsilon})\end{gather*}$$
+
+ $$\begin{gather} \hat{\boldsymbol{\beta}} = \boldsymbol{\beta} + (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}'\boldsymbol{\epsilon} \end{gather}$$
+
+- $\beta$ is fixed, but $\epsilon$ is random
+  - So $\hat{\boldsymbol{\beta}}$ is random, too
+  - That randomness is driven by the error term, $\boldsymbol{\epsilon}$
+
+
+
+
+
+
+## Variance of $\hat{\boldsymbol{\beta}}$
+
+- Variance is about how much a random variable varies from its mean
+  - It's a second-order moment (i.e. squared deviation from the mean)
+  - Note how we use expectations here, since we are talking about population parameters
+  - Also note that this comes directly from the second part of the previous equation!
+  
+$$\begin{gather} Var(\hat{\boldsymbol{\beta}} | \boldsymbol{X}) = (\mathbf{X}' \mathbf{X})^{-1} \mathbf{X}'\mathbb{E}(\boldsymbol{\epsilon}'\boldsymbol{\epsilon}|\boldsymbol{X})\mathbf{X}(\mathbf{X}' \mathbf{X})^{-1}  \end{gather}$$
+
+- Well that doesn't look very good, does it?
+  - We can simplify this... with an assumption on $\mathbb{E}(\boldsymbol{\epsilon}'\boldsymbol{\epsilon}|\boldsymbol{X})$, which we can denote $\boldsymbol{\Omega}$
+
+
+
+
+
+
+## Homoskedasticity
+
+
+- If we are willing to assume structure on the error term, we can simplify the variance
+
+
+::: {.panel-tabset}
+
+### Assumption: Homoskedasticity
+
+$\boldsymbol{\Omega} = \sigma^2 \mathbf{I}$, where $\mathbf{I}$ is the identity matrix (ones on the diagonal and zeros elsewhere). 
+
+:::
+
+<br>
+
+Since this doesn't depend on $\mathbf{X}$, this simplifies the variance to:
+  \begin{gather} Var(\hat{\boldsymbol{\beta}}_{homoskedasticity}) = \sigma^2 (\mathbf{X}' \mathbf{X})^{-1} \end{gather}
+
+
+
+
+
+
+
+## Homoskedasticity
+
+- What, exactly, is homoskedasticity? 
+- It means that the variance of the error term is constant
+  - In other words, the variance of the error term does not depend on the covariates
+  - This is a very strong assumption and is often violated in practice
+
+
+
+
+
+
+## Estimating the variance under homoskedasticity
+
+- Even though it may not be reasonable, let's assume homoskedasticity
+  - Then, the variance of $\hat{\boldsymbol{\beta}}_{homoskedasticity}$ is: 
+  
+$$\begin{gather} \sigma^2 (\mathbf{X}' \mathbf{X})^{-1} \end{gather}$$
+
+- There's a problem, though: we don't know $\sigma^2$
+  - We can estimate it, just like with the mean
+  - We can estimate it with the residual sum of squares (RSS)
+    - The RSS is the sum of the squared *residuals*
+    - This is an assumption about the *error* term, not the variables
+
+
+
+
+
+
+## Estimating the variance under homoskedasticity
+- We can estimate $\sigma^2$ as $\frac{RSS}{n - k - 1}$, where $n$ is the sample size and $k$ is the number of covariates
+  - The extra $1$ is due to the intercept (which we also estimate!)
+- We estimate the variance as:
+
+$$\begin{align} Var(\hat{\boldsymbol{\beta}}_{homoskedasticity}) &= \hat{\sigma}^2(\mathbf{X}' \mathbf{X})^{-1} \\
+                &= \frac{RSS}{n - k - 1}(\mathbf{X}' \mathbf{X})^{-1} \\
+                &= \frac{\sum_1^n(y_i-\hat{y}_i)^2}{n-k-1}(\mathbf{X}' \mathbf{X})^{-1} \end{align}$$
+
+
+
+
+
+
+## What does this equation tell us?
+
+$$\begin{gather} Var(\hat{\boldsymbol{\beta}}_{homoskedasticity}) = \frac{\sum_1^n(y_i-\hat{y}_i)^2}{n-k-1}(\mathbf{X}' \mathbf{X})^{-1} \end{gather}$$
+
+- There are a couple things to point out here
+  - First, the variance of $\hat{\boldsymbol{\beta}}$ is a function of the variance of the error term (estimated with the residuals)
+    - The more unexplained variation in the outcome, the larger the variance of our estimated coefficients
+  - Second, the variance of $\hat{\boldsymbol{\beta}}$ is also a function of the variance of the covariates
+    - The more variation in the covariates, the smaller the variance of our estimated coefficients
+    - The matrix inverse function is like division (but much funkier)
+
+
+
+
+
+# Using uncertainty
+
+## Why do we care about variance?
+
+
+- We care about variance because it allows us to do hypothesis testing
+  - We can test whether or not a coefficient is different from zero (or any other value)
+  - We can test whether or not two coefficients are different from each other
+
+. . .
+
+- We only have a *sample*, which means we cannot say anything with certainty
+  - We can only say something with a certain degree of confidence
+
+. . .
+
+- Taking into account variance allows us to say something about *the population from which the sample is drawn*
+  - We generally don't care about the sample itself, only what it tells us about something larger
+
+
+
+
+
+
+
+## Confidence intervals
+
+
+- Suppose we have an estimated coefficient, $\hat{\beta}$
+- Let's create a simulation exercise with a "population"
+
+```{r}
+
+# some variable, x, randomly distributed between 0 and 5
+x <- runif(100000, min = 0, max = 5)
+# y is a function of x, plus some random error
+y <- 3*x + rnorm(100000, mean = 0, sd = 1)
+# put it into a data frame
+df <- as_tibble(cbind(y, x))
+
+# what is the "true" value of beta in our population of 100,000 people?
+ols <- lm(y ~ x, data = df)
+coef(ols)
+```
+
+
+
+
+
+
+
+
+
+
+## Confidence intervals
+
+
+Now let's take a sample of just 50. In a smaller sample, the coefficient can be quite different sometimes.
+
+```{r}
+sample <- df[sample(1:nrow(df), 50, replace = FALSE),]
+summary(lm(y ~ x, data = sample))
+```
+
+
+
+
+
+
+
+## Confidence intervals
+
+- We want to put a confidence interval around our estimate of $\hat{\beta}$
+  - This will give us some idea of what the "true" value is (we know it here, but we generally do not!)
+
+. . .
+
+- You hopefully remember two separate distributions from earlier classes:
+  - z distribution
+  - t distribution
+
+. . .
+
+- In theory, you should always use a t distribution if *you do not know the true population* $\sigma^2$ (which we usually don't)
+  - We will always use t distributions
+  - In practice, the z and t distributions are pretty similar when the sample size is large, but the t is more technically correct (and computers calculate it for us anyway)
+
+
+
+
+
+
+
+## Different distributions (zoomed in to abs(value)<5)
+
+
+```{r}
+#| echo: False
+
+z <- as_tibble(rnorm(100000, mean = 0, sd = 1))
+z$dist = "z"
+t5 <- as_tibble(rt(100000, df = 5))
+t5$dist = "t (df = 5)"
+t10 <- as_tibble(rt(100000, df = 10))
+t10$dist = "t (df = 10)"
+t50 <- as_tibble(rt(100000, df = 50))
+t50$dist = "t (df = 50)"
+dist <- rbind(z, t5, t10, t50)
+dist <- dist |> filter(abs(value)<5)
+
+ggplot(dist) +
+  geom_density(aes(x = value, fill = dist), alpha = 0.25) +
+  scale_fill_brewer("Distribution:", palette = "Set2") +
+  theme_bw() +
+  labs(x = "Values", y = "Density") +
+  theme(legend.position = c(0.8, 0.8),
+        legend.text = element_text(size = 15),
+        legend.title = element_text(size = 15))
+```
+
+
+
+
+
+
+
+## Critical values
+
+
+- I'll assume you all remember critical values from earlier metrics classes
+  - If not, ask now!
+  - Confidence level (e.g. 0.05 for 95\% confidence): $\alpha$
+
+. . .
+
+- We construct our CI as:
+$$\begin{gather} CI = \left(\hat{\beta} - t^{1-\frac{\alpha}{2}}_{n-k-1} \times \sqrt{Var(\hat{\beta})},\hspace{3mm} \hat{\beta} + t^{1-\frac{\alpha}{2}}_{n-k-1} \times \sqrt{Var(\hat{\beta})}\right) \end{gather}$$
+
+- At smaller sample sizes, the t distribution has fatter tails
+  - This means that we need to be more uncertain about the true value of $\beta$ and the critical value can be quite different
+
+
+
+
+
+
+
+## Critical values for the different distributions
+
+
+```{r}
+#| echo: False
+
+z <- as_tibble(rnorm(100000, mean = 0, sd = 1))
+z$dist = "z, critical = 1.96"
+t5 <- as_tibble(rt(100000, df = 5))
+t5$dist = "t (df = 5), critical = 2.571"
+t50 <- as_tibble(rt(100000, df = 10))
+t50$dist = "t (df = 10), critical = 2.228"
+t500 <- as_tibble(rt(100000, df = 50))
+t500$dist = "t (df = 50), critical = 2.009"
+dist <- rbind(z, t5, t50, t500)
+dist <- dist |> filter(abs(value)<5)
+
+ggplot(dist) +
+  geom_density(aes(x = value, fill = dist), alpha = 0.25) +
+  scale_fill_brewer("Distribution:", palette = "Set2") +
+  theme_bw() +
+  labs(x = "Values", y = "Density") +
+  theme(legend.position = c(0.8, 0.8),
+        legend.text = element_text(size = 15),
+        legend.title = element_text(size = 15))
+```
+
+
+
+
+
+
+
+## Understanding the confidence interval
+
+- Let's go back to our example with the sample of 50
+- What, exactly, does the confidence interval represent?
+
+- Suppose we took a bunch of samples of size 50, let's say 100 of them
+  - We would get a bunch of different estimates of $\hat{\beta}$
+  - Let's plot them along with the confidence intervals
+
+
+
+
+
+
+
+## Degrees of freedom: $n - k - 1 = 48$
+
+```{r}
+#| echo: False
+#| fig.align: center
+
+betas <- as_tibble(matrix(NA, nrow = 100, ncol = 4))
+colnames(betas) <- c("beta", "lower", "upper", "sim")
+for (i in 1:100){
+  sample <- df[sample(1:nrow(df), 50, replace = FALSE),]
+  reg <- summary(lm(y ~ x, data = sample))
+  betas$beta[i] <- reg[[4]][2,1]
+  betas$lower[i] <- reg[[4]][2,1] - reg[[4]][2,2]*qt(0.975, df = 48)
+  betas$upper[i] <- reg[[4]][2,1] + reg[[4]][2,2]*qt(0.975, df = 48)
+  betas$sim[i] <- i
+}
+CIs <- rbind(betas, betas)
+CIs$CI <- CIs$lower
+CIs$CI[101:200] <- CIs$upper[101:200]
+CIs$cover <- 0
+CIs$cover[CIs$lower<3 & CIs$upper>3] <- 1
+ggplot() +
+  geom_point(data = betas, aes(x = sim, y = beta), color = rgb(0, 99, 52, maxColorValue = 255), shape = 15) +
+  geom_line(data = CIs |> filter(cover==1), aes(x = sim, y = CI, group = sim), color = rgb(167, 169, 172, maxColorValue = 255), alpha = 0.5) +
+  geom_line(data = CIs |> filter(cover==0), aes(x = sim, y = CI, group = sim), color = rgb(0, 99, 52, maxColorValue = 255)) +
+  geom_hline(aes(yintercept = 3), color = rgb(0, 99, 52, maxColorValue = 255), linetype = "dashed") +
+  theme_bw() +
+  labs(x = "Simulation number", y = "Estimate")
+
+```
+
+
+
+
+
+
+
+## Confidence intervals
+
+- Confidence intervals are a frequentist idea
+  - They are about the probability of the true value being in the interval
+
+- We usually can't know for sure whether or not the true value is in the interval
+  - The probability is only about "averages" over many samples
+
+- We can change our confidence level:
+  - $\alpha=0.01$ (confidence level of 99\%) gives us a wider interval
+  - $\alpha=0.10$ (confidence level of 90\%) gives us a narrower interval
+
+
+
+
+
+
+
+## Hypothesis testing
+
+- We can also explicitly test whether or not a coefficient is different from some value
+  - What is the most common value we are interested in?
+
+. . .  
+
+- Zero!
+
+. . .  
+
+- We can do this with a t-test
+  - Null hypothesis ($H_0$): what we assume is true
+  - Alternative hypothesis ($H_1$): not the null
+
+- Common example with a regression coefficient:
+  - $H_0: \beta = 0$
+  - $H_1: \beta \neq 0$
+
+- NOTE: We are testing for the POPULATION parameter, not the sample statistics
+
+
+
+
+
+
+
+## Hypothesis testing
+
+- t-test:
+$$\begin{gather} \hat{t} = \frac{\hat{\beta} - H_0}{SE(\hat{\beta})}, \end{gather}$$
+
+where $SE(\hat{\beta})$ is the standard error of $\hat{\beta}$, or $\sqrt{Var(\hat{\beta})}$. I use $\hat{t}$ here to underline that this comes from our sample statistics.
+
+- We can then compare this to a critical value
+  - If $|\hat{t}| > t_{n-k-1}^{1-\frac{\alpha}{2}}$, then we reject the null
+  - If $|\hat{t}| < t_{n-k-1}^{1-\frac{\alpha}{2}}$, then we fail to reject the null
+
+
+
+
+
+
+
+## Type 1 and type 2 errors
+
+ 
+- Type 1 error: we reject the null when it is true
+  - $\alpha$ is the probability of a type 1 error
+ 
+- Type 2 error: we fail to reject the null when it is false
+  - We do not know the probability of a type 2 error
+ 
+
+
+
+
+
+
+## Interpreting the output
+
+```{r}
+# using feols (from fixest package) instead of lm now
+library(fixest)
+feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+```
+
+
+
+
+
+
+
+## Something really nice about fixest (feols)
+
+```{r}
+
+# using feols instead of lm now
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+reg2 <- feols(servicesemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+etable(reg1, reg2,
+        se.below = TRUE, se.row = FALSE, digits = 3,
+        digits.stats = 3, fitstat = c("r2", "ar2", "f", "n")
+        )
+```
+
+
+
+
+
+
+
+## Some important statistics
+
+- $R^2$: the proportion of variation in the outcome explained by the model
+  - $R^2$ is always between 0 and 1
+  - $R^2$ is a measure of *fit*, but you don't really want to use it to judge how "good" your model is
+  - Adding more variables to your model can NEVER decrease $R^2$
+
+- Adjusted $R^2$ ($\bar{R}^2$): penalizes $R^2$ for adding more variables
+  - Adjusted $R^2$ is always between 0 and 1
+  - Adjusted $R^2$ is a measure of *fit*, but you don't really want to use it to judge how "good" your model is
+  - Adding more variables to your model can decrease adjusted $R^2$
+  
+$$\begin{gather} \bar{R}^2 = 1 - (1 - R^2)\frac{n-1}{n-k-1} \end{gather}$$
+
+
+
+
+
+
+
+## F tests
+
+- The F distribution is important in linear regression
+  - It is the ratio of two chi-squared distributions, so it has two different degrees of freedom
+  - We sometimes refer to these as the "numerator" and "denominator" degrees of freedom
+  - An F statistic is always positive
+  
+. . .
+
+- In the previous regression, the F at the bottom is a test of whether or not all of the coefficients are equal to zero
+  - This is a joint test of the coefficients
+  - The null hypothesis is that *all* of the coefficients are equal to zero
+  - The alternative hypothesis is that *at least one* of the coefficients is not equal to zero
+  
+. . .
+
+- In practice, we usually just use the p-value because of the fact that critical values of F distributions can be quite different depending on the d.f.
+
+
+
+
+
+
+
+## F distributions with different degrees of freedom
+
+```{r}
+#| echo: False
+#| fig.align: center
+
+f1 <- as_tibble(rf(100000, df1 = 10, df2 = 10))
+f1$dist = "F(10,10), critical = 2.98"
+f2 <- as_tibble(rf(100000, df1 = 10, df2 = 20))
+f2$dist = "F(10,20), critical = 2.35"
+f3 <- as_tibble(rf(100000, df1 = 10, df2 = 50))
+f3$dist = "F(10,50), critical = 2.03"
+f4 <- as_tibble(rf(100000, df1 = 50, df2 = 50))
+f4$dist = "F(50,50), critical = 1.60"
+dist <- rbind(f1, f2, f3, f4)
+dist <- dist %>% filter(value<=10)
+
+ggplot(dist) +
+  geom_density(aes(x = value, fill = dist), alpha = 0.25) +
+  scale_fill_brewer("Distribution:", palette = "Set2") +
+  theme_bw() +
+  labs(x = "Values", y = "Density") +
+  theme(legend.position = c(0.8, 0.8),
+        legend.text = element_text(size = 15),
+        legend.title = element_text(size = 15))
+```
+
+
+
+
+
+
+
+## F distributions and hypothesis testing
+
+- t-tests are the workhorse for inference on a *single* coefficient
+
+- But what if we want to test multiple coefficients at once?
+  - F-tests 
+
+- Consider the following regression:
+$$\begin{gather} y_i = \beta_0 + \beta_1x_{1,i} + \beta_2x_{2,i} + \beta_3x_{3,i} + \epsilon_i \end{gather}$$
+
+- How might we think about testing whether $\beta_1 = \beta_2 = 0$?
+
+
+
+
+
+
+
+## F distributions and hypothesis testing
+
+$$\begin{gather} y_i = \beta_0 + \beta_1x_{1,i} + \beta_2x_{2,i} + \beta_3x_{3,i} + \epsilon_i \end{gather}$$
+- If we assume $\beta_1 = \beta_2 = 0$, that is the same as estimating:
+$$\begin{gather} y_i = \tilde{\beta}_0 + \tilde{\beta}_3x_{3,i} + \tilde{\epsilon}_i \end{gather}$$
+
+- Intuitively, we want to know whether the first specification is "better" than the second. We can calculate the estimated variance of the residuals in each specification:
+$$\begin{gather}\hat{\sigma}^2 = \sum_1^n(y_i - \hat{y}_i)^2 \\ 
+              \tilde{\sigma}^2 = \sum_1^n(y_i - \tilde{y}_i)^2 \end{gather}$$
+
+
+
+
+
+
+
+## F distributions and hypothesis testing
+
+$$\begin{gather}\hat{\sigma}^2 = \sum_1^n(y_i - \hat{y}_i)^2 \\ 
+              \tilde{\sigma}^2 = \sum_1^n(y_i - \tilde{y}_i)^2 \end{gather}$$
+
+- We can then calculate the F statistic:
+
+$$\begin{gather} F = \frac{(\tilde{\sigma}^2 - \hat{\sigma}^2)/q}{\hat{\sigma}^2/(n - k - 1)},  \end{gather}$$
+
+where $q$ is the number of restrictions we are testing. In this case, $q = 2$ (two restricted coefficients).
+
+
+
+
+
+
+
+## F distributions and hypothesis testing
+
+$$\begin{gather} F = \frac{(\tilde{\sigma}^2 - \hat{\sigma}^2)/q}{\hat{\sigma}^2/(n - k - 1)}  \end{gather}$$
+
+
+- The numerator ($(\tilde{\sigma}^2 - \hat{\sigma}^2)/q$) is distributed as $\chi^2$ with $q$ degrees of freedom
+- The denominator ($\hat{\sigma}^2/(n - k - 1)$) is distributed as $\chi^2$ with $n-k-1$ degrees of freedom
+- Their ratio is distributed as F with $q$ and $n-k-1$ degrees of freedom:
+
+$$\begin{gather} F = \frac{(\tilde{\sigma}^2 - \hat{\sigma}^2)/q}{\hat{\sigma}^2/(n - k - 1)} \sim F(q,n-k-1)   \end{gather}$$
+
+- Now you see why they are sometimes referred to as "numerator" and "denominator" degrees of freedom!
+
+
+
+
+
+
+
+## F-test by hand - note the relationship with the t-test for a single coefficient!
+
+```{r}
+
+# full specification
+full <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+# restricted
+restricted <- feols(agemployment ~ log(gnipc) + lfp + urbanpop, data = data)
+sigma_full <- sum((full$resid)^2) # sigma for full 
+sigma_restricted <- sum((restricted$resid)^2) # sigma for restricted
+((sigma_restricted - sigma_full)/1)/(sigma_full/(full$nobs - 4 - 1)) # calculate F statistic
+```
+
+
+## F-test by hand - note the relationship with the t-test for a single coefficient!
+
+```{r}
+full
+```
+
+- For a *single* coefficient, $F = t^2$!
+
+
+
+
+
+# Alternative standard errors
+
+## We've been assuming homoskedasticity
+
+- In the previous examples, we've been assuming *homoskedasticity*
+$$\begin{gather} \mathbb{E}(\boldsymbol{\epsilon}'\boldsymbol{\epsilon}|\boldsymbol{X}) = \boldsymbol{\Omega} = \sigma^2 \mathbf{I} \end{gather}$$
+
+- In practice, this assumption is unlikely to be true
+  - You can test for it, but it's not really worth it. Just assume it's not true.
+  - In other words, assume $\boldsymbol{\Omega} \neq \sigma^2 \mathbf{I}$
+
+- **Homoskedasticity** can take many forms
+  - It simply means that the variance is not constant across observations
+  - Let's talk about a general estimator under heteroskedasticity and another one under clustering (which is also a form of heteroskedasticity)
+
+
+
+
+
+
+## Sandwich estimators
+
+- There is a broad class of estimators that are called "sandwich estimators" because of their form
+
+- The baseline *heteroskedasticity-consistent* standard errors are:
+$$\begin{gather} Var(\hat{\boldsymbol{\beta}}) = (\mathbf{X}' \mathbf{X})^{-1} \left( \sum_i^n X_i X_i' \sigma_i^2 \right) (\mathbf{X}' \mathbf{X})^{-1}  \end{gather}$$
+
+- Of course we don't know $\sigma_i^2$, so we calculate a feasible estimate using the residuals:
+$$\begin{gather} Var(\hat{\boldsymbol{\beta}})^{HC0} = (\mathbf{X}' \mathbf{X})^{-1} \left( \sum_i^n X_i X_i' \hat{e_i}^2 \right) (\mathbf{X}' \mathbf{X})^{-1}  \end{gather}$$
+
+- This is sometimes referred to as $HC0$ standard errors, or **Eicker-White** standard errors
+  - We actually don't use these much!
+
+
+
+
+
+
+## Bias in HC0
+
+- But there's a problem: it turns out that $\sum_i\hat{e_i}^2$ is a biased estimator for $\sigma_i^2$!
+  - It's biased towards zero ("attenuated") so the standard errors are a bit too small
+
+- The next step is to use a scaling factor to "correct" the standard errors
+  - This is sometimes referred to as $HC1$ standard errors
+  
+$$\begin{gather} Var(\hat{\boldsymbol{\beta}})^{HC1} = \frac{n}{n-k-1}(\mathbf{X}' \mathbf{X})^{-1} \left( \sum_i^n X_i X_i' \hat{e_i}^2 \right) (\mathbf{X}' \mathbf{X})^{-1}  \end{gather}$$
+
+- This is a bit ad hoc, but is generally preferred (Hanson, 2022).
+  - **This is currently the default in Stata (with the option *robust*)**
+  - **With fixest in R, this is what you get with `vcov = "hetero"`**
+
+
+
+
+
+
+## Two more...
+
+- To confuse you more, there are two additional alternatives:
+$$\begin{gather} Var(\hat{\boldsymbol{\beta}})^{HC2} = (\mathbf{X}' \mathbf{X})^{-1} \left( \sum_i^n (1 - h_{ii})^{-1} X_i X_i' \hat{e_i}^2 \right) (\mathbf{X}' \mathbf{X})^{-1}  \\
+               Var(\hat{\boldsymbol{\beta}})^{HC3} = (\mathbf{X}' \mathbf{X})^{-1} \left( \sum_i^n (1 - h_{ii})^{-2} X_i X_i' \hat{e_i}^2 \right) (\mathbf{X}' \mathbf{X})^{-1}  \end{gather}$$
+
+- $h_{ii}$ has to do with a diagonal element of an orthogonal projection matrix. We're going to ignore this for now.
+
+- These are sometimes referred to as $HC2$ and $HC3$ standard errors (and they may actually perform better!)
+
+- When I refer to HC standard errors, I will be talking about $HC1$ unless I say otherwise
+
+
+
+
+
+
+## Clustering
+
+- One of the most common types of heteroskedasticity is clustering
+  - This is when the error term is correlated within groups
+  - For example, if we have data on students within schools, the error term for students in the same school is likely to be correlated
+  
+. . .
+
+- Let $K$ denote the number of clusters and $k$ a specific cluster
+  - We can then calculate the cluster-robust variance estimator as:
+  
+$$\begin{gather} Var(\hat{\boldsymbol{\beta}})^{cluster} = (\mathbf{X}' \mathbf{X})^{-1}  \sum_{k=1}^K \left(\sum_{i=1}^{n_k} X_{ik} \hat{e}_{ik} \right) \left(\sum_{l=1}^{n_k} X_{lk} \hat{e}_{lk} \right)'  (\mathbf{X}' \mathbf{X})^{-1}  \end{gather}$$
+
+- One nice thing: this is also robust to heteroskedasticity in general! (but clustering is also a form of heteroskedasticity)
+
+
+
+
+## Clustering
+
+- The basic intuition is that the more correlated the observations in a cluster is, the larger the variance of the estimated coefficients
+  - You can actually show this with some algebra and some assumptions
+  - This *intra-cluster correlation* is often referred to as $\rho$
+
+
+
+
+
+
+## Clustering
+
+- Suppose you have no clustering at all. Then your effective sample size is $n$.
+
+- Suppose all of your observations are perfectly correlated with the cluster ($\rho=1$). Then your effective sample size is just the number of clusters.
+
+- Of course, neither assumption is likely to ever be true. We are usually somewhere in between, but hopefully this helps with intuition.
+
+- All of these alternative standard error (variance) calculations only affect the standard errors. **Coefficients do not change.**
+
+
+
+
+
+
+## Clustering and standard errors
+
+```{r}
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data, vcov = "iid") # homoskedasticity
+reg2 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data, vcov = "hetero") # HC1 correction
+reg3 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data, cluster = "country") # clustering
+etable(reg1, reg2, reg3,
+       headers = c("iid", "HC1", "cluster"), depvar = FALSE,
+        se.below = TRUE, se.row = FALSE,
+        digits = 3, digits.stats = 3, fitstat = c("wald", "n")
+        )
+```
+
+
+
+
+
+
+
+## What level do we cluster at?
+
+- This is a hard question to answer in many cases
+  - With panel data, we usually cluster at the unit level (e.g. individuals)
+  - In the previous example, this was the country level
+
+- Always cluster at the level of randomization
+  - If the data is collected using a complex survey design, we cluster at the the "enumeration area" level
+
+- **We do not know the "correct" level at which to cluster except in rare situations.**
+
+- [Cameron and Miller (2015)](https://jhr.uwpress.org/content/50/2/317.short) is a nice paper on this topic
+
+
+
+
+
+
+
+## Some complications
+
+- What if the size of clusters is quite different?
+  - Variance is calculated as the sum of errors within clusters, so different cluster sizes means differences in variance
+  - This is basically heteroskedasticity
+  - The key takeaway from this is that smaller samples may show bias (finite-sample bias)
+  - Which leads to...
+
+- What if $K$ is small, i.e. we have relatively few clusters?
+  - One way to think about it is that our effective sample size is closer to $K$ than $n$
+  - Unless we are willing to assume normality of the error term (which we already know we can't), small samples can be problematic
+  - What to do? We will return to this in the next section on bootstrapping.
+
+
+
+
+
+
+
+## Before moving on... the regression "assumptions"
+
+Have you seen these before?
+
+
+1. **Linearity:** the relationship between the outcome and covariates is linear
+2. **Full rank:** the matrix $\mathbf{X}$ has full rank
+   - Another way to say this: no perfect collinearity
+3. **Exogeneity:** the error term is uncorrelated with the covariates
+4. **Homoskedasticity:** the variance of the error term is constant
+5. **Normality:** the error term is normally distributed
+
+
+
+
+
+
+
+## Linearity
+
+1. **Linearity:** the relationship between the outcome and covariates is linear
+  - Regardless of the "true" relationship, OLS will always give you the best linear approximation
+
+
+
+
+
+
+
+## Full rank of $\mathbf{X}$
+
+2. **Full rank:** the matrix $\mathbf{X}$ has full rank, or no perfect collinearity
+  - This is required to estimate the regression.
+  - If there is perfect collinearity, then the matrix $\mathbf{X}'\mathbf{X}$ is not invertible
+  - Stata and R will automatically drop variables to make this happen
+
+
+
+
+
+
+
+## Full rank of $\mathbf{X}$
+
+3. **Exogeneity:** the error term is uncorrelated with the covariates
+  - Ignore this for now. We'll come back to it.
+
+
+
+
+
+
+
+## Homoskedasticity
+
+4. **Homoskedasticity:** the variance of the error term is constant
+  - Obviously not required! We've already talked about this. There are corrections.
+
+
+
+
+
+
+
+## Normality
+
+5. **Normality:** the error term is normally distributed
+   - This is not required for OLS!
+   - The only time this is important is with small samples.
+     - With small samples, we need to assume normality to do hypothesis testing.
+   - With large samples, we can use the central limit theorem to get around non-normality.
+     - A note: the more "non-normal" the error term is, the larger the sample size we need for appropriate inferences.
+
+
+
+
+
+
+
+# Resampling methods
+
+## Bootstrapping (resampling)
+
+- It turns out that there is an alternative to calculting standard errors using formulas
+  - It's called bootstrapping
+  - It's a resampling method
+    - I'll abuse terminology and will generally refer to all of these as "bootstrapping"
+
+- Bootstrapping originated with Efron (1970)
+  - Lots of work since then
+  - There are many different types of bootstrapping
+
+
+
+
+
+
+
+## Resampling *with replacement*
+
+- Bootstrapping is about sampling from your data 
+  - Something you might not be used to: it is sampling *with replacement*
+
+- Imagine a vector with 10 elements: $\{1,2,3,4,5,6,7,8,9,10\}$
+  - Imagine we sample a randomly selected element. Let's say we get 5.
+  - Now, we want to take another randomly selected element. The question: do we put the 5 back in or not?
+  - With replacement: put the 5 back in
+  - Without replacement: don't put the 5 back in
+
+- Bootstrapping is *with replacement*
+  - Put the 5 back in!
+
+
+
+
+
+
+
+
+## Resampling 10 observations *with replacement*
+
+- The key is that we sample rows -- i.e. observations. We do not sample columns. We take an observation and all its values.
+
+:::: {.columns}
+
+::: {.column width="50%"}
+- The original sample
+
+```{r}
+#| echo: False
+
+df <- data[1:10,1:2]
+df
+```
+:::
+
+::: {.column width="50%"}
+- The bootstrapped sample
+
+```{r}
+#| echo: False
+
+df <- data[1:10,1:2]
+df <- df[sample(1:nrow(df), nrow(df), replace = TRUE),]
+df
+```
+:::
+::::
+
+
+
+
+
+
+
+
+## Bootstrapping to estimate variance
+
+- Suppose we are interested in the variance of a coefficient estimate, $\hat{\beta}_1$
+  - We can use bootstrapping to estimate the variance of $\hat{\beta}_1$
+  - Keeping it simple, here is our regression:
+  
+$$\begin{gather} y_i = \beta_0 + \beta_1x_{1,i} + \beta_2x_{2,i} + \beta_3x_{3,i} + \beta_4x_{4,i} + \epsilon_i \end{gather}$$
+
+```{r}
+feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+```
+
+
+
+
+
+
+## Bootstrapping to estimate variance
+
+- Imagine a single bootstrap sample, which we will denote with $b$
+  - We are going to call the estimate we are interested in $\hat{\theta}_b$ (which in this case is a coefficient)
+- Let's calculate the variance using our bootstrap as follows:
+
+$$\begin{gather} Var(\hat{\theta}) = \frac{1}{B-1} \sum_{b=1}^B (\hat{\theta}_{b} - \bar{\theta})^2, \end{gather}$$
+where
+$$\begin{gather} \bar{\theta} = \frac{1}{B} \sum_{b=1}^B \hat{\theta}_{b} \end{gather}$$
+
+
+
+
+
+
+## Bootstrapping to estimate variance
+
+- In words:
+  - We take a bunch of bootstrap samples (more is better, but we'll do 1,000)
+  - We estimate the regression in each bootstrap sample and save the coefficient we are interested in
+  - After all 1,000 bootstrap samples, we calculate the variance as the mean (almost) of the squared differences between each bootstrap estimate and the mean of the bootstrap estimates
+
+
+
+
+
+
+## Bootstrapping to estimate variance
+
+```{r}
+# empty container to hold the estimates
+bootvec <- c()
+# 1000 samples
+for (b in 1:1000){
+  # take a sample with replacement (same size as data)
+  sample <- data[sample(1:nrow(data), nrow(data), replace = TRUE),]
+  # estimate regression
+  reg <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = sample)
+  # add coefficient to vector
+  bootvec <- c(bootvec, reg$coefficients[2])
+}
+# find variance
+var <- sum((bootvec - mean(bootvec))^2)/999
+# estimated standard error is the square root
+sqrt(var)
+```
+The original estimates:
+```{r}
+#| echo: False
+summary(feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data))$coeftable[1:2,1:2]
+```
+
+
+
+
+
+
+## Bootstrapping to estimate variance
+
+- The estimated standard error is the square root of the variance, and it is quite close to the standard error we got from the regression
+
+- In reality, there's no reason to do this for a single coefficient like this
+  - But it's a good way to understand the intuition behind bootstrapping
+  - Bootstrapping works by treating the sample *as if it were the population*
+
+- Where this becomes really powerful is where there is no closed-form solution for the variance
+  - For example, what if we wanted to calculate $\frac{\hat{\beta}_2}{\hat{\beta}_3}$?
+  - To be clear, this is a non-sense example, but it's just to illustrate the point
+
+
+
+
+
+
+## Our non-sense example
+
+```{r}
+# empty container to hold the estimates
+bootvec <- c()
+# 1000 samples
+for (b in 1:1000){
+  # take a sample with replacement (same size as data)
+  sample <- data[sample(1:nrow(data), nrow(data), replace = TRUE),]
+  # estimate regression
+  reg <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = sample)
+  # add coefficient to vector
+  bootvec <- c(bootvec, reg$coefficients[2]/reg$coefficients[3])
+}
+# find variance
+var <- sum((bootvec - mean(bootvec))^2)/999
+# estimated standard error is the square root
+sqrt(var)
+```
+
+
+
+
+
+
+## Clustered bootstrap
+
+- There's a problem with the previous example: we are assuming that the observations are independent
+
+- What if we think there is clustering?
+  - We can use a clustered bootstrap (block bootstrap), where we randomly sample CLUSTERS, not observations
+  - In this case, clusters are countries, so we will randomly sample countries
+
+
+
+
+
+
+## Clustered bootstrap
+
+```{r}
+feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data, cluster = "country")
+```
+
+
+
+
+
+
+
+
+
+## Bootstrapping to estimate variance
+
+```{r}
+# empty container to hold the estimates
+bootvec <- c()
+# get list of countries
+countries <- unique(data$country)
+# This takes longer to run, so just 500 as an example (try to use more)
+for (b in 1:500){
+  # take a sample with replacement (same size as data)
+  samplecountries <- countries[sample(1:length(countries), length(countries), replace = TRUE)]
+  # go through sample countries and get data, appending
+  sample <- c()
+  for (c in samplecountries){
+    sample <- rbind(sample, data %>% filter(data$country==paste0(c)))
+  }
+  # estimate regression
+  reg <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = sample)
+  # add coefficient to vector
+  bootvec <- c(bootvec, reg$coefficients[2])
+}
+# find variance
+var <- sum((bootvecsave - mean(bootvecsave))^2)/499
+# estimated standard error is the square root
+print(paste0("Standard error: ", format(sqrt(var), digits = 3)))
+```
+
+
+
+
+
+
+
+
+## Using the bootstrap vector for confidence intervals
+
+- We can use our bootstrap vector to calculate confidence intervals
+  - We can use the 2.5th and 97.5th percentiles of the bootstrap vector to get a 95\% confidence interval:
+
+$$\begin{gather} CI = \left( \hat{\theta}_{\alpha/2}, \hat{\theta}_{1-\alpha/2} \right) \end{gather}$$
+
+
+
+
+
+
+
+
+## Using the bootstrap vector for confidence intervals
+
+```{r}
+#| echo: False
+#| fig.align: center
+
+ggplot() + 
+  geom_density(aes(x = bootvecsave), color = rgb(0, 99, 52, maxColorValue = 255)) +
+  theme_bw() +
+  labs(x = expression(paste(hat(theta)[b])), y = "density")+
+  theme(axis.text = element_text(size = 14),
+        axis.title = element_text(size = 14))
+```
+```{r bs10, echo = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+print(paste0("Mean: ", format(mean(bootvecsave), digits = 3)))
+print(paste0("Lower: ", format(sort(bootvecsave)[round(length(bootvecsave)*0.025)], digits = 3)))
+print(paste0("Upper: ", format(sort(bootvecsave)[round(length(bootvecsave)*0.975)], digits = 3)))
+
+```
+
+
+
+
+
+
+
+
+## Non-parametric
+
+- This type of bootstrap is non-parametric
+  - That is, we are not assuming anything about the distribution of the data
+  - The previous kernel density plot wasn't normally distributed, it was skewed, etc.
+  - This flexibility is one of the main advantages of bootstrapping
+
+- The main downside to bootstrapping is computation
+  - The previous example takes about 5 minutes to run on my computer with just 500 samples (and it's a good computer)
+  - More elaborate estimation can take much longer
+
+
+
+
+
+
+
+
+## An actual example from one of my papers
+
+- Brummund and Merfeld (2022)
+  - We want to estimate marginal revenue product of labor (MRPL)
+- Here is the specification:
+
+$$\begin{gather}\begin{split} \ln R_{iht} = \alpha_h + I(\textit{Farm}=1)\times(\underset{j}{\Sigma} \beta_{j}\ln \gamma_{jiht} + \frac{1}{2}\underset{j}{\Sigma}\underset{k}{\Sigma}\beta_{jk}\ln\gamma_{jiht} \ln\gamma_{kiht} + \delta C_{iht} \\ 
+          + D_{dt}  + \eta_{m}) + \underset{j}{\Sigma} \beta_{j}\ln \gamma_{jiht} + \frac{1}{2}\underset{j}{\Sigma}\underset{k}{\Sigma}\beta_{jk}\ln\gamma_{jiht} \ln\gamma_{kiht} + \delta C_{iht} + D_{dt} + \eta_{m} \\ 
+          + I(\textit{Farm}=1) + \varepsilon_{iht} \end{split}\end{gather}$$
+
+
+
+
+
+
+
+
+## An actual example from one of my papers
+
+- This is what we need to estimate, using coefficients from the previous equation:
+$$\begin{gather} \frac{\partial R^f}{\partial L^f}=\frac{\hat R_{iht}^f}{L_{iht}^f}\left[\beta_L^f+\beta_{LL}^f \log L_{iht}^f+\beta_{LA}\log A_{iht}+\beta_{LF}\log F_{iht}\right] \\
+ \frac{\partial R^{nf}}{\partial L^{nf}}=\frac{\hat R_{iht}^{nf}}{L_{iht}^{nf}}\left[\beta_L^{nf}+\beta_{LL}^{nf}\log L_{iht}^{nf}+\beta_{LC}\log C_{iht}\right] \end{gather}$$
+
+- It's not possble to get closed-form solutions for the variance of these
+  - So what did we do? Bootstrapped!
+  - Household panel data, so clustered bootstrap at the household level
+
+
+
+
+
+
+
+
+## The parametric bootstrap
+
+- There is another type of bootstrap called the parametric bootstrap
+  - This is where we assume a distribution for the data
+  - We then sample from that distribution
+
+- Essentially, we draw random values from the assumed distribution and add these to the original data
+  - We then re-estimate the model
+  - We do this many times
+  - We then calculate the variance of the coefficient of interest
+
+
+
+
+
+
+
+
+
+## The parametric bootstrap
+```{r}
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+ggplot() + 
+  geom_density(aes(x = reg1$residuals)) +
+  theme_bw()
+```
+
+
+
+
+
+
+
+
+## The parametric bootstrap
+
+- Seems *relatively* normal. Let's assume a normal distribution!
+
+```{r bs12, echo = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+dist <- fitdistr(reg1$residuals, "normal")
+dist
+```
+
+
+
+
+
+
+
+
+## The parametric bootstrap
+```{r}
+# NOTE: This assume homoskedasticity! (non-parametric bootstrap takes that into)
+# Heteroskedasticity would require allowing the variance to change. This is a simple example.
+reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = data)
+dist <- fitdistr(reg1$residuals, "normal")
+
+bootvec <- c()
+for (b in 1:1000){
+  brep <- data
+  # draw from distribution
+  brep$agemployment <- brep$agemployment + rnorm(nrow(brep), mean = dist$estimate[1], sd = dist$estimate[2])
+  # re-estimate
+  reg1 <- feols(agemployment ~ log(gnipc) + lfp + log(population) + urbanpop, data = brep)
+  # add to container
+  bootvec <- c(bootvec, reg1$coefficients[2])
+}
+# coefficient was -10.112581
+mean(bootvec)
+# standard error of homoskedastic model was 0.239763
+sd(bootvec)
+```
+
+
+
+
+
+
+
+## The parametric bootstrap in my work
+
+- The parametric bootstrap is actually integral to some of the work I do with the UN and World Bank on estimating outcomes
+
+- Small area estimation:
+$$y_{isa} = \beta_0 + \beta X_{isa} + \upsilon_{sa} + \epsilon_{isa},$$
+
+where $\upsilon_{isa}$ is a *random effect*. We use a parametric bootstrap to draw from TWO distributions:
+
+  - The distribution of the random effect
+  - The distribution of the error term
+
+
+
+
+
+
+
+
+
+
+
+## Class exercise
+
+- I'd like you all to try bootstrapping!
+  - This is a useful exercise because it lets you practice quite a few important skills in R
+
+- The task:
+  - Download ``bootstrapdata`` from GitHub. This data has just one variable in it: ``x``
+  - Calculate the 75th percentile of ``x`` using the function ``quantile()``
+  - Find the 95\% confidence interval for the 75th percentile using the (non-parametric) bootstrap
+
+- I'll give you 10 minutes to work on this. I'll be around to help.
+  - One way to do this on next slide. But don't look at it!
+
+
+
+
+
+
+
+
+
+
+
+## Class exercise solution (one of many)
+```{r}
+bootstrapdata <- read_csv("week2files/bootstrapdata.csv")
+quantile(bootstrapdata$x, 0.75)
+
+bootvec <- c()
+for (b in 1:1000){
+  # random sample
+  sample <- bootstrapdata$x[sample(1:nrow(bootstrapdata), nrow(bootstrapdata), replace = TRUE)]
+  # add quantile to container
+  bootvec <- c(bootvec, quantile(sample, 0.75))
+}
+# 2.5th percentile
+quantile(bootvec, 0.025)
+# 97.5th percentile
+quantile(bootvec, 0.975)
+```
+
+
+
+
+
+
+
+
+
+
+
+

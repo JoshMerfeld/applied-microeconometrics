@@ -41,9 +41,10 @@ There are also two slide decks that are extremely helpful:
 
 You can find the slides (and any data we will be using) for each week under their respective folders (weeks/). Each week will have just a single slide deck. Note that in each week's folder, you can also find the raw .qmd file that I used to create the slides.[^1] You might find these helpful, though you are by no means required to look at them.
 
-- Week 1: You can find the slides for the the week [Day 1 slides](https://joshmerfeld.github.io/applied-microeconometrics/week1both.html).
+- Week 1: You can find the slides for the the week here: [Day 1 slides](https://joshmerfeld.github.io/applied-microeconometrics/week1both.html).
   - You can find the data for the second class in the [week 1 folder](weeks/week1) or by clicking [here](weeks/week1/data.csv) (you can download the csv in the upper-right-hand corner).
-- Week 2: TBD
+- Week 2: You can find the slides for the the week here: [Day 2 slides](https://joshmerfeld.github.io/applied-microeconometrics/week2.html).
+  - You can find the data for the second class in the [week 2 folder](week2files) or by clicking [here](week2files) (you can download the data in the upper-right-hand corner).
 - Week 3: TBD
 - Week 4: TBD
 - Week 5: TBD
