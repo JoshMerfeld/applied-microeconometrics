@@ -1,6 +1,5 @@
 ---
-title:  |
-    | Applied microeconometrics
+title: "Applied microeconometrics"
 subtitle: "Week 2 - Linear regression (OLS) and bootstrapping"
 author: "Josh Merfeld"
 institute: "KDI School"

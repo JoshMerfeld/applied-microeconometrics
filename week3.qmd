@@ -1,0 +1,1419 @@
+---
+title: "Applied microeconometrics"
+subtitle: "Week 3 - Discrete Choice"
+author: "Josh Merfeld"
+institute: "KDI School"
+date: "2024-09-30"
+
+date-format: long
+format: 
+  revealjs:
+    self-contained: true
+    slide-number: false
+    progress: false
+    theme: [serif, custom.scss]
+    width: 1500
+    height: 1500*(9/16)
+    code-copy: true
+    code-fold: show
+    code-overflow: wrap
+    highlight-style: github
+execute:
+  echo: true
+  warnings: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+
+
+
+library(tidyverse)
+library(kableExtra)
+library(fixest)
+library(ggpubr)
+library(RColorBrewer)
+library(haven)
+library(mfx)
+library(nnet)
+library(survival)
+library(survminer)
+
+df <- read_dta("week3files/data.dta")
+data(iris)
+multinomresults <- multinom(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, data = iris)
+
+```
+
+
+
+# Introduction
+
+## What are we doing today?
+
+
+- This week we will review methods for limited dependent variables
+  - We will also discuss how to interpret the results
+
+
+- Some of this will be review, but there will be some new stuff, too
+  - For example, we will discuss poisson regression, which you might not have seen before
+
+
+
+
+## What are we doing today?
+
+
+- Much of the mathematical notation and theory comes from *Econometrics* by Bruce Hansen
+  - I already discussed the older version of the textbook that is available for free online
+
+
+- A small note:
+  - You can use OLS for binary outcomes! This is actually pretty common in economics.
+  - I'll discuss this more in a bit.
+  - Other disciplines (e.g. public health) really like some of the new methods we will discuss today, so they are worth knowing.
+
+
+
+
+
+
+
+# Binary Choice
+
+## Binary choice
+
+
+- Let's start with the simplest possibility: binary choice
+
+- You can think of this as a No/Yes or False/True question, but we will generally refer to it as 0/1 choice
+  - In programming, always remember that $FALSE=0$ and $TRUE=1$
+
+- Focusing on the binary choice case will allow us to build intuition for the more general case of discrete choice
+  - We will also be able to use the same data as we move to the more general case
+
+
+
+
+
+
+## Dichotomous variables
+
+- We will be thinking about this $Y\in\{0,1\}$
+  - In other words, $Y$ is a dichotomous (dummy) variable that can only be equal to 0 or 1
+
+- We are going to discuss methods to output *conditional probabilities*:
+$$\begin{gather} \mathbb{P}\left[Y=1|X\right] \end{gather}$$
+
+
+
+
+
+
+## The error term
+
+- Consider the following model:
+$$\begin{gather} Y = \beta X + \epsilon, \end{gather}$$
+where $X$ can have any number of columns (variables), $k$.
+
+- We already know that $\epsilon$ does not need to be normally distributed
+
+- In fact, if $Y\in\{0,1\}$, then $\epsilon$ *will never be normally distributed*
+  - Why?
+
+
+
+
+
+
+## The error term
+
+- $\epsilon$ has a two-point conditional distribution:
+$$\begin{gather} \epsilon = \Biggl\{ \begin{array}{ll} 1 - P(X), & \text{with probability } P(X) \\ P(X), & \text{with probability } 1 - P(X) \end{array} \end{gather}$$
+
+- $\epsilon$ is *heteroskedastic*:
+$$\begin{gather} \text{Var}(\epsilon|X) = P(X)(1-P(X)) \end{gather}$$
+- In fact, the variance of any dummy variable is $P(1-P)$, where $P$ is the probability of the dummy variable being equal to 1
+
+
+
+
+
+
+## Scatterplots are pretty worthless!
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r scatter, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+# for reading in Stata data. 
+# Install this using your console
+library(haven) 
+# read in data for the week:
+df <- read_dta("data.dta")
+
+# scatter of in_poverty on h_age:
+ggplot(data = df) +
+  geom_point(aes(x = h_age, y = in_poverty)) +
+  labs(x = "Head age", y = "In poverty this month") +
+  theme_bw() +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+:::
+
+::: {.column width="50%"}
+```{r scatter2, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "100%", fig.align = "center"}
+ggplot(data = df) +
+  geom_point(aes(x = h_age, y = in_poverty)) +
+  labs(x = "Head age", y = "In poverty this month") +
+  theme_bw() +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+:::
+::::
+
+
+
+
+
+## Let's plot out the conditional probabilities (means)
+:::: {.columns}
+
+::: {.column width="50%"}
+```{r scatter3, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+# means by age
+povmeans <- df %>%
+            group_by(h_age) %>%
+            summarize(mean = mean(in_poverty)) %>%
+            ungroup
+
+# scatter of in_poverty on h_age:
+ggplot(data = povmeans) +
+  geom_point(aes(x = h_age, y = mean)) +
+  labs(x = "Head age", y = "P(poverty)") +
+  theme_bw() +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+:::
+
+::: {.column width="50%"}
+```{r scatter4, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "100%", fig.align = "center"}
+# means by age
+povmeans <- df %>%
+            group_by(h_age) %>%
+            summarize(mean = mean(in_poverty)) %>%
+            ungroup
+
+# scatter of in_poverty on h_age:
+ggplot(data = povmeans) +
+  geom_point(aes(x = h_age, y = mean)) +
+  labs(x = "Head age", y = "P(poverty)", title = "Mean poverty by age of head") +
+  theme_bw() +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+:::
+::::
+
+
+
+
+
+## Linear probability model (LPM) 
+
+- We can estimate this using OLS:
+$$\begin{gather} Y = \beta X + \epsilon \end{gather}$$
+
+```{r lpm, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "100%", fig.align = "center"}
+f1 <- feols(in_poverty ~ h_male + h_age, data = df)
+f2 <- feols(in_poverty ~ h_male + h_age, data = df, vcov = "HC1")
+etable(f1, f2)
+```
+
+
+
+
+
+
+
+## Linear probability model (LPM) 
+
+```{r lpm2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "100%", fig.align = "center"}
+summary(feols(in_poverty ~ h_male + h_age, data = df, vcov = "HC1"))
+```
+
+
+- The interpretation of these coefficients is pretty straightforward:
+  - It is the change in the probability of being in poverty for a one-unit change in the variable of interest
+  - Male-headed households are 6.1 *percentage points* less likely to be poor than female-headed households, controlling for age.
+  - Each addition year of age *increases* the probability of being in poverty by 0.005 *percentage points*, controlling for gender of the head.
+
+
+
+
+
+
+## Linear probability model (LPM) 
+
+- Sometimes people motivate other estimation methods based on heteroskedasticity
+  - But we can easily correct for this using robust standard errors (HC1 in `feols`)
+
+- There are two other problems with LPM, though:
+
+. . .
+
+- The predicted values can be outside of the 0-1 range
+  - Is this a problem? Maybe. Maybe not. It depends on what you're doing. \pause
+- Constant effects throughout the probability distribution
+
+. . .
+
+  - Is this realistic? If we think someone has a 95 percent probability of being poor, do we think the percentage point change would be the same for changing a variable relative to someone with a 50 percent probability of being poor?
+
+
+
+
+
+
+
+## Another option
+
+
+- We can think of this as a *latent variable* model:
+$$\begin{gather} Y^* = \beta X + \epsilon \\
+                \epsilon\sim G(\epsilon) \\
+                Y = \mathbbm{1}(Y^*>0) = \Biggl\{ \begin{array}{ll} 1, & \text{if } Y^*>0 \\ 0, & \text{otherwise} \end{array} \end{gather}$$
+where $Y^*$ is the latent variable, $G(\cdot)$ is the distribution of $\epsilon$, and $\mathbbm{1}(\cdot)$ is the indicator function.
+
+- One way to think about this is that $y^*$ is utility, but we only observe whether the choice increases utility ($y=1$) or doesn't ($y=0$).
+
+
+
+
+
+
+
+
+## Let's give this a bit more structure
+
+
+- Note that $Y=1$ iff $Y^*>0$, which is the same as saying $\beta X + \epsilon > 0$
+
+- The response probability is then given by the CDF of $\epsilon$ evaluated at $-\beta X$:
+$$\begin{gather} \mathbb{P}\left[Y=1|X\right] = \mathbb{P}\left[\epsilon > -\beta X\right] = 1 - G(-\beta X) = G(\beta X) \end{gather}$$
+
+- Note that CDFs (cumulative distribution functions) give us probabilities of being *less than or equal to* a given value
+  - The last equality holds because $G(\cdot)$ will always be *symmetric around 0* here
+  - That value here is $\beta X$
+
+
+
+
+
+
+
+## CDF examples of the logistic (sigmoid) function - Wikipedia
+
+![](week3files/cdfwiki)
+
+
+
+
+
+
+
+## The link function
+
+- The function $G(\cdot)$ is called the *link function* and plays an important role here
+
+- Two common link functions are the *logit* and *probit* link functions:
+  - They are defined as follows:
+  - Logit: $G(\epsilon) = \frac{e^{\epsilon}}{1+e^{\epsilon}} = \frac{1}{1+e^{-\epsilon}}$
+  - Probit: $G(\epsilon) = \Phi(\epsilon)$, where $\Phi(\cdot)$ is the CDF of the standard normal distribution
+
+- We will discuss these in more detail in a bit
+ 
+
+
+
+
+
+
+
+## Likelihood
+
+- Likelihood: the joint probability of the data evaluated with the sample, as a function of the parameters
+  - What?
+
+- Let's start with probit, which uses a normal distribution. Here is the conditional density of $Y$ given $X$ under this assumption:
+$$\begin{gather} f(Y|X) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{1}{2\sigma^2}(Y-\beta X)^2\right) \end{gather}$$
+
+
+
+
+
+
+
+
+## Likelihood
+
+$$\begin{gather} f(Y|X) = \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{1}{2\sigma^2}(y-\beta X)^2\right) \end{gather}$$
+
+- In this case, what is the probability we *observe our sample given the values of $\beta$ and $\sigma$*?
+$$\begin{align} f(y_1,\ldots,y_n | x_1,\ldots, x_n) &= \prod_{i=1}^n f(y_i | x_i) \\
+                                                  &= \prod_{i=1}^n \frac{1}{\sqrt{2\pi\sigma^2}}\exp\left(-\frac{1}{2\sigma^2}(y_i-\beta x_i)^2\right) \\
+                                                  &= \frac{1}{(2\pi\sigma^2)^{n/2}}\exp\left(-\frac{1}{2\sigma^2}\prod_{i=1}^n(y_i-\beta x_i)^2\right) \\
+                                                  &= L_n(\beta, \sigma^2) \end{align}$$
+
+
+
+
+
+
+
+
+## Likelihood
+
+$$\begin{gather} f(y_1,\ldots,y_n | x_1,\ldots, x_n) = L_n(\beta, \sigma^2) \end{gather}$$
+
+- This is the *likelihood function* 
+  
+  - Note that it is a function of the parameters, $\beta$ and $\sigma^2$
+
+- The properties of logs make this easier to work with:
+$$\begin{gather} \ell_n(\beta, \sigma^2) = \log(L_n(\beta, \sigma^2)) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-\beta x_i)^2 \end{gather}$$
+- This is the *log likelihood function* 
+  
+  - It is of course also a function of the parameters, $\beta$ and $\sigma^2$
+
+
+
+
+
+
+
+
+## Maximum likelihood estimation
+
+
+$$\begin{gather} \ell_n(\beta, \sigma^2) = \log(L_n(\beta, \sigma^2)) = -\frac{n}{2}\log(2\pi\sigma^2) - \frac{1}{2\sigma^2}\sum_{i=1}^n(y_i-\beta x_i)^2 \end{gather}$$
+
+
+- We have our log likelihood function, which is a function of the parameters, $\beta$ and $\sigma^2$
+
+
+
+
+
+
+
+
+## Maximum likelihood estimation
+  
+
+- What we want to do is find the values of $\beta$ and $\sigma^2$ that *maximize* this function
+  - In other words, the values that make our sample the most likely to have been observed, or the biggest probability of observing our sample
+  
+
+- This is called *maximum likelihood estimation*
+
+$$\begin{gather} \left(\hat{\beta}, \hat{\sigma}^2\right) = \underset{\beta\in\mathbb{R}^k,\sigma^2>0}{\text{argmax}}\;\ell_n(\beta, \sigma^2) \end{gather}$$
+where $k$ is the number of variables (coefficients), including the intercept.
+
+
+
+
+
+
+
+
+## Maximum likelihood estimation
+
+- A simple example is a coin flip
+
+- Let's say we flip a coin. If it's a fair coin, what is the probability of obtaining heads?
+
+. . .
+
+    - 50% or 0.5 (we generally work with the proportion 0.5, and not the percent)
+
+. . .
+
+- What is the probability of obtaining heads twice in a row?
+
+. . .
+
+    - 0.5 * 0.5 = 0.25
+
+- Three times in a row?
+
+. . .
+
+    - 0.5 * 0.5 * 0.5 = 0.125
+
+
+
+
+
+
+
+
+## Maximum likelihood estimation
+
+- Say we flip the coin a bunch of times
+  - For argument's sake, let's say we flip it 100 times and obtain 60 heads
+
+- If we know nothing about whether the coin is actually fair, what is the *most likely distribution* that would give us 60 heads and 40 tails? \pause
+  - It's a distribution in which the probability of heads is 0.6! \pause
+
+- This is like maximum likelihood estimation. We are trying to find the parameters that makes our sample the most likely to have been observed.
+  - In this case, the parameter would be the true mean of the distribution of the coin (where heads = 1 and tails = 0).
+  - We could then of course test whether this is significantly different from 0.5, which might be our null hypothesis.
+
+
+
+
+
+
+
+
+
+## Generalizing maximum likelihood estimation
+
+$$\begin{gather} \left(\hat{\beta}, \hat{\sigma}^2\right) = \underset{\beta\in\mathbb{R}^k,\sigma^2>0}{\text{argmax}}\;\ell_n(\beta, \sigma^2) \end{gather}$$
+
+- MLE is generally always estimated using numerical optimization
+  - We will not discuss the details of this here
+  - The basic reason is that most likelihood functions are not easy to maximize analytically (i.e. they have no closed-form solution)
+
+
+- In the case of the normal regression model, however, there is a closed-form solution
+  - And this is the same closed-form solution as OLS!
+
+
+
+
+
+
+
+
+
+## Logit for binary choice
+
+- Let's return to our binary choice model.
+  - Regardless of how you estimate it, the probability mass function for $Y$ is:
+
+$$\begin{gather} \pi(y) = p^y(1-p)^{1-y}, \end{gather}$$
+where $p$ is the probability of $Y=1$, or the mean. Remember that $Y\in\{0,1\}$; i.e., it can only equal 0 or 1.
+
+- Let's bring our link function back into it. The *conditional* probability is:
+$$\begin{gather} \pi(Y|X)=G(\beta X)^Y(1-G(\beta X))^{1-Y}=G(\beta X)^Y(G(-\beta X))^{1-Y}=G(\beta Z),   \end{gather}$$
+
+where $Z = \Biggl\{ \begin{array}{ll} X, & \text{if } Y=1 \\ -X, & \text{if } Y=0 \end{array}$
+
+
+
+
+
+
+
+
+## Logit for binary choice
+
+$$\begin{gather} \pi(Y|X)=G(\beta Z),   \end{gather}$$
+
+- Taking logs (because they're easy to work with), we get the log likelihood function:
+$$\begin{gather} \ell_n(\beta) = \sum_{i=1}^n \log G(\beta Z) \end{gather}$$
+
+
+- This is the same as the log likelihood function for probit, except that the link function is different.
+
+
+
+
+
+
+
+
+## Logit for binary choice
+
+- Again, we want to find the values of $\beta$ (and $\sigma$, which will show up in the link function) that maximize this function.
+$$\begin{gather} \left(\hat{\beta}, \hat{\sigma}^2\right) = \underset{\beta\in\mathbb{R}^k,\sigma^2>0}{\text{argmax}}\;\ell_n(\beta, \sigma^2) \end{gather}$$
+
+- Something interesting is that in practice, we don't numerically maximize...
+  - Instead, we *minimize* the *negative* of the log likelihood function!
+
+$$\begin{gather} \left(\hat{\beta}, \hat{\sigma}^2\right) = \underset{\beta\in\mathbb{R}^k,\sigma^2>0}{\text{argmin}}\;-\ell_n(\beta, \sigma^2) \end{gather}$$
+
+
+
+
+
+
+
+
+## An example in R - Household variables and poverty using glm()
+```{r mle1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+summary(glm(in_poverty ~ h_male, data = df, family = binomial(link = "logit")))
+```
+
+
+
+
+
+
+
+## Interpreting logit output
+```{r mle2, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+summary(glm(in_poverty ~ h_male, data = df, family = binomial(link = "logit")))$coefficients
+```
+
+
+- How do we interpret these coefficients?
+  - The coefficients are "log odds"
+
+- For male household heads, the log odds of being in poverty is 0.280 *lower* than that for female household heads
+  - What?
+
+
+
+
+
+
+
+
+## Log odds
+
+- What are log odds?
+  - Let's start with odds:
+
+$$\begin{gather} \text{odds} = \frac{p}{1-p}, \end{gather}$$
+
+where $p$ is the probability of $y = 1$ (being poor in this case).
+
+- Log odds?
+
+$$\begin{gather} \text{log odds} = \log\left(\frac{p}{1-p}\right) \end{gather}$$
+
+
+
+
+
+
+
+## Log odds and logit
+
+- Logit regression is basically estimating:
+
+$$\begin{gather} \log\left(\frac{p}{1-p}\right) = \beta_0 + \beta_1 X_1 + \ldots + \beta_k X_k \end{gather}$$
+
+
+
+
+
+
+
+
+
+## The intercept is the log odds of being in poverty for female households
+```{r mle3, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+summary(glm(in_poverty ~ h_male, data = df, family = binomial(link = "logit")))$coefficients
+```
+
+$$\begin{gather} \log\left(\frac{p}{1-p}\right) = -0.6196447 \\
+                   \left(\frac{p}{1-p}\right) = exp(-0.6196447) \\
+                   \left(\frac{p}{1-p}\right) \approx 0.538  \\ 
+                   p = 0.538-0.538p \\
+                   1.538p = 0.538 \\
+                        p\approx 0.350  \end{gather}$$
+
+What is the actual mean for female headed households? `r format(mean(df$in_poverty[df$h_male==0]), digits = 3)`
+
+
+
+
+
+
+
+
+## The coefficient?
+
+$$\begin{gather} \log\left(\frac{p_m}{1-p_m}\right) - \log\left(\frac{p_f}{1-p_f}\right) = -0.2795628 \\
+                \log\left(\frac{\frac{p_m}{1-p_m}}{\frac{p_f}{1-p_f}}\right) = -0.2795628 \\
+                \left(\frac{\frac{p_m}{1-p_m}}{\frac{p_f}{1-p_f}}\right) = exp(-0.2795628) \\
+                \left(\frac{\frac{p_m}{1-p_m}}{\frac{p_f}{1-p_f}}\right) = 0.7561142 \end{gather}$$
+
+
+- In the last line, this is referred to as an *odds ratio*. 
+  - It's less than one, which means male-headed households are *less likely* to be in poverty.
+  - Their *odds* of being in poverty are around 24% lower.
+ 
+
+
+
+
+
+
+
+## The coefficient?
+
+- Mean for female-headed households: `r format(mean(df$in_poverty[df$h_male==0]), digits = 3)`
+  - odds ($\frac{p_f}{1-p_f}$): `r format(mean(df$in_poverty[df$h_male==0])/(1-mean(df$in_poverty[df$h_male==0])), digits = 3)`
+
+- Mean for male-headed households: `r format(mean(df$in_poverty[df$h_male==1]), digits = 3)`
+  - odds $\left(\frac{p_m}{1-p_m}\right)$: `r format(mean(df$in_poverty[df$h_male==1])/(1-mean(df$in_poverty[df$h_male==1])), digits = 3)`
+
+- Odds ratio ($\frac{\frac{p_m}{1-p_m}}{\frac{p_f}{1-p_f}}$): `r format((mean(df$in_poverty[df$h_male==1])/(1-mean(df$in_poverty[df$h_male==1])))/(mean(df$in_poverty[df$h_male==0])/(1-mean(df$in_poverty[df$h_male==0]))), digits = 3)`
+ 
+ - Exponentiating shows us the odds ratio!
+
+
+
+
+
+
+
+
+## Marginal effects
+
+- We can also calculate marginal effects
+  - These are the change in the probability of being in poverty for a one-unit change in the variable of interest
+  - An important note is that this *depends on where you are located in the distribution*
+
+- We just calculated the means, so with only the binary independent variable, we know that the marginal effect is:
+  - `r format(mean(df$in_poverty[df$h_male==1]) - mean(df$in_poverty[df$h_male==0]), digits = 3)`
+
+- We will use the "mfx" package for this, so please install it in the console.
+
+
+
+
+
+
+
+
+
+
+
+## Marginal effects
+```{r mle4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+logitmfx(in_poverty ~ h_male, data = df)
+
+# for binary outcomes, it shows the change from 0 to 1!
+```
+
+
+
+
+
+
+
+
+
+
+## logit with more coefficients
+```{r mle5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+logitmfx(in_poverty ~ h_male + h_age, data = df)
+
+# for binary outcomes, it shows the change from 0 to 1!
+# for continuous variables, it's the derivative (i.e. instantaneous change)!
+# By default, it calculates these by holding variables AT THEIR MEANS
+```
+
+
+
+
+
+
+
+## Probit
+```{r probit1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+summary(glm(in_poverty ~ h_male, data = df, family = binomial(link = "probit")))$coefficients
+```
+
+
+- What about probit coefficients?
+  - These relate to the *CDF of the standard normal distribution*
+
+
+
+- The intercept is the mean for female-headed households 
+
+
+
+
+
+
+
+
+
+## Standard normal CDF
+- The intercept is -0.3856924
+  - The mean poverty for female-headed households is `r format(mean(df$in_poverty[df$h_male==0]), digits = 3)`
+- Here's the CDF for the standard normal distribution with the intercept:
+
+```{r probit2, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot() +
+  stat_function(data = data.frame(x = c(-3, 3)), aes(x = x), fun = pnorm) +
+  theme_bw() +
+  labs(x = "x", y = "CDF(x)") +
+  geom_vline(xintercept = -0.3856924, linetype = "dotted", color = "blue") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+
+## Standard normal CDF
+- The intercept is -0.3856924
+  - The mean poverty for female-headed households is `r format(mean(df$in_poverty[df$h_male==0]), digits = 3)`
+- Here's the CDF for the standard normal distribution with BOTH:
+
+```{r probit3, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot() +
+  stat_function(data = data.frame(x = c(-3, 3)), aes(x = x), fun = pnorm) +
+  theme_bw() +
+  labs(x = "x", y = "CDF(x)") +
+  geom_vline(xintercept = -0.3856924, linetype = "dotted", color = "blue") +
+  geom_hline(yintercept = mean(df$in_poverty[df$h_male==0]), linetype = "dotted", color = "blue") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+
+## Now let's look at the coefficient on h_male
+```{r probit4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+summary(glm(in_poverty ~ h_male, data = df, family = binomial(link = "probit")))$coefficients
+```
+
+
+
+
+
+
+
+
+## Standard normal CDF
+- The intercept is -0.3038412 and the coefficient is -0.1699918
+- Here's the CDF for the standard normal distribution with BOTH:
+
+```{r probit5, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot() +
+  stat_function(data = data.frame(x = c(-3, 3)), aes(x = x), fun = pnorm) +
+  theme_bw() +
+  labs(x = "x", y = "CDF(x)") +
+  geom_vline(xintercept = -0.3038412, linetype = "dotted", color = "blue") +
+  geom_vline(xintercept = -0.3038412-0.2540258, linetype = "dotted", color = "orange") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+
+
+## Standard normal CDF
+- The intercept is -0.3856924 and the coefficient is -0.1699918
+- What's the change in PROBABILITY? $\text{mean(male)} - \text{mean(female)}$ or `r format(mean(df$in_poverty[df$h_male==1]) - mean(df$in_poverty[df$h_male==0]), digits = 3)`
+
+```{r probit6, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot() +
+  stat_function(data = data.frame(x = c(-3, 3)), aes(x = x), fun = pnorm) +
+  theme_bw() +
+  labs(x = "x", y = "CDF(x)") +
+  geom_vline(xintercept = -0.3856924, linetype = "dotted", color = "blue") +
+  geom_vline(xintercept = -0.3856924-0.1699918, linetype = "dotted", color = "orange") +
+  geom_hline(yintercept = mean(df$in_poverty[df$h_male==0]), linetype = "dotted", color = "blue") +
+  geom_hline(yintercept = mean(df$in_poverty[df$h_male==1]), linetype = "dotted", color = "orange") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+
+
+## Marginal effects
+- The intercept is -0.3856924 and the coefficient is -0.1699918
+- What's the change in PROBABILITY? $\text{mean(male)} - \text{mean(female)}$ or `r format(mean(df$in_poverty[df$h_male==1]) - mean(df$in_poverty[df$h_male==0]), digits = 3)`
+
+
+```{r probit7, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+probitmfx(in_poverty ~ h_male, data = df)
+```
+
+
+
+
+
+
+
+
+## Probit and marginal effects
+
+
+```{r probit8, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# change in z-scores
+summary(glm(in_poverty ~ h_male + h_age, data = df, family = binomial(link = "probit")))$coefficients
+```
+
+
+```{r probit9, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# change in probability, holding other variables at their means
+probitmfx(in_poverty ~ h_male + h_age, data = df)
+```
+
+
+
+
+
+
+# Multiple discrete choice
+
+## What if the outcome has more than two categories?
+
+- Many outcomes are not 0/1.
+
+- We can think of outcomes with discrete categories, but more than two:
+  - Religion
+  - Political party
+  - Opinion on a likert scale (e.g. strongly agree, agree, neutral, disagree, strongly disagree)
+  - Months in poverty
+
+- There's a key difference between the first two and the last two:
+  - The first two are *unordered*
+  - The last two are *ordered*
+
+
+
+
+
+
+
+## Months in poverty - distribution
+```{r ologit1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+ggplot() +
+    geom_histogram(data = df, aes(x = months_in_poverty), binwidth = 1) + 
+    theme_bw() +
+    labs(x = "Months in poverty", y = "Count") +
+    scale_x_continuous(breaks = seq(0, 12, 1)) +
+    geom_vline(xintercept = mean(df$months_in_poverty), linetype = "dotted", color = "blue") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+## Ordered logistic regression with the polr function
+
+```{r ologit2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# note that the outcome must be a FACTOR variable for polr
+summary(polr(as_factor(months_in_poverty) ~ h_male + h_age, data = df, Hess = TRUE))
+```
+
+
+
+
+
+
+
+
+## Ordered data: ordinal logit/probit
+
+- When we have ordered discrete variable, we can use an ordered logit or probit model
+  - These are also called *ordinal* logit/probit models
+
+- The idea is that we have a latent variable, $Y^*$, that is continuous
+  - We observe $Y$ as a discrete variable, but it is *ordered*
+  - We can think of $Y$ as being *binned* into categories
+
+$$\begin{gather} Y = \Biggl\{ \begin{array}{ll} 1, & \text{if } Y^*\in(-\infty,\theta_1] \\ 2, & \text{if } Y^*\in(\theta_1,\theta_2] \\ \vdots & \vdots \\ J, & \text{if } Y^*\in(\theta_{J-1},\infty) \end{array} \end{gather}$$
+
+
+
+
+
+## The interpretation?
+
+```{r ologit3, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# note that the outcome must be a FACTOR variable for polr
+summary(polr(as_factor(months_in_poverty) ~ h_male + h_age, data = df, Hess = TRUE))
+```
+- The interpretation is similar to logit: a change in the log-odds of being in a higher level of months in poverty!
+
+
+
+
+
+## Understanding fit with MLE
+
+- There is no r-squared in MLE
+  - It is not a true r-squared *because there is no sense of "mean" with discrete data, especially unordered data*
+ 
+- We can use the log likelihood function to compare models
+  - The log likelihood function is a function of the parameters, $\beta$ and $\sigma^2$
+  - The higher the log likelihood, the better the fit
+
+- We can also use the *Akaike Information Criterion* (AIC) and *Bayesian Information Criterion* (BIC)
+  - These are functions of the log likelihood function and the number of parameters
+  - The lower the AIC/BIC, the better the fit
+
+- These are best thought of as useful for comparing across models
+  - Difficult to interpret them on their own
+
+
+
+
+
+## AIC
+
+- AIC is defined as follows:
+  - $k$ is the number of parameters in the model
+  - $L$ is the log likelihood function
+  - AIC: $2k - 2\log(L)$
+
+```{r aic, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# save our model
+results <- glm(in_poverty ~ h_male + h_age, data = df, family = binomial(link = "probit"))
+
+# log likelihood
+logLik(results)
+
+# aic from temp
+results$aic
+
+# Calculate AIC by hand:
+2*3 - 2*(-2788.727)
+```
+
+
+
+
+
+## BIC
+
+- BIC is defined as follows:
+  - $k$ is the number of parameters in the model
+  - $L$ is the log likelihood function
+  - $n$ is the number of observations
+  - BIC: $k\log(n) - 2\log(L)$
+
+```{r bic, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# save our model
+results <- glm(in_poverty ~ h_male + h_age, data = df, family = binomial(link = "probit"))
+
+# log likelihood
+logLik(results)
+nrow(df)
+
+# Calculate BIC by hand:
+3*log(4609) - 2*(-2788.727)
+```
+
+
+
+
+
+
+
+## Pseudo r-squared
+
+- We can also calculate a pseudo r-squared
+  - This is a measure of the change in the log likelihood function relative to the null model (no coefficients except intercepts)
+
+```{r pseudor2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# null model
+logLik(glm(in_poverty ~ 1, data = df, family = binomial(link = "probit")))
+# our model
+logLik(glm(in_poverty ~ h_male + h_age, data = df, family = binomial(link = "probit")))
+# pseudo r-squared: 1 - (log likelihood of model / log likelihood of null model)
+1 - (-2788.727/-2791.606)
+# Same thing: (null - model) / null
+(-2791.606 - -2788.727)/-2791.606
+```
+
+
+
+
+
+
+## Multinomial probit/logit
+
+- Ordered logit/probit is used when the outcome is *ordered*
+
+- But what if it's not, like trying to predict what the species of a flower is?
+  - Let's use a built-in dataset in R called "iris" to look at this:
+
+```{r iris1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+data(iris)
+head(iris)
+```
+
+
+
+
+
+
+## Multinomial probit/logit
+
+```{r iris2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+data(iris)
+table(iris$Species)
+colnames(iris)
+```
+
+- Let's use sepal/pedal length/width to predict the species
+
+
+
+
+
+
+## Multinomial probit/logit
+
+```{r iris3, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+data(iris)
+library(nnet)
+multinomresults <- multinom(Species ~ Sepal.Length + Sepal.Width + Petal.Length + Petal.Width, data = iris)
+```
+
+```{r iris4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+summary(multinomresults)$coefficients
+```
+
+
+- Note how setosa isn't there... it's the omitted category
+  - We can interpret the coefficients as the log odds of being in a particular category relative to setosa (the omitted category)
+
+
+
+
+
+
+
+
+# Extensions
+
+## Extensions
+
+- GLM is a very general framework
+  - We can use it for other distributions, too
+
+- Let's look at a poisson distribution
+  - The poisson distribution is often used for count data
+  - It has assumptions (mean = variance), but violation isn't a big deal!
+ 
+
+
+
+
+## The poisson distribution
+
+- The poisson distribution is defined as follows:
+$$\begin{gather} f(y; \lambda) = \frac{\lambda^ye^{-\lambda}}{y!} \end{gather}$$
+
+- Note the $e$: this is going to lead to a nice log interpretation
+- $y$ is the number of occurrences of the variable (in our example, it will be number of months in poverty)
+
+- As mentioned, one implication of this distribution is:
+$$\begin{gather} E(y) = Var(y) = \lambda \end{gather}$$
+i.e. the mean of $y$ equals its variance. But we can work around this if it's false (which it probably is).
+
+
+
+
+
+## Possion, months in poverty (with feols - feglm)
+
+```{r poisson1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# could save results. Not going to here... just display them
+summary(feglm(months_in_poverty ~ h_male + h_age, data = df, family = "poisson"))
+# notice the difference in standard errors if we use HC1 (which we want to here because of overdispersion)
+summary(feglm(months_in_poverty ~ h_male + h_age, data = df, family = "poisson", vcov = "HC1"))
+```
+
+
+
+
+
+## Interpreting poisson coefficients
+
+```{r poisson2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+summary(feglm(months_in_poverty ~ h_male, data = df, family = "poisson", vcov = "HC1"))$coefficients
+```
+
+
+- How do we interpret poisson coefficients?
+  - They are the *log* of the *rate* of the outcome
+  - i.e. the log of the number of months in poverty
+
+- The log count for male-headed households is around 0.28 *lower* than for female-headed households
+
+
+
+
+
+## The intercept is log count for female households
+
+```{r poisson3, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+summary(feglm(months_in_poverty ~ h_male, data = df, family = "poisson", vcov = "HC1"))$coefficients
+# intercept is log count, so exponentiate for levels
+exp(1.5189645)
+# what is the mean for female-headed households?
+mean(df$months_in_poverty[df$h_male==0])
+# intercept plus coefficient for male-headed households
+exp(1.5189645 - 0.2772304)
+# mean for male-headed households?
+mean(df$months_in_poverty[df$h_male==1])
+```
+
+
+
+
+
+## Quasi-poisson
+
+- The poisson distribution has a mean = variance assumption
+  - This is often violated
+  - We can use quasi-poisson instead
+
+- The quasi-poisson is the same as poisson, but the variance is estimated from the data
+  - With feglm, it estimates the variance as a *linear function of the mean*
+
+- Small note: if you use glm, you can use the "quasipoisson" family
+  - This is more similar to poisson with vcov = "HC1"!
+    - If you use "HC1" in both, you'll get identical results.
+  - This is only about the structure of the error term. Not the coefficients.
+
+
+
+
+
+## Possion vs quasi-poisson (note the similar standard errors with HC1 for poisson)
+
+```{r poisson4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+# Poisson with HC1
+summary(feglm(months_in_poverty ~ h_male + h_age, data = df, family = "poisson", vcov = "HC1"))
+# quasipoisson
+summary(feglm(months_in_poverty ~ h_male + h_age, data = df, family = "quasipoisson"))
+```
+
+
+
+
+
+## Doesn't have to be integers!
+
+- You can use poisson for non-integer outcomes, too!
+  - It's just a distribution
+  - It's often used for integer outcomes because it's a count distribution
+
+- Jeff Wooldridge is a huge proponent of using (quasi) poisson
+
+- Two really nice things: it is robust and has an easy interpretation
+ 
+
+
+
+# Survival models
+
+## Hazard/survival models
+
+- These models are used for *duration* data
+  - i.e. time until an event occurs or a state changes
+  - e.g. time until death after being diagnosed with cancer, time until a person leaves poverty, time until a person gets a job, until contracting a disease, etc.
+
+- You need a very specific kind of data for this...
+  - We want to know what kinds of variables predict the occurence of some event (e.g. death).
+
+- **Warning:** I am not an expert on survival models. I will give you a brief overview, but you should consult a textbook for more information.
+
+
+
+
+
+
+## Pfizer-BioNTech COVID-19 vaccine
+
+![](week3files/covidhazard)
+
+
+
+
+
+
+## Survival models
+
+- Let's use the package `survival` in R.
+  - It has a dataset set up for us, called diabetic
+
+```{r surv1, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(survival)
+# dataset with "high-risk" diabetic retinopathy patients
+head(diabetic)
+```
+
+
+- Note: this is a *panel* dataset
+  - Each row is a patient (id)
+  - Each patient has multiple observations (time)
+  - Interested in loss of sight (status = 1)
+
+
+
+
+
+
+## Survival function
+ 
+- Let's first look at the survival function
+  - This is the probability of surviving past a certain time
+  - We're going to use the Kaplan-Meier estimator
+
+```{r surv2, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+KM <- survfit(Surv(time = time, event = status) ~ 1, data = diabetic)
+# note that Surv() is necessary here. It's a function that creates a survival object.
+# The ~ 1 means this is for EVERYONE.
+```
+
+
+
+
+
+
+## Survival curve
+
+```{r surv4, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+KM <- survfit(Surv(time = time, event = status) ~ 1, data = diabetic)
+plot(KM, ylab = "Survival probability", xlab = "Time (months)")
+```
+
+
+
+
+
+
+
+## Comparing survival curves based on treatment
+
+- Base R has ugly plots. We can use `survminer` to make it work with `ggplot2`.
+
+```{r surv5, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+library(survminer)
+KM <- survfit(Surv(time = time, event = status) ~ 1, data = diabetic)
+ggsurvplot(KM)$plot +
+  labs(y = "Survival probability", x = "Time (months)") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+## Comparing survival curves based on treatment
+
+```{r surv6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+KM <- survfit(Surv(time = time, event = status) ~ trt, data = diabetic)
+ggsurvplot(KM)$plot +
+  labs(y = "Survival probability", x = "Time (months)") +
+  scale_color_discrete("Treatment:", labels = c("No", "Yes")) +
+  theme(legend.position = c(0.1, 0.2)) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+## Comparing survival curves based on treatment, empirically
+
+```{r surv7, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+survdiff(Surv(time = time, event = status) ~ trt, data = diabetic)
+
+# changes the weighting (more weight on earlier time points); doesn't matter here! Huge differences.
+survdiff(Surv(time = time, event = status) ~ trt, data = diabetic, rho = 1)
+```
+
+
+
+
+
+
+## Adding more covariates
+
+- Plotting two survival curves with a simply treatment dummy is straightforward.
+  - But what if we want to add more covariates?
+  - For example, the `diabetic` dataset has age at diagnosis and which eye the problem is. Does this matter?
+
+- We can use a Cox proportional hazards model to do this.
+  - This is a semi-parametric model that is very popular in survival analysis.
+  - It is a *proportional hazards* model, which means that the hazard ratio is constant over time.
+  - Its nature means we do not estimate the baseline hazard function.
+    - Instead, we compare across variables
+  
+
+
+
+
+
+## Adding more covariates
+
+```{r surv8, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+coxph(Surv(time = time, event = status) ~ age + as_factor(eye) + trt, data = diabetic)
+```
+
+
+- Note that treatment is randomized, so we *shouldn't* see large changes in the coefficient on treatment when we add covariates.
+  - More on this next week!
+
+
+
+
+
+
+## Some warnings
+
+- Note that all these methods have assumptions that can sometimes be important
+
+- Given our time, I am purposefully just showing you the basics
+  - If any of these specific methods interest you, I suggest doing more in-depth readings. I can provide some suggestions.
+
+
+
+
+
+
+## Articles for next week (check syllabus for textbook readings)
+
+- Deserranno, E., Stryjan, M., & Sulaiman, M. (2019). Leader selection and service delivery in community groups: Experimental evidence from Uganda. *American Economic Journal: Applied Economics*, 11(4), 240-267.
+
+- Fischer, T., Frölich, M., & Landmann, A. (2023). Adverse Selection in Low-Income Health Insurance Markets: Evidence from an RCT in Pakistan. *American Economic Journal: Applied Economics*, 15(3), 313-340.
+
+
+
+
+
+
