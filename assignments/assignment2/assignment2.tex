@@ -68,7 +68,7 @@
 \ifLuaTeX
   \usepackage{selnolig}  % disable illegal ligatures
 \fi
-\IfFileExists{bookmark.sty}{\usepackage{bookmark}}{\usepackage{hyperref}}
+\usepackage{bookmark}
 \IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
 \urlstyle{same}
 \hypersetup{
@@ -85,18 +85,18 @@
 \subtitle{Ph.D.~Applied Microeconometrics\\
 KDI School Fall 2023}
 \author{}
-\date{\vspace{-2.5em}2023-10-06}
+\date{\vspace{-2.5em}2024-09-30}
 
 \begin{document}
 \maketitle
 
-\textbf{Due date: Friday, October 13th at 11:59pm}
+\textbf{Due date: Monday, October 7th at 6:59pm}
 
 For this assignment, you will be using the \texttt{village\_economiccensus.rds} data in the assignment folder. I have done a bit of cleaning for you, including a variable \texttt{year} that is the year of the census. I have renamed all of the economic census variables to drop the \texttt{ec\_} prefix. You can find the definition of the variables on the SHRUG website, from which I downloaded the data. The data dictionary for the economic census is \href{https://docs.devdatalab.org/SHRUG-Metadata/Economic\%20Census/Tables/ec90-metadata/}{\textcolor{kdisgreen}{here}}.
 
 The dataset is in an R-specific format. You can load it into R using the \texttt{readRDS()} function.
 
-Below is a list of tasks. I would like you to create a properly formated PDF file, as if it were a paper. This means that raw code should not appear in the PDF file. When you estimate a regression, the choice of standard errors is up to you. However, I'd like you to justify your choice of standard errors in each case. For 3. and 4., please treat the data as a simple cross-section.
+Below is a list of tasks. I would like you to create a properly formatted PDF file, as if it were a paper. This means that raw code should not appear in the PDF file. When you estimate a regression, the choice of standard errors is up to you. However, I'd like you to justify your choice of standard errors in each case. For 3. and 4., please treat the data as a simple cross-section.
 
 Tasks:
 

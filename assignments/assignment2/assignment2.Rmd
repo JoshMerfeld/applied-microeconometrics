@@ -19,13 +19,13 @@ header-includes:
 
 ---
 
-**Due date: Friday, October 13th at 11:59pm**
+**Due date: Monday, October 7th at 6:59pm**
 
 For this assignment, you will be using the `village_economiccensus.rds` data in the assignment folder. I have done a bit of cleaning for you, including a variable `year` that is the year of the census. I have renamed all of the economic census variables to drop the `ec_` prefix. You can find the definition of the variables on the SHRUG website, from which I downloaded the data. The data dictionary for the economic census is [\textcolor{kdisgreen}{here}](https://docs.devdatalab.org/SHRUG-Metadata/Economic%20Census/Tables/ec90-metadata/).
 
 The dataset is in an R-specific format. You can load it into R using the `readRDS()` function.
 
-Below is a list of tasks. I would like you to create a properly formated PDF file, as if it were a paper. This means that raw code should not appear in the PDF file. When you estimate a regression, the choice of standard errors is up to you. However, I'd like you to justify your choice of standard errors in each case. For 3. and 4., please treat the data as a simple cross-section.
+Below is a list of tasks. I would like you to create a properly formatted PDF file, as if it were a paper. This means that raw code should not appear in the PDF file. When you estimate a regression, the choice of standard errors is up to you. However, I'd like you to justify your choice of standard errors in each case. For 3. and 4., please treat the data as a simple cross-section.
 
 Tasks: 
 
