@@ -813,12 +813,13 @@ summary(glm(in_poverty ~ h_male, data = df, family = binomial(link = "probit")))
 - Here's the CDF for the standard normal distribution with BOTH:
 
 ```{r probit5, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
+results <- summary(glm(in_poverty ~ h_male, data = df, family = binomial(link = "probit")))$coefficients
 ggplot() +
   stat_function(data = data.frame(x = c(-3, 3)), aes(x = x), fun = pnorm) +
   theme_bw() +
   labs(x = "x", y = "CDF(x)") +
-  geom_vline(xintercept = -0.3038412, linetype = "dotted", color = "blue") +
-  geom_vline(xintercept = -0.3038412-0.2540258, linetype = "dotted", color = "orange") +
+  geom_vline(xintercept = results[1,1], linetype = "dotted", color = "blue") +
+  geom_vline(xintercept = results[1,1] + results[2,1], linetype = "dotted", color = "orange") +
   theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
 ```
 
@@ -838,8 +839,8 @@ ggplot() +
   stat_function(data = data.frame(x = c(-3, 3)), aes(x = x), fun = pnorm) +
   theme_bw() +
   labs(x = "x", y = "CDF(x)") +
-  geom_vline(xintercept = -0.3856924, linetype = "dotted", color = "blue") +
-  geom_vline(xintercept = -0.3856924-0.1699918, linetype = "dotted", color = "orange") +
+  geom_vline(xintercept = results[1,1], linetype = "dotted", color = "blue") +
+  geom_vline(xintercept = results[1,1] + results[2,1], linetype = "dotted", color = "orange") +
   geom_hline(yintercept = mean(df$in_poverty[df$h_male==0]), linetype = "dotted", color = "blue") +
   geom_hline(yintercept = mean(df$in_poverty[df$h_male==1]), linetype = "dotted", color = "orange") +
   theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
@@ -873,13 +874,13 @@ probitmfx(in_poverty ~ h_male, data = df)
 
 ```{r probit8, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
 # change in z-scores
-summary(glm(in_poverty ~ h_male + h_age, data = df, family = binomial(link = "probit")))$coefficients
+summary(glm(in_poverty ~ h_male + log(h_age), data = df, family = binomial(link = "probit")))$coefficients
 ```
 
 
 ```{r probit9, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
 # change in probability, holding other variables at their means
-probitmfx(in_poverty ~ h_male + h_age, data = df)
+probitmfx(in_poverty ~ h_male + log(h_age), data = df)
 ```
 
 
