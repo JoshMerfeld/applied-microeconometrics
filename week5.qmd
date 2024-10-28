@@ -1103,6 +1103,159 @@ $$\mathbb{E}(\beta_{RE}) = \mathbb{E}(\beta_{OLS})$$
 
 
 
+## Triple differences
+
+- We have discussed differences-in-differences
+  - We can also have triple differences
+  - For example, if we have three groups and two time periods
+  
+- The Card and Krueger paper simply compared employment rates in fast food restaurants in New Jersey and Pennsylvania before and after the minimum wage increase in New Jersey
+  - This is a double difference
+
+- Can you think of a group that theoretically would not be affected by the minimum wage change?
+
+. . .
+
+- How about high-wage workers?
+
+
+
+
+
+## Triple differences
+
+- Differences-in-differences can be extend into higher "differences"
+  - Triple differences, quadruple differences, etc.
+  
+- Example: [Muralidharan and Prakash (2017)](https://www.aeaweb.org/articles?id=10.1257/app.20160004)
+
+- They study a bicycle program for girls in Bihar, India
+  - Reducing the gender gap by providing girls in secondary school with a bicycle
+
+
+
+
+
+## Higher differences
+
+- Using higher differences is quite common
+
+- Common problem: large standard errors
+
+- Triple difference in this paper:
+  - Gender by age by location
+
+
+
+
+
+## The program
+
+- Program in Bihar
+  - Third largest (by population) state in India
+  - Quite poor
+  
+- Secondary schools can be located far from households
+  - Along with a large gender gap in schooling, this motivates the program itself
+  
+- "Chief Minister's Bicycle Program"
+  - "Conditional kind transfer"
+
+
+
+
+
+## Data
+
+- Data was not collected specifically for the program
+
+- Indian District Level Health Survey (DLHS)
+
+- DLHS is nationally representative
+  - 720,000 households across 601 districts
+
+
+
+
+
+## Identification
+
+- Compare girls eligible for the program based on age
+  - The survey was 18 months after the start of the program 
+  - Compare girls who were just barely eligible for the program based on age
+  
+- Could just compare boys to girls based on age
+  - Problem: possible non-parallel trends
+
+
+
+
+
+## Pre-trends a problem?
+
+![](week5assets/bicycles1){width=100% fig-align="center"}
+
+
+
+
+
+## Solution? Triple difference bringing in a second state, Jharkhand
+
+![](week5assets/bicycles2){width=100% fig-align="center"}
+
+
+
+
+
+## Triple difference bringing in a second state, Jharkhand
+
+![](week5assets/bicycles3){width=100% fig-align="center"}
+
+
+
+
+
+## Main results: enrollment/completion of grade 9
+
+![](week5assets/bicycles4){width=100% fig-align="center"}
+
+
+
+
+
+## Expected heterogeneity
+
+- One way to convince people that your causal results are true is to make arguments about heterogeneity
+
+- For example, with this paper distance should be important
+
+- For those who live very close to a school, bicycles shouldn't matter
+  - For those who live very far, same
+
+- So what is the heterogeneity we EXPECT to see?
+
+. . .
+  
+- Treatment effect should be largest at "middle" distances
+
+
+
+
+
+## Expected heterogeneity by distance
+
+![](week5assets/bicycles5){width=100% fig-align="center"}
+
+
+
+
+
+## Effects on grade 10 board exams
+
+![](week5assets/bicycles6){width=100% fig-align="center"}
+
+
+
 
 
 
@@ -1148,7 +1301,7 @@ where $D_{it}$ is a dummy variable for treatment.
 sums <- df %>% group_by(year) %>%
         summarize(treated = mean(cdl==1))
 kable(sums,
-      align = "lc", booktabs = TRUE, linesep = "") %>%
+      align = "cc", booktabs = TRUE, linesep = "") %>%
       kable_classic_2()
 ```
 :::
@@ -1282,12 +1435,33 @@ The weights:
 
 
 
+## Back to Bacon-Goodman
+
+- In other words, what causes the problem?
+  - The fact that already-treated groups can be used as control groups for later-treated groups
+  
+- This means that changing "effects" of the intervention can bias this later comparison
+
+
+
+
+
+
+## Goodman-Bacon (2021)
+
+![](week5assets/bacon_figure4.jpg){width=70% fig-align="center"}
+
+
+
+
+
+
 ## Enough math, what to do?
 
 - That's enough math. Let's talk about what we can actually do!
 
 - Let's go back to the `castle.dta` dataset
-  - Cheng and Hoekstra (2013), *Journal of Human Resources*
+  - [Cheng and Hoekstra (2013)](https://jhr.uwpress.org/content/48/3/821.short), *Journal of Human Resources*
 
 - Let's use the information in Cunningham's book
 
@@ -1437,7 +1611,7 @@ kable(tablech,
 
 - Effectively, what we want to do is redefine the time period to be relative to treatment
   - For example, if treatment is introduced in 2005, we want to redefine 2005 as year 0, 2004 as year -1, etc.
-  - Let's do this nrow
+  - Let's do this now
 
 
 
@@ -1930,7 +2104,7 @@ data <- rbind(data, data2)
 # plot estimates
 ggplot(data) +
   geom_point(aes(x = Year, y = Estimate, color = Type)) +
-  geom_vline(xintercept = -0.5, linetype = "dashed", color = "red") +
+  geom_vline(xintercept = -0.5, linetype = "dashed", color = "black") +
   labs(x = "Years to treatment", y = "Coefficient (relative to T = -1)") +
   # change x axis to be every year
   scale_x_continuous(breaks = years) +
@@ -1938,8 +2112,32 @@ ggplot(data) +
   theme(legend.position = c(0.2, 0.8)) +
   theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
   theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
-  theme(legend.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+  theme(legend.background = element_rect(fill = NA, color = NA)) +
+  theme(legend.key = element_rect(fill = NA))
 ```
+
+
+
+
+
+
+
+## [Roth et al. (2023)](https://www.sciencedirect.com/science/article/pii/S0304407623001318?via%3Dihub)
+
+![](week5assets/rothetal){width=85% fig-align="center"}
+
+
+
+
+
+
+
+## [de Chaisemartin and D’Haultfoeuille (2022)](https://academic.oup.com/ectj/article/26/3/C1/6604378)
+
+![](week5assets/dCdH){width=85% fig-align="center"}
+
+
+
 
 
 
@@ -1956,7 +2154,6 @@ ggplot(data) +
 
 - A lingering question: TWFE with continuous treatment variables
   - Callaway et al. (2021) and Chaisemartin and D’Haultfœuille (2023) have some ideas
-  - I haven't seen reliable packages for these, though
 
 - IVs with TWFE?
 
@@ -1980,11 +2177,15 @@ dfgraph <- df %>%
 dfgraph$group <- ifelse(dfgraph$california==1, "California", "Rest of U.S.")
 ggplot(dfgraph) +
   geom_line(aes(x = year, y = cigsale, color = group)) +
-  scale_color_viridis_d("State", labels = c("California", "Rest of U.S.")) +
+  scale_color_brewer("State", labels = c("California", "Rest of U.S."), palette = "Set1") +
   geom_vline(xintercept = 1988, linetype = "dashed", color = "black") +
   theme_bw() +
   labs(x = "Year", y = "Cigarette sales (per capita)") +
-  theme(legend.position = c(0.2, 0.2))
+  theme(legend.position = c(0.2, 0.2)) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(legend.background = element_rect(fill = NA, color = NA)) +
+  theme(legend.key = element_rect(fill = NA))
   
 ```
 
@@ -2249,9 +2450,9 @@ print(paste0("Sum of weights: ", sum(weights$weight)))
 balance <- smoking_out %>% grab_balance_table()
 colnames(balance) <- c("Variable", "California", "Synthetic California", "Placebo")
 kable(balance, 
-      align = "lccc", booktabs = TRUE, linesep = "", row.names = FALSE, digits = 3) %>%
-  column_spec(1,width = "4cm") %>%
-  column_spec(c(2:4),width = "3cm") %>%
+      align = "lccc", linesep = "", row.names = FALSE, digits = 3) %>%
+  column_spec(1,width = "6cm") %>%
+  column_spec(c(2:4),width = "4cm") %>%
   kable_styling()
 ```
 
@@ -2266,13 +2467,24 @@ kable(balance,
 
 
 ## The results
-```{r sc6, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+```{r sc6, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
 gg1 <- smoking_out %>% plot_trends() # it's a ggplot object! So let's prettify it
 gg1 +
   labs(x = "Year", y = "Cigarette sales (per capita)") +
+  theme_bw() +
   theme(legend.position = c(0.2, 0.2))
 ```
-
+```{r sc6b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+gg1 <- smoking_out %>% plot_trends() # it's a ggplot object! So let's prettify it
+gg1 +
+  labs(x = "Year", y = "Cigarette sales (per capita)") +
+  theme_bw() +
+  theme(legend.position = c(0.2, 0.2)) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(legend.background = element_rect(fill = NA, color = NA)) +
+  theme(legend.key = element_rect(fill = NA, color = NA))
+```
 
 
 
@@ -2282,12 +2494,22 @@ gg1 +
 
 
 ## Just the difference
-```{r sc7, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+```{r sc7, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
 gg1 <- smoking_out %>% plot_differences()
 gg1 +
-  labs(x = "Year", y = "Difference in cigarette sales (per capita)")
+  labs(x = "Year", y = "Difference in cigarette sales (per capita)") +
+  theme_bw()
 ```
-
+```{r sc7b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+gg1 <- smoking_out %>% plot_differences()
+gg1 +
+  labs(x = "Year", y = "Difference in cigarette sales (per capita)") +
+  theme_bw() +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(legend.background = element_rect(fill = NA, color = NA)) +
+  theme(legend.key = element_rect(fill = NA, color = NA))
+```
 
 
 
@@ -2318,8 +2540,19 @@ gg1 +
 
 
 ## Placebo tests
-```{r sc8, echo = TRUE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
-smoking_out %>% plot_placebos()
+```{r sc8, echo = TRUE, eval = FALSE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+smoking_out %>% plot_placebos() +
+  theme_bw() +
+  theme(legend.position = c(0.2, 0.8))
+```
+```{r sc8b, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "65%", fig.align = "center"}
+smoking_out %>% plot_placebos() +
+  theme_bw() +
+  theme(legend.position = c(0.2, 0.8)) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) +
+  theme(legend.background = element_rect(fill = NA, color = NA)) +
+  theme(legend.key = element_rect(fill = NA, color = NA))
 ```
 
 
@@ -2358,11 +2591,12 @@ sig <- sig %>%
 sig$unit_name <- sig$state_str
 sig <- sig %>% select(-c("state_str", "z_score", "unit"))
 # round
-sig[,c(3,4,5,7)] <- round(sig[,c(3,4,5,7)], 3)
+sig[,c(3,4,5,7)] <- round(sig[,c(3,4,5,7)], 2)
+colnames(sig) <- c("State", "Type", "Pre-MSPE", "Post-MSPE", "Ratio", "Rank", "P-value")
 kable(sig[1:10,],  # just first 10
       align = "lcccccc", booktabs = TRUE, linesep = "", row.names = FALSE) %>%
-  column_spec(c(1,7),width = "4cm") %>%
-  column_spec(c(2:6),width = "1cm") %>%
+  column_spec(c(1),width = "5cm") %>%
+  column_spec(c(2:7),width = "3cm") %>%
   kable_styling()
 ```
 
