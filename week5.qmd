@@ -3,7 +3,7 @@ title: "Applied microeconometrics"
 subtitle: "Weeks 5 and 6 - Differences-in-differences and synthetic control"
 author: "Josh Merfeld"
 institute: "KDI School"
-date: "2024-10-07"
+date: "2024-10-14"
 
 date-format: long
 format: 
