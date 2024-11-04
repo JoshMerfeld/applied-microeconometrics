@@ -1,0 +1,22 @@
+<mxfile host="Electron" modified="2023-10-19T05:08:21.408Z" agent="Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) draw.io/22.0.3 Chrome/114.0.5735.289 Electron/25.8.4 Safari/537.36" etag="XvX-0JFlUZAyDBd5dZRv" version="22.0.3" type="device">
+  <diagram name="Page-1" id="s3ZK1nmSX360O-za-qAG">
+    <mxGraphModel dx="1434" dy="854" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="850" pageHeight="1100" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="bicvr7vfTIFY5oRpYVGM-2" value="Pollution" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;strokeColor=#006334;fontColor=#006334;" vertex="1" parent="1">
+          <mxGeometry x="180" y="220" width="270" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="bicvr7vfTIFY5oRpYVGM-3" value="Productivity" style="ellipse;whiteSpace=wrap;html=1;aspect=fixed;fillColor=none;strokeColor=#006334;fontColor=#006334;" vertex="1" parent="1">
+          <mxGeometry x="350" y="280" width="270" height="270" as="geometry" />
+        </mxCell>
+        <mxCell id="bicvr7vfTIFY5oRpYVGM-5" value="IV" style="ellipse;whiteSpace=wrap;html=1;rotation=-30;fillColor=none;strokeColor=#340063;fontColor=#340063;" vertex="1" parent="1">
+          <mxGeometry x="169.33" y="407.5" width="250" height="90" as="geometry" />
+        </mxCell>
+        <mxCell id="bicvr7vfTIFY5oRpYVGM-6" value="Omitted variable&lt;br&gt;(e.g. growth)" style="ellipse;whiteSpace=wrap;html=1;fontColor=#63002F;fillColor=none;strokeColor=#63002F;" vertex="1" parent="1">
+          <mxGeometry x="340" y="240" width="210" height="130" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

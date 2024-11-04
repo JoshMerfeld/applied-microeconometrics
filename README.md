@@ -51,9 +51,8 @@ You can find the slides (and any data we will be using) for each week under thei
   - You can find the data for the second class in the [week 4 folder](week4files).
 - Weeks 5 and 6: You can find the slides for the the week here: [Day 5/6 slides](https://joshmerfeld.github.io/applied-microeconometrics/week5.html).
   - You can find the data for the second class in the [week 5 folder](week5files).
-- Week 5: TBD
-- Week 6: TBD
-- Week 7: TBD
+- Weeks 7 and 8: You can find the slides for the the week here: [Day 7/8 slides](https://joshmerfeld.github.io/applied-microeconometrics/week7.html).
+  - You can find the data for the second class in the [week 7 folder](week7files).
 - Week 8: TBD
 - Week 9: TBD
 - Week 10: TBD

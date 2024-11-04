@@ -1,0 +1,47 @@
+---
+title: |
+        | Assignment 4
+subtitle: |
+        | Ph.D. Applied Microeconometrics
+        | KDI School Fall 2023
+date: "`r Sys.Date()`"
+# Output type and options (no TOC and yes fig captions)
+output:
+  bookdown::pdf_document2: 
+    toc: false
+    fig_caption: yes
+    # This also keeps the .tex file that is used to make the output (we will eventually need this for publication)
+    keep_tex: yes
+
+# This includes latex arguments
+header-includes:
+  - \input{header.tex}
+
+---
+
+**Due date: Friday, November 10th at 11:59pm**
+
+For this assignment, you will be continuing with the `castle.dta` data -- which I've put in the assignment folder -- the same data from last week. 
+
+Below is a list of tasks. I would like you to create a properly formated PDF file, as if it were a paper. This means that raw code should not appear in the PDF file. In a change, *this week I would like you to format this more like a paper.* I want a short introduction (you can use `# Introduction` in your R Markdown file), and then a separate section for each task. Each section should have a title, and then a discussion of the results. You do not need a conclusion section here.
+
+Tasks: 
+
+1. Recreate the two-way fixed effects estimates from your last assignment. Put them in a nice table. Discuss the results again.
+2. Discuss the recent literature on (possible) bias in two-way fixed effects. What is the "forbidden comparison" we discussed in class?
+3. Using a package of your choice (you might want to just use `did2s` from class), estimate the two-way fixed effects model. How do they compare to the results you got in 1.? Why do you think the results are different/similar (depending on what you got)?
+4. Create an event study plot for the two-way fixed effects model. You may want to reference my code from class. Discuss the results.
+
+Make sure to *interpret* your output. Do not just present regressions/figures/summary statistics.
+
+As before, please submit the following files:
+
+- Your R Markdown file
+- Your knitted PDF file
+- Any other scripts you used to complete the assignment
+
+
+
+
+
+
