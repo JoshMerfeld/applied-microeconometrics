@@ -660,7 +660,7 @@ head(df)
 
 ## Reduced form
 ```{r rep1b, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
-bordercounties <- df %>% filter(border==1)
+bordercounties <- df |> filter(border==1)
 summary(feols(Dl_hpi ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
         data = bordercounties, weights = bordercounties$w1,
         cluster = "state_n"))
@@ -676,7 +676,7 @@ summary(feols(Dl_hpi ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_po
 
 ## First stage
 ```{r rep2, echo = TRUE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
-bordercounties <- df %>% filter(border==1)
+bordercounties <- df |> filter(border==1)
 reg1 <- feols(Dl_nloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
               data = bordercounties, weights = bordercounties$w1,
               cluster = "state_n")
@@ -699,7 +699,7 @@ reg3 <- feols(Dl_lir_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_
 
 ## First stage
 ```{r rep3, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
-bordercounties <- df %>% filter(border==1)
+bordercounties <- df |> filter(border==1)
 reg1 <- feols(Dl_nloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
               data = bordercounties, weights = bordercounties$w1,
               cluster = "state_n")
@@ -734,19 +734,21 @@ tstats <- round(tstats, 3)
 # add to bottom of table
 table[18,] <- c("F-test for instrument", tstats)
 kable(table, 
-      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
-      row_spec(16, hline_after = TRUE) %>%
-      column_spec(1,width = "3cm") %>%
-      column_spec(c(2:4),width = "2.5cm") %>%
-      kable_styling() %>%
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) |>
+      row_spec(16, hline_after = TRUE) |>
+      column_spec(1,width = "7cm") |>
+      column_spec(c(2:4),width = "3.5cm") |>
+      kable_styling() |>
       footnote("Note: F-test differs from results in paper due to differences in how xtreg calculates standard errors.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
-                ) %>%
+                ) |>
       footnote("Standard errors clustered on state in parentheses.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
-                )
+                ) |>
+  
+      kable_styling(font_size = 18)
 ```
 
 
@@ -760,7 +762,7 @@ kable(table,
 
 ## First stage predictions vs. actual values... what do you notice?
 ```{r rep4, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE, size = "tiny", out.width = "55%", fig.align = "center"}
-bordercounties <- df %>% filter(border==1)
+bordercounties <- df |> filter(border==1)
 reg1 <- feols(Dl_nloans_b ~ Linter_bra + LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v | county + year, 
               data = bordercounties, weights = bordercounties$w1,
               cluster = "state_n")
@@ -795,9 +797,9 @@ ggplot(bordercounties, aes(x = Dl_nloans_b, y = credit)) +
 ## First stage predictions vs. actual values... what do you notice?
 
 ```{r rep5, echo = FALSE, eval = TRUE, message = FALSE, warning = FALSE}
-sums <- bordercounties %>% 
-          dplyr::select(Dl_nloans_b, credit) %>% 
-          na.omit() %>%
+sums <- bordercounties |> 
+          dplyr::select(Dl_nloans_b, credit) |> 
+          na.omit() |>
           summarize(across(everything(), list(min = min, max = max, sd = sd)))
 sums <- rbind(sums, sums)
 sums[2,1:3] <- sums[2,4:6]
@@ -808,7 +810,7 @@ colnames(sums) <- c("", "min", "max", "SD")
 sums[,2:4] <- round(sums[,2:4], 3)
 kable(sums,
       align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE
-      ) %>%
+      ) |>
       kable_styling()
 ```
 
@@ -903,15 +905,15 @@ colnames(table) <- c("", "Loans", "Loan volume", "Loan-to-inc. ratio")
 table[4,2:4] <- ""
 table <- table[-c(7:8),]
 kable(table, 
-      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
-      row_spec(6, hline_after = TRUE) %>%
-      column_spec(1,width = "3cm") %>%
-      column_spec(c(2:4),width = "2.5cm") %>%
-      kable_styling() %>%
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) |>
+      row_spec(6, hline_after = TRUE) |>
+      column_spec(1,width = "3cm") |>
+      column_spec(c(2:4),width = "2.5cm") |>
+      kable_styling() |>
       footnote("Note: The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
-                ) %>%
+                ) |>
       footnote("Standard errors clustered on state in parentheses.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
@@ -979,11 +981,11 @@ table[11,4] <- table[13,4]
 table <- table[-c(12:13),]
 table[11,1] <- "Wald (1st stage)"
 kable(table, 
-      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
-      row_spec(10, hline_after = TRUE) %>%
-      column_spec(1,width = "3cm") %>%
-      column_spec(c(2:4),width = "2.5cm") %>%
-      kable_styling() %>%
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) |>
+      row_spec(10, hline_after = TRUE) |>
+      column_spec(1,width = "3cm") |>
+      column_spec(c(2:4),width = "2.5cm") |>
+      kable_styling() |>
       footnote("Standard errors clustered on state in parentheses. The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors. The standard errors here are more conservative.", 
                 general_title = "",
                 threeparttable = TRUE,
@@ -1134,7 +1136,7 @@ setFixest_fml(..controls = ~ area_pop_base + area_debt_total_base + area_busines
 # they control for baseline values of NEIGHBORHOOD means of these variables
 ```
 ```{r microb, echo = FALSE, eval = TRUE, message = FALSE, warning = TRUE, size = "tiny", out.width = "55%", fig.align = "center"}
-df <- df %>% dplyr::select(areaid, treatment, w1, starts_with("area_"), anymfi_1, anyloan_1, bizassets_1, bizprofit_1, any_biz_1)
+df <- df |> dplyr::select(areaid, treatment, w1, starts_with("area_"), anymfi_1, anyloan_1, bizassets_1, bizprofit_1, any_biz_1)
 # make sure we have same sample
 df <- df[complete.cases(df),]
 ```
@@ -1195,11 +1197,11 @@ table <- etable(reg1, reg2, reg3,
 colnames(table) <- c("", "Any biz?", "Biz week7assets", "Biz profits")
 table <- table[-c(4:5),]
 kable(table, 
-      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
-      row_spec(3, hline_after = TRUE) %>%
-      column_spec(1,width = "2cm") %>%
-      column_spec(c(2:4),width = "1.5cm") %>%
-      kable_styling() %>%
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) |>
+      row_spec(3, hline_after = TRUE) |>
+      column_spec(1,width = "2cm") |>
+      column_spec(c(2:4),width = "1.5cm") |>
+      kable_styling() |>
       footnote("Standard errors clustered on neighborhood in parentheses.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
@@ -1251,11 +1253,11 @@ table <- etable(reg1, reg2,
 colnames(table) <- c("", "Any MFI loan?", "Any loan?")
 table <- table[-c(4:5),]
 kable(table, 
-      align = "lcc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
-      row_spec(3, hline_after = TRUE) %>%
-      column_spec(1,width = "2cm") %>%
-      column_spec(c(2:3),width = "1.5cm") %>%
-      kable_styling() %>%
+      align = "lcc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) |>
+      row_spec(3, hline_after = TRUE) |>
+      column_spec(1,width = "2cm") |>
+      column_spec(c(2:3),width = "1.5cm") |>
+      kable_styling() |>
       footnote("Standard errors clustered on neighborhood in parentheses.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
@@ -1317,11 +1319,11 @@ table <- table[-c(4:5),]
 table[1,1] <- "Has MFI loan"
 table[4,1] <- "Wald (1st stage)"
 kable(table, 
-      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) %>%
-      row_spec(3, hline_after = TRUE) %>%
-      column_spec(1,width = "2cm") %>%
-      column_spec(c(2:4),width = "1.5cm") %>%
-      kable_styling() %>%
+      align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE) |>
+      row_spec(3, hline_after = TRUE) |>
+      column_spec(1,width = "2cm") |>
+      column_spec(c(2:4),width = "1.5cm") |>
+      kable_styling() |>
       footnote("Standard errors clustered on neighborhood in parentheses.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
