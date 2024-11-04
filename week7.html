@@ -2011,7 +2011,7 @@ RMSE: 0.006641     Adj. R2: 0.47468
 <h2>First stage predictions vs. actual values… what do you notice?</h2>
 <div class="cell">
 <div class="cell-output-display">
-<table class="table caption-top" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto;">
+<table class="table caption-top" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto; font-size: 18px; margin-left: auto; margin-right: auto;">
 <thead>
 <tr class="header">
 <th style="text-align: left;" data-quarto-table-cell-role="th"></th>
@@ -2061,13 +2061,13 @@ RMSE: 0.006641     Adj. R2: 0.47468
 <span id="cb7-2"><a href></a><span class="fu">setFixest_fml</span>(<span class="at">..controls =</span> <span class="sc">~</span> LDl_hpi <span class="sc">+</span> Dl_inc <span class="sc">+</span> LDl_inc <span class="sc">+</span> Dl_pop <span class="sc">+</span> LDl_pop <span class="sc">+</span> Dl_her_v <span class="sc">+</span> LDl_her_v)</span>
 <span id="cb7-3"><a href></a><span class="co"># Let&#39;s use feols to estimate the two stages</span></span>
 <span id="cb7-4"><a href></a>reg1 <span class="ot">&lt;-</span> <span class="fu">feols</span>(Dl_hpi <span class="sc">~</span> ..controls <span class="sc">|</span> county <span class="sc">+</span> year <span class="sc">|</span> Dl_nloans_b <span class="sc">~</span> Linter_bra, </span>
-<span id="cb7-5"><a href></a>              <span class="at">data =</span> df, <span class="at">weights =</span> df<span class="sc">$</span>w1,</span>
+<span id="cb7-5"><a href></a>              <span class="at">data =</span> bordercounties, <span class="at">weights =</span> bordercounties<span class="sc">$</span>w1,</span>
 <span id="cb7-6"><a href></a>              <span class="at">cluster =</span> <span class="st">&quot;state_n&quot;</span>)</span>
 <span id="cb7-7"><a href></a>reg2 <span class="ot">&lt;-</span> <span class="fu">feols</span>(Dl_hpi <span class="sc">~</span> ..controls <span class="sc">|</span> county <span class="sc">+</span> year <span class="sc">|</span> Dl_vloans_b <span class="sc">~</span> Linter_bra, </span>
-<span id="cb7-8"><a href></a>              <span class="at">data =</span> df, <span class="at">weights =</span> df<span class="sc">$</span>w1,</span>
+<span id="cb7-8"><a href></a>              <span class="at">data =</span> bordercounties, <span class="at">weights =</span> bordercounties<span class="sc">$</span>w1,</span>
 <span id="cb7-9"><a href></a>              <span class="at">cluster =</span> <span class="st">&quot;state_n&quot;</span>)</span>
 <span id="cb7-10"><a href></a>reg3 <span class="ot">&lt;-</span> <span class="fu">feols</span>(Dl_hpi <span class="sc">~</span> ..controls <span class="sc">|</span> county <span class="sc">+</span> year <span class="sc">|</span> Dl_lir_b <span class="sc">~</span> Linter_bra, </span>
-<span id="cb7-11"><a href></a>              <span class="at">data =</span> df, <span class="at">weights =</span> df<span class="sc">$</span>w1,</span>
+<span id="cb7-11"><a href></a>              <span class="at">data =</span> bordercounties, <span class="at">weights =</span> bordercounties<span class="sc">$</span>w1,</span>
 <span id="cb7-12"><a href></a>              <span class="at">cluster =</span> <span class="st">&quot;state_n&quot;</span>)</span></code><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></pre></div>
 </details>
 </div>
@@ -2102,7 +2102,7 @@ RMSE: 0.006641     Adj. R2: 0.47468
 <p></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<table class="table" style="margin-left: auto; margin-right: auto;border-bottom: 0;border-bottom: 0;">
+<table class="table table" style="margin-left: auto; margin-right: auto;border-bottom: 0;border-bottom: 0; font-size: 18px; margin-left: auto; margin-right: auto;">
  <thead>
   <tr>
    <th style="text-align:left;">  </th>
@@ -2114,14 +2114,14 @@ RMSE: 0.006641     Adj. R2: 0.47468
 <tbody>
   <tr>
    <td style="text-align:left;width: 3cm; "> IV (deregulation index) </td>
-   <td style="text-align:center;width: 2.5cm; "> 0.024** </td>
-   <td style="text-align:center;width: 2.5cm; "> 0.025** </td>
-   <td style="text-align:center;width: 2.5cm; "> 0.028** </td>
+   <td style="text-align:center;width: 2.5cm; "> 0.034*** </td>
+   <td style="text-align:center;width: 2.5cm; "> 0.034** </td>
+   <td style="text-align:center;width: 2.5cm; "> 0.034*** </td>
   </tr>
   <tr>
    <td style="text-align:left;width: 3cm; ">  </td>
    <td style="text-align:center;width: 2.5cm; "> (0.011) </td>
-   <td style="text-align:center;width: 2.5cm; "> (0.012) </td>
+   <td style="text-align:center;width: 2.5cm; "> (0.013) </td>
    <td style="text-align:center;width: 2.5cm; "> (0.012) </td>
   </tr>
   <tr>
@@ -2150,15 +2150,15 @@ RMSE: 0.006641     Adj. R2: 0.47468
   </tr>
   <tr>
    <td style="text-align:left;width: 3cm; "> Wald (1st stage) </td>
-   <td style="text-align:center;width: 2.5cm; "> 4.332 </td>
-   <td style="text-align:center;width: 2.5cm; "> 4.700 </td>
-   <td style="text-align:center;width: 2.5cm; "> 5.243 </td>
+   <td style="text-align:center;width: 2.5cm; "> 8.986 </td>
+   <td style="text-align:center;width: 2.5cm; "> 6.917 </td>
+   <td style="text-align:center;width: 2.5cm; "> 7.803 </td>
   </tr>
   <tr>
    <td style="text-align:left;width: 3cm; "> Observations </td>
-   <td style="text-align:center;width: 2.5cm; "> 11,107 </td>
-   <td style="text-align:center;width: 2.5cm; "> 11,107 </td>
-   <td style="text-align:center;width: 2.5cm; "> 11,107 </td>
+   <td style="text-align:center;width: 2.5cm; "> 2,914 </td>
+   <td style="text-align:center;width: 2.5cm; "> 2,914 </td>
+   <td style="text-align:center;width: 2.5cm; "> 2,914 </td>
   </tr>
 </tbody>
 <tfoot><tr><td style="padding: 0; " colspan="100%">
@@ -2200,99 +2200,94 @@ RMSE: 0.006641     Adj. R2: 0.47468
 <p></p>
 <div class="cell" data-layout-align="center">
 <div class="cell-output-display">
-<table class="table caption-top" data-quarto-postprocess="true" style="margin-left: auto; margin-right: auto;border-bottom: 0;">
-<thead>
-<tr class="header">
-<th style="text-align: left;" data-quarto-table-cell-role="th"></th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">(1)</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">(2)</th>
-<th style="text-align: center;" data-quarto-table-cell-role="th">(3)</th>
-</tr>
-</thead>
+<table class="table table" style="margin-left: auto; margin-right: auto;border-bottom: 0;border-bottom: 0; font-size: 18px; margin-left: auto; margin-right: auto;">
+ <thead>
+  <tr>
+   <th style="text-align:left;">  </th>
+   <th style="text-align:center;"> (1) </th>
+   <th style="text-align:center;"> (2) </th>
+   <th style="text-align:center;"> (3) </th>
+  </tr>
+ </thead>
 <tbody>
-<tr class="odd">
-<td style="text-align: left; width: 3cm;">Loans</td>
-<td style="text-align: center; width: 2.5cm;">0.141</td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left; width: 3cm;"></td>
-<td style="text-align: center; width: 2.5cm;">(0.129)</td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; width: 3cm;">Loan volume</td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;">0.135</td>
-<td style="text-align: center; width: 2.5cm;"></td>
-</tr>
-<tr class="even">
-<td style="text-align: left; width: 3cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;">(0.117)</td>
-<td style="text-align: center; width: 2.5cm;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; width: 3cm;">Loan-to-inc. ratio</td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;">0.120</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; width: 3cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;">(0.099)</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; width: 3cm;">controls</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; width: 3cm;">Fixed-Effects:</td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-<td style="text-align: center; width: 2.5cm;"></td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; width: 3cm;">county</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; width: 3cm;">year</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-<td style="text-align: center; width: 2.5cm;">Yes</td>
-</tr>
-<tr class="odd">
-<td style="text-align: left; width: 3cm;">Wald (1st stage)</td>
-<td style="text-align: center; width: 2.5cm;">4.332</td>
-<td style="text-align: center; width: 2.5cm;">4.700</td>
-<td style="text-align: center; width: 2.5cm;">5.243</td>
-</tr>
-<tr class="even">
-<td style="text-align: left; width: 3cm;">Observations</td>
-<td style="text-align: center; width: 2.5cm;">11,107</td>
-<td style="text-align: center; width: 2.5cm;">11,107</td>
-<td style="text-align: center; width: 2.5cm;">11,107</td>
-</tr>
-</tbody><tfoot>
-<tr class="odd">
-<td style="text-align: left; padding: 0;"><sup></sup> Standard errors clustered on state in parentheses. The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors. The standard errors here are more conservative.</td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-<td style="text-align: center;"></td>
-</tr>
-</tfoot>
-
+  <tr>
+   <td style="text-align:left;width: 3cm; "> Loans </td>
+   <td style="text-align:center;width: 2.5cm; "> 0.123* </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; "> (0.066) </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> Loan volume </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; "> 0.123* </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; "> (0.066) </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> Loan-to-inc. ratio </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; "> 0.121* </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; "> (0.061) </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> controls </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> Fixed-Effects: </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+   <td style="text-align:center;width: 2.5cm; ">  </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> county </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> year </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+   <td style="text-align:center;width: 2.5cm; "> Yes </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> Wald (1st stage) </td>
+   <td style="text-align:center;width: 2.5cm; "> 8.986 </td>
+   <td style="text-align:center;width: 2.5cm; "> 6.917 </td>
+   <td style="text-align:center;width: 2.5cm; "> 7.803 </td>
+  </tr>
+  <tr>
+   <td style="text-align:left;width: 3cm; "> Observations </td>
+   <td style="text-align:center;width: 2.5cm; "> 2,914 </td>
+   <td style="text-align:center;width: 2.5cm; "> 2,914 </td>
+   <td style="text-align:center;width: 2.5cm; "> 2,914 </td>
+  </tr>
+</tbody>
+<tfoot><tr><td style="padding: 0; " colspan="100%">
+<sup></sup> Note: The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors.</td></tr></tfoot>
+<tfoot><tr><td style="padding: 0; " colspan="100%">
+<sup></sup> Standard errors clustered on state in parentheses.</td></tr></tfoot>
 </table>
-
 
 </div>
 </div>

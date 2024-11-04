@@ -747,7 +747,6 @@ kable(table,
                 footnote_as_chunk = TRUE,
                 escape = FALSE
                 ) |>
-  
       kable_styling(font_size = 18)
 ```
 
@@ -811,7 +810,8 @@ sums[,2:4] <- round(sums[,2:4], 3)
 kable(sums,
       align = "lccc", booktabs = TRUE, linesep = "", escape = FALSE, row.names = FALSE
       ) |>
-      kable_styling()
+      kable_styling() |>
+      kable_styling(font_size = 18)
 ```
 
 
@@ -838,13 +838,13 @@ kable(sums,
 setFixest_fml(..controls = ~ LDl_hpi + Dl_inc + LDl_inc + Dl_pop + LDl_pop + Dl_her_v + LDl_her_v)
 # Let's use feols to estimate the two stages
 reg1 <- feols(Dl_hpi ~ ..controls | county + year | Dl_nloans_b ~ Linter_bra, 
-              data = df, weights = df$w1,
+              data = bordercounties, weights = bordercounties$w1,
               cluster = "state_n")
 reg2 <- feols(Dl_hpi ~ ..controls | county + year | Dl_vloans_b ~ Linter_bra, 
-              data = df, weights = df$w1,
+              data = bordercounties, weights = bordercounties$w1,
               cluster = "state_n")
 reg3 <- feols(Dl_hpi ~ ..controls | county + year | Dl_lir_b ~ Linter_bra, 
-              data = df, weights = df$w1,
+              data = bordercounties, weights = bordercounties$w1,
               cluster = "state_n")
 ```
 
@@ -917,7 +917,8 @@ kable(table,
       footnote("Standard errors clustered on state in parentheses.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
-                )
+                ) |>
+      kable_styling(font_size = 18)
 ```
 
 
@@ -986,12 +987,15 @@ kable(table,
       column_spec(1,width = "3cm") |>
       column_spec(c(2:4),width = "2.5cm") |>
       kable_styling() |>
-      footnote("Standard errors clustered on state in parentheses. The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors. The standard errors here are more conservative.", 
-                general_title = "",
-                threeparttable = TRUE,
+      footnote("Note: The Wald (similar to F-test) values do not equal the values in the paper due to differences in how xtreg calculates standard errors.", general_title = "",
                 footnote_as_chunk = TRUE,
                 escape = FALSE
-                )
+                ) |>
+      footnote("Standard errors clustered on state in parentheses.", general_title = "",
+                footnote_as_chunk = TRUE,
+                escape = FALSE
+                ) |>
+      kable_styling(font_size = 18)
 ```
 
 
