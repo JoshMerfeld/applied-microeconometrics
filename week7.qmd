@@ -34,7 +34,7 @@ knitr::knit_hooks$set(chunk = function(x, options) {
   ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
 })
 
-
+knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
 
 library(tidyverse)
 library(kableExtra)
@@ -44,6 +44,9 @@ library(RColorBrewer)
 library(haven)
 library(fwildclusterboot)
 library(modelsummary)
+library(terra)
+library(tidyterra)
+library(cowplot)
 
 ```
 
@@ -2021,6 +2024,382 @@ reg3 <- feols(any_biz_1 ~ ..controls | anymfi_1 ~ treatment,
   - So we can't really test the validity of the instruments!
 
 - TLDR: overidentification tests are not very useful (my take, anyway)
+
+
+
+
+
+
+# Shift-share instruments
+
+## Shift-share instruments (SSIV)
+
+- Much of this is based on [Peter Hull's notes](https://about.peterhull.net/metrix)
+  - He is an expert on this stuff! I am not.
+  
+- Often referred to as "Bartik shocks/instruments" ([Bartik 1991](https://research.upjohn.org/up_press/77/?ref=https://githubhelp.com))
+
+- Can find a review in [Borusyak et al. (2024)](https://academic.oup.com/ectj/advance-article/doi/10.1093/ectj/utae003/7590835?login=true) (though it's a bit more general than just SSIV)
+
+
+
+
+
+
+## Before the theory...
+
+- Before getting into theory, let's look at an example
+
+- [Autor et al. (2013)](https://pubs.aeaweb.org/doi/pdfplus/10.1257/aer.103.6.2121)
+  - The China Syndrome: Local Labor Market Effects of Import Competition in the United States
+  
+::: {.callout-note appearance="minimal"}
+## Abstract
+We analyze the effect of rising Chinese import competition between 1990 and 2007 on US local labor markets, **exploiting cross-market variation in import exposure stemming from initial differences in industry specialization and instrumenting for US imports using changes in Chinese imports by other high-income countries.**
+:::
+
+. . .
+
+- Basic idea: use initial *shares* of import exposure
+  - Instrument using change in Chinese imports in *other* high-income countries
+  - This is the basic setup for a SSIV
+  - They do more, so we just focus on the SSIV part
+
+
+
+
+
+
+## Chinese exports and local labor markets
+
+- Interested in wages ($W_i$), employment for traded goods ($L_{Ti}$), and employment for non-traded goods ($L_{Ni}$)
+
+\begin{align} W_i =& \;\sum_j c_{ij}\frac{L_{ij}}{L_{Ni}}\left[\theta_{ijC}E_{Cj}-\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \\
+              L_{Ti} =& \;\rho_i\sum_j c_{ij}\frac{L_{ij}}{L_{Ti}}\left[\theta_{ijC}E_{Cj}-\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \\
+              L_{Ni} =& \;\rho_i\sum_j c_{ij}\frac{L_{ij}}{L_{Ni}}\left[-\theta_{ijC}E_{Cj}+\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \end{align}
+
+
+
+
+
+
+## Chinese exports and local labor markets
+
+\begin{align} W_i =& \;\sum_j c_{ij}\frac{L_{ij}}{L_{Ni}}\left[\theta_{ijC}E_{Cj}-\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \\
+              L_{Ti} =& \;\rho_i\sum_j c_{ij}\frac{L_{ij}}{L_{Ti}}\left[\theta_{ijC}E_{Cj}-\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \\
+              L_{Ni} =& \;\rho_i\sum_j c_{ij}\frac{L_{ij}}{L_{Ni}}\left[-\theta_{ijC}E_{Cj}+\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \end{align}
+
+- $A_{Cj}$ is change in China's "export-supply capability" in each industry
+- $E_{Cj}$ is change in China's change in expenditures *within China* in each industry
+- $\theta_{ijC}$ is initial share of output in region $i$ that is shipped to China
+- $\theta_{ijk}$ is initial share of output in region $i$ that is shipped to each market $k$
+- $\phi_{Cjk}$ is initial share of imports from China in total purchases
+
+
+
+
+
+
+## Chinese exports and local labor markets
+
+\begin{align} W_i =& \;\sum_j c_{ij}\frac{L_{ij}}{L_{Ni}}\left[\theta_{ijC}E_{Cj}-\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \\
+              L_{Ti} =& \;\rho_i\sum_j c_{ij}\frac{L_{ij}}{L_{Ti}}\left[\theta_{ijC}E_{Cj}-\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \\
+              L_{Ni} =& \;\rho_i\sum_j c_{ij}\frac{L_{ij}}{L_{Ni}}\left[-\theta_{ijC}E_{Cj}+\sum_k \theta_{ijk}\phi_{Cjk}A_{Cj}\right] \end{align}
+
+- "Positive shocks to China's export supply decrease region $i$'s wage and employment in traded goods and increase its employment in non-traded goods. Similarly, positive shocks to China's import demand increase region $i$'s wage and employment in traded goods and decrease its employment in non-traded goods." (p. 2127)
+
+
+
+
+
+
+## What is endogenous here?
+
+. . .
+
+- Initial share is certainly endogenous
+- The change for a specific region also certainly endogenous!
+
+. . .
+
+- "our main measure of local labor market exposure to import competition is the change in Chinese import exposure per worker in a region, where imports are apportioned to the region according to its share of national industry employment:" (p. 2128)
+
+\begin{gather} \Delta IPW_{uit} = \sum_j\frac{L_{ijt}}{L_{ujt}}\frac{\Delta M_{ucjt}}{L_{it}} \end{gather}
+
+- $\Delta M_{ucjt}$ is change in US imports from China in industry $j$
+
+
+
+
+
+
+## The change is endogenous, too!
+
+::: {.callout-note appearance="minimal"}
+## p. 2128-2129
+"A concern for our subsequent estimation is that realized US imports from China... may be correlated with industry import demand shocks, in which case the OLS estimate of how increased imports from China affect US manufacturing employment may understate the true impact, as both US employment and imports may be positively correlated with unobserved shocks to US product demand."
+:::
+
+. . .
+
+- The solution?
+
+. . .
+
+- "[W]e instrument for growth in Chinese imports to the United States using the contemporaneous composition and growth of Chinese imports in eight other developed countries. Specifically, we instrument the measured import exposure variable $\Delta IPW_{uit}$ with a non-US exposure variable $\Delta IPW_{oit}$ that is constructed using data on contemporaneous industry-level growth of Chinese exports to other high-income markets:" (p. 2129)
+
+\begin{gather} \Delta IPW_{oit} = \sum_j \frac{L_{ijt-1}}{L_{ujt-1}}\frac{\Delta M_{ocjt}}{L_{it-1}} \end{gather}
+
+
+
+
+
+
+## Back to Hull's notes
+
+- Same paper, different syntax. Instrument is
+
+\begin{gather} z_\ell = \sum_n s_{\ell n}g_n \end{gather}
+
+for the model
+
+\begin{gather} y_\ell = \beta x_\ell + w'_\ell + \varepsilon_\ell \end{gather}
+
+- $x_\ell$: growth of Chinese import comp. in location $\ell$
+- $y_\ell$: growth of outcome of interest
+- $g_n$: growth of Chinese exports in industry $n$ to non-US countries
+- $s_{\ell n}$: initial share of employment (well, 10-year lags)
+- $z_\ell$: instrument for $x_\ell$ (predicted growth of Chinese import comp.)
+
+
+
+
+
+
+## What do we need?
+
+Following Borusyak et al. (2024):
+
+- "Quasi-random shock assignment": In our example, this is true when "expected growth of chinese imports $g_n$ is the same across industries with high vs. low [shock-level unobservables] $\bar{\varepsilon}_n$ (and [average exposure] $s_n$)"
+- "Many uncorrelated shocks": In our example, "imposes many uncorrelated industry growth rates and sufficiently different industry specialization across locations"
+  - Hull notes that this is basically a "shock-level law of large numbers"
+  - Essentially, the expected value of $\sum_n s_n g_n \bar{\varepsilon}_n$ is zero
+
+
+
+
+
+
+## What do we need?
+
+- Important change: incomplete shares
+  - Initial assumption is "constant sum-of-shares": $S_\ell=\sum_n s_{\ell n}=1\;\forall\;\ell$
+
+- In our example, this is not true!
+  - In practice, we can control for the sum-of-shares $S_\ell$
+  - In panels, control for interaction between sum-of-shares and the year fixed effect (period effects)
+
+
+
+
+
+
+## Back to the paper
+
+- SSIV in the paper is $z_{\ell t}=\sum_n s_{\ell nt}g_{nt}$
+  - $n$: 397 different industries $\times$ two periods
+  - $g_{nt}$: growth of Chinese imports in non-US economics per US worker
+  - $s_{\ell nt}$: lagged share of mfg. industry $n$ in total employment of location $\ell$
+
+
+- In practice, Borusyak et al. (2024) suggest clustering by industry (since that is essentially the level of treatment)
+
+
+
+
+
+
+## Check "balance"
+
+- Can regress industry covariates on the shock. We expect null results.
+
+
+- Borusyak et al. (Table 3):
+
+
+
+```{r}
+#| echo: false
+#| eval: true
+
+mat <- matrix(c("Production workers’ share of employment, 1991", "-0.011", "(0.012)",
+  "Ratio of capital to value-added, 1991",	"–0.007",	"(0.019)",
+  "Log real wage (2007 USD), 1991", "-0.005", "(0.022)",
+  "Computer investment as share of total, 1990", "0.750", "(0.465)",
+  "High-tech equipment as share of total investment, 1990", "0.532", "(0.296"), 
+  ncol = 3, byrow = TRUE)
+colnames(mat) <- c("Balance variable", "Coef.", "SE")
+
+kable(mat, format = "html", booktabs = TRUE,
+  align = "lcc", row.names = FALSE) |>
+  column_spec(1,width = "16cm") |>
+  column_spec(c(2:3),width = "3.5cm") |>
+  footnote("The table is Panel A. of Table 3 in Borusyak et al. (2024).", general_title = "",
+    footnote_as_chunk = TRUE,
+    escape = FALSE
+    ) |>
+  kable_styling(font_size = 24, full_width = F)
+```
+
+
+- Key: "Shocks do not predict industry-level observables controlling for period FE"
+  - (Can also check location-level characteristics, as Borusyak et al. do)
+
+
+
+
+
+
+## What are we identifying?
+
+- [Goldsmith-Pinkham, Sorkin, and Swift (2020)](https://www.aeaweb.org/articles?id=10.1257/aer.20181047)
+  - See paper for more details
+  
+- Big takeaway: they show that the SSIV estimator is equivalent to using many different IVs, one for each industry/market
+  - You can derive the weights!
+
+- SSIV puts more weight on:
+  - Share instruments with more extreme shocks $g_n$
+  - Largest first stages
+
+
+
+
+
+
+## Requirement: "share exogeneity"
+
+- Share exogeneity means something a little different here: "all relevant unobservables are unforecastable from the shares" (Hull's notes)
+
+- Key: Goldsmith-Pinkham, Sorkin, and Swift (2020) show that you can test it!
+  - Check $n$ with high weights
+  - Can do balance and pre-trend tests
+
+
+
+
+
+
+# Recentered IV
+
+## Recentered IV
+
+- [Borusyak and Hull (2023)](https://onlinelibrary.wiley.com/doi/full/10.3982/ECTA19367)
+
+- The idea:
+  - Imagine a policy that rolls out over many years, like the building of roads
+  - The location of roads might be endogenous, but maybe the exact completion data is not!
+  - If the date of completion is somewhat random, we may be able to create an IV
+  
+- Example I'll use: roads in India
+
+
+
+
+## Roads in India, by wave of NSS
+
+- NSS has three waves of interest:
+  - 2004-2005 (wave 61)
+  - 2007-2008 (wave 64)
+  - 2011-2012 (wave 68)
+
+
+
+
+## We might be interested in the following
+
+\begin{gather} y_{it} = \alpha_i + \delta_t + \beta roads_{it} + X_{it} + \varepsilon_{it} \end{gather}
+
+- $y_{it}$ is some outcome of interest
+- $\alpha_i$ is district FE
+- $\delta_t$ is time FE
+- $roads_{it}$ is the length of roads in the district, $\beta$ is the coefficient of interest
+- But there is a concern... what?
+
+. . .
+
+- Perhaps roads are built in places that are trending in certain ways
+
+
+
+
+## Roads in India, by wave of NSS
+
+```{r}
+#| echo: false
+#| eval: true
+#| crop: true
+library(terra)
+districts <- vect("week7files/india_2011_district.shp")
+districts$distfe <- paste0(districts$st_cen_cd, "-", districts$dt_cen_cd)
+roads <- read_csv("week7files/actualroads.csv")
+districts <- districts |>
+  left_join(roads, by = "distfe") |>
+  filter(!is.na(wave))
+districts <- districts |>
+  group_by(distfe) |>
+  mutate(obs = n()) |>
+  filter(obs==3) |>
+  ungroup()
+g1 <- ggplot() +
+  geom_spatvector(data = districts, aes(fill = log(length)), color = NA) +
+  scale_fill_distiller("Length (log)", palette = "Spectral", direction = 1) +
+  facet_wrap(~wave) +
+  theme_bw() +
+  labs(subtitle = "Actual roads") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) + 
+  theme(legend.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+g2 <- ggplot() +
+  geom_spatvector(data = districts, aes(fill = log(expectedlength)), color = NA) +
+  scale_fill_distiller("Length (log)", palette = "Spectral", direction = 1) +
+  facet_wrap(~wave) +
+  theme_bw() +
+  labs(subtitle = "Expected roads") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) + 
+  theme(legend.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+plot_grid(g1, g2, ncol = 1) +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) + 
+  theme(legend.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+## Roads in India, by wave of NSS
+
+```{r}
+#| echo: false
+#| eval: true
+#| crop: true
+ggplot() +
+  geom_spatvector(data = districts, aes(fill = log(length) - log(expectedlength)), color = NA) +
+  scale_fill_distiller("Length (log)", palette = "Spectral", direction = 1) +
+  facet_wrap(~wave) +
+  theme_bw() +
+  labs(subtitle = "Deviation from expected") +
+  theme(legend.position = "bottom") +
+  theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) + 
+  theme(legend.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
+```
+
+
+
+
+
+
+
+
+
 
 
 

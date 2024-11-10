@@ -2156,6 +2156,7 @@ ggplot(data) +
   - Callaway et al. (2021) and Chaisemartin and D’Haultfœuille (2023) have some ideas
 
 - IVs with TWFE?
+  - Note that you could in theory do this by hand! IV estimates are just a ratio of reduced form and first stage. Could bootstrap the ratio.
 
 
 
