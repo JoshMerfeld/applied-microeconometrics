@@ -2339,6 +2339,7 @@ kable(mat, format = "html", booktabs = TRUE,
 #| echo: false
 #| eval: true
 #| crop: true
+#| fig.align: center
 library(terra)
 districts <- vect("week7files/india_2011_district.shp")
 districts$distfe <- paste0(districts$st_cen_cd, "-", districts$dt_cen_cd)
@@ -2352,7 +2353,7 @@ districts <- districts |>
   filter(obs==3) |>
   ungroup()
 g1 <- ggplot() +
-  geom_spatvector(data = districts, aes(fill = log(length)), color = NA) +
+  geom_spatvector(data = districts, aes(fill = log(length))) +
   scale_fill_distiller("Length (log)", palette = "Spectral", direction = 1) +
   facet_wrap(~wave) +
   theme_bw() +
@@ -2360,7 +2361,7 @@ g1 <- ggplot() +
   theme(plot.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb")) + 
   theme(legend.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
 g2 <- ggplot() +
-  geom_spatvector(data = districts, aes(fill = log(expectedlength)), color = NA) +
+  geom_spatvector(data = districts, aes(fill = log(expectedlength))) +
   scale_fill_distiller("Length (log)", palette = "Spectral", direction = 1) +
   facet_wrap(~wave) +
   theme_bw() +
@@ -2381,8 +2382,9 @@ plot_grid(g1, g2, ncol = 1) +
 #| echo: false
 #| eval: true
 #| crop: true
+#| fig.align: center
 ggplot() +
-  geom_spatvector(data = districts, aes(fill = log(length) - log(expectedlength)), color = NA) +
+  geom_spatvector(data = districts, aes(fill = log(length) - log(expectedlength))) +
   scale_fill_distiller("Length (log)", palette = "Spectral", direction = 1) +
   facet_wrap(~wave) +
   theme_bw() +
@@ -2392,6 +2394,16 @@ ggplot() +
   theme(legend.background = element_rect(fill = "#f0f1eb", color = "#f0f1eb"))
 ```
 
+
+
+
+## The basic idea
+
+- The basic idea is similar to randomization inference
+
+- Find "expected" value based on randomized completion date
+  - Instrument is actual - expected
+  - This is the recentered IV
 
 
 
