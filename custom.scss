@@ -36,7 +36,7 @@ $code-color: $accent !default;
 
 /* This changes the size of the code block chunks (the font) */
 code.sourceCode {
-  font-size: 1.0em;
+  font-size: 1.5em;
   /* or try font-size: xx-large; */
   margin-bottom: 0px;
 }
@@ -85,7 +85,7 @@ details > summary {
     font-style: bold;
     // font-weight: 350;
     font-weight: lighter;
-    // margin-bottom: 3cm;
+    margin-bottom: 3cm;
   }
   
   .subtitle {
@@ -121,7 +121,7 @@ details > summary {
   font-weight: lighter;
   font-size: 2em;
   margin-top: 0cm; /* Adjust this value as needed */
-  margin-bottom: 1cm; /* Adjust this value as needed */
+  margin-bottom: 1.5cm; /* Adjust this value as needed */
 }
 
 .reveal h3 {
@@ -166,6 +166,7 @@ details > summary {
   // font-weight: 300;
   font-weight: lighter;
   padding-left: 16px;
+  padding-bottom: 0.5em;
 
   li::marker {
     color: $kdisgreen;
@@ -344,9 +345,3 @@ details > summary {
   margin-top: 0 !important;
 }
 
-// tabset
-
-.panel-tabset > .tab-content {
-  padding: 12px 12px;
-    background-color: mix($kdisgray, white, 40%);
-}
