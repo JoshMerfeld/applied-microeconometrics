@@ -1,0 +1,91 @@
+---
+title: "Data wrangling in `R`"
+subtitle: "Using the `tidyverse`"
+author: "Josh Merfeld"
+institute: "KDI School"
+date: "`r Sys.Date()`"
+
+date-format: long
+format: 
+  html:
+    self-contained: true
+    toc: true
+    toc-location: left
+    page-layout: full
+execute:
+  echo: true
+  warnings: false
+  message: false
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead of pdf to decrease size of the resulting pdf
+
+def.chunk.hook  <- knitr::knit_hooks$get("chunk")
+knitr::knit_hooks$set(chunk = function(x, options) {
+  x <- def.chunk.hook(x, options)
+  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+})
+
+knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
+
+library(tidyverse)
+library(haven)
+library(cowplot)
+
+kdisgreen <- "#006334"
+accent <- "#340063"
+accent2 <- "#633400"
+kdisgray <- "#A7A9AC"
+
+```
+
+
+
+# Introduction
+
+This page gives a brief introduction to data wrangling in `R` with the suite of packages including in the `tidyverse`. I have been using the `tidyverse` for a couple of years now, and I find it to be much more intuitive than alternative options for data wrangling in `R`. That said, there are other options, with the most common alternative likely being the [`data.table`](https://github.com/Rdatatable/data.table) package. Some other details:
+
+- For tables, I tend to use the `kable` (and `kableExtra`) package(s) when working with `Quarto` or `RMarkdown` documents. There are many other options here, as well!
+- For figures, I default to the `ggplot2` package (which comes with the `tidyverse`). The most common alternative is likely the base `R` plotting system, which many people use to great effect. I find `ggplot2` to be more intuitive, but that is likely because I learned it first.
+
+## Resources
+
+There are many, many, many resources available to learn about the `tidyverse`. First and foremost, the [official website](https://www.tidyverse.org/) is a great place to start. There are also many books available. One of my favorites is [R for Data Science](https://r4ds.had.co.nz/), which is available for free online. Between these two resources, you should be able to get a good handle on the `tidyverse`, above and beyond anything I teach you here.
+
+## The data
+
+For this example, I use household survey data from Malawi. Specifically, I use the 2019 fifth integrated household survey (aka the IHS5). This data is publicly available from the National Statistical Office of Malawi (NSO) and from the [World Bank's microdata repository](https://microdata.worldbank.org/index.php/catalog/3818). As this is a public dataset and since I am using it as part of a class I teach at the [KDI School](https://www.kdischool.ac.kr/), I have uploaded the data to the course's GitHub repository. However, two small notes:
+
+- I have *not* included one specific module from the survey: `HH_MOD_G1` (section G1 from the household module). The file itself is almost 500 MB, which is above GitHub's limit. If you want to play around with that specific module, you can download it yourself from the website above.^[I of course will not use it here.]
+- I have created a single `.zip` file that you can download from my Dropbox. You can download it [here](https://www.dropbox.com/scl/fi/s9f8xm0o8yv6ejnz3ljdj/ihs5.zip?rlkey=iydode1k1mgezc0acbw5rt1sr&dl=0). The file is about 115 MB. Alternatively, you can just download the individual modules from the course website, [here](https://github.com/JoshMerfeld/applied-microeconometrics/datawranglingfiles).
+
+## The example
+
+To show some of the many features of the `tidyverse` vis-a-vis data wrangling, I will be using data with the following aim: to predict household expenditures per capita using a variety of household characteristics. This is a common exercise in applied microeconometrics, and it is a good way to show off the power of the `tidyverse` for data wrangling.
+
+
+
+# Data wrangling in `R`
+
+I will be using three packages throughout this tutorial: `tidyverse`, `cowplot`, and `haven`. The `tidyverse` is a suite of packages that are designed to work together seamlessly. The `cowplot` package is a great way to combine multiple figures into one. The `haven` package provides functions to read and write datasets from different programs, including Stata and SPSS. Let's load these first. Note that if you do not have these downloaded, you will first need to install them. You can do so by running `install.packages(c("tidyverse", "cowplot", "haven"))`.^[Note that you must use quotation marks with the `install.packages()` function!]
+
+```{r}
+#| label: load-libraries
+#| echo: true
+# load libraries
+library(tidyverse)
+library(cowplot)
+library(haven)
+```
+
+Let's start by loading the household expenditures module. This module contains information on household expenditures, both in aggregate and for some specific categories.
+
+
+
+
+
+
+
+
