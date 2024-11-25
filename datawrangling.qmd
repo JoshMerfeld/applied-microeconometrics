@@ -12,8 +12,23 @@ format:
     toc: true
     toc-location: left
     page-layout: full
+    theme: journal
+    code-tools: true
+    code-line-numbers: true
+    highlight-style: github
+    number-sections: true
+    number-depth: 1
+    cap-location: top
+    other-links:
+      - text: Intro to the tidyverse
+        href: https://www.tidyverse.org/
+      - text: R for Data Science
+        href: https://r4ds.had.co.nz/
+      - text: IHS5 data
+        href: https://microdata.worldbank.org/index.php/catalog/3818
 execute:
   echo: true
+  eval: true
   warnings: false
   message: false
 ---
@@ -24,8 +39,8 @@ knitr::opts_chunk$set(echo = FALSE, dev = "png") # NOTE: switched to png instead
 def.chunk.hook  <- knitr::knit_hooks$get("chunk")
 knitr::knit_hooks$set(chunk = function(x, options) {
   x <- def.chunk.hook(x, options)
-  #ifelse(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
-  ifelse(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
+  #if_else(options$size != "a", paste0("\n \\", "tiny","\n\n", x, "\n\n \\normalsize"), x)
+  if_else(options$size != "normalsize", paste0("\n \\", options$size,"\n\n", x, "\n\n \\normalsize"), x)
 })
 
 knitr::knit_hooks$set(crop = knitr::hook_pdfcrop)
@@ -34,14 +49,24 @@ library(tidyverse)
 library(haven)
 library(cowplot)
 
-kdisgreen <- "#006334"
-accent <- "#340063"
-accent2 <- "#633400"
-kdisgray <- "#A7A9AC"
-
 ```
 
 
+```{css, echo = FALSE}
+.scrolling {
+  max-height: 300px;
+  max-width: $("quarto-document-content").width();
+  overflow-y: scroll;
+  overflow-x: scroll;
+  margin-bottom: 20px;
+}
+
+.styled-output .cell-output {
+  background-color: #f8f9fa;
+  border-radius: 4px;
+}
+
+```
 
 # Introduction
 
@@ -59,7 +84,7 @@ There are many, many, many resources available to learn about the `tidyverse`. F
 For this example, I use household survey data from Malawi. Specifically, I use the 2019 fifth integrated household survey (aka the IHS5). This data is publicly available from the National Statistical Office of Malawi (NSO) and from the [World Bank's microdata repository](https://microdata.worldbank.org/index.php/catalog/3818). As this is a public dataset and since I am using it as part of a class I teach at the [KDI School](https://www.kdischool.ac.kr/), I have uploaded the data to the course's GitHub repository. However, two small notes:
 
 - I have *not* included one specific module from the survey: `HH_MOD_G1` (section G1 from the household module). The file itself is almost 500 MB, which is above GitHub's limit. If you want to play around with that specific module, you can download it yourself from the website above.^[I of course will not use it here.]
-- I have created a single `.zip` file that you can download from my Dropbox. You can download it [here](https://www.dropbox.com/scl/fi/s9f8xm0o8yv6ejnz3ljdj/ihs5.zip?rlkey=iydode1k1mgezc0acbw5rt1sr&dl=0). The file is about 115 MB. Alternatively, you can just download the individual modules from the course website, [here](https://github.com/JoshMerfeld/applied-microeconometrics/datawranglingfiles).
+- I have created a single `.zip` file that you can download from my Dropbox. You can download it [here](https://www.dropbox.com/scl/fi/s9f8xm0o8yv6ejnz3ljdj/ihs5.zip?rlkey=iydode1k1mgezc0acbw5rt1sr&dl=0).^[If this link ever breaks, please e-mail me so I can fix it.] The file is about 115 MB. Alternatively, you can just download the individual modules from the course website, [here](https://github.com/JoshMerfeld/applied-microeconometrics/tree/main/datawranglingfiles).
 
 ## The example
 
@@ -67,7 +92,22 @@ To show some of the many features of the `tidyverse` vis-a-vis data wrangling, I
 
 
 
-# Data wrangling in `R`
+# Understanding the file structure
+
+I remember when I first started working with household survey data during my first year of Ph.D. It took me a while to really wrap my head around the file structure of the data! The good news is that household surveys like the IHS5 tend to have similar structures, so once you master one, you will generally be ready to work with others. The first thing to do is to *make sure you have the questionnaire downloaded.* I include the household questionnaire here:
+
+```{=html}
+<embed src="datawranglingfiles/Documentation/fifth_integrated_household_survey_2019_2020_and_the_integrated_household_panel_survey_2019_household_questionnaire.pdf" width="1000px" height="800" />
+```
+
+Note that the IHS5 also as other questionnaires: an agricultural questionnaire, a community questionnaire, etc. In this example, we will only be working with the household questionnaire.
+
+The household questionnaire is a long document, but it includes all of the questions asked by enumerators, so it is worth spending some time looking through. As an example, suppose we want to create variables about household demographics. We need to find the proper module in the dataset that has information about household composition; in other words, we need to find the *household roster*. For the IHS5, this is Module B (page 5 of the questionnaire above).
+
+One tricky thing about household survey data is that different modules are at different levels of aggregation. For example, the household roster is at the *individual* level, whereas the household expenditure module is at the *household* level. If we want to merge the household roster into the expenditure module, we will have to aggregate the roster to the household level. This is a common task in data wrangling, and I will show you how to do this below. As someone who has worked a lot with agricultural data, wrapping your head around the different levels of aggregation is a key skill in working with this type of survey data. Some agricultural modules ask about individual plots (i.e. it is at the plot level), whereas others ask about plot-crops (i.e. it asks about different crops *on the same plot), while still others might ask about crops only (one observation for each crop the household grows). 
+
+
+# Loading and viewing data
 
 I will be using three packages throughout this tutorial: `tidyverse`, `cowplot`, and `haven`. The `tidyverse` is a suite of packages that are designed to work together seamlessly. The `cowplot` package is a great way to combine multiple figures into one. The `haven` package provides functions to read and write datasets from different programs, including Stata and SPSS. Let's load these first. Note that if you do not have these downloaded, you will first need to install them. You can do so by running `install.packages(c("tidyverse", "cowplot", "haven"))`.^[Note that you must use quotation marks with the `install.packages()` function!]
 
@@ -80,7 +120,576 @@ library(cowplot)
 library(haven)
 ```
 
-Let's start by loading the household expenditures module. This module contains information on household expenditures, both in aggregate and for some specific categories.
+
+Let's load the household roster using the `haven` package, specifically the `read_dta()` function, since this household survey is in a Stata format. 
+
+
+```{r}
+#| echo: true
+#| eval: false
+df <- read_dta("datawranglingfiles/HH_MOD_B.dta")
+glimpse(df)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+df <- read_dta("datawranglingfiles/HH_MOD_B.dta")
+glimpse(df)
+```
+
+:::
+
+Notice the use of the `glimpse()` function. This function provides an overview of the data, including the number of rows (observations), the number of columns (variables), the variable names and class (e.g. character, number), and a preview of the first few observations for each variable.
+
+Another common function to use is `head()`, which shows the first few observations of the data (across all variables). Here is an example:^[As a small note, the amount of data it shows you depends on the width of your console. I have actually changed the width of the output in this document using the `options(width = XXXX)` feature of `R`, but this only works well since this is an HTML document and I have enabled scrolling. You can just leave it as is in your console.]
+
+
+```{r}
+#| echo: true
+#| eval: false
+head(df)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+options(width = 5000)
+head(df)
+```
+
+:::
+
+As an additional small note, at the top of the output, you will see something that says `A tibble`. A tibble is essentially just `tidyverse`'s version of a data frame. Base `R` uses `data.frames` and `data.table` uses `data.tables`. The `tibble` might sound strange, but it is nothing more than a data frame.
+
+# Creating household-level demographics
+
+Now let's start cleaning this data. We are going to create household-level demographic information about the household. This will include:
+
+- Household size (total number of people in the household)
+- Number of adult men (15+ years of age)
+- Number of adult women (15+ years of age)
+- Number of boys
+- Number of girls
+- The age of the household head
+
+You could of course create many other variables, but this is a good starting point.^[For example, we might wish to add information about education of household members. However, education can be a bit tricky, depending on how the question is asked. Different countries have different types of educational qualifications, meaning you sometimes have to do some sleuthing to figure out what the different levels of education mean.]
+
+To do this, we are going to use the `mutate()` function in conjunction with pipes (`|>`). The `mutate()` function is part of `tidyverse` (the `dplyr` package, specifically) and pipes allow us to chain functions together. Here, I am first going to create individual-level variables that define the different demographic variables we will need, using two variables in this module: age and gender. We can find the appropriate variables by looking through the data or, preferably, using the household questionnaire, since the latter option will always have the appropriate labels, as well (for example, the gender variable here is `hh_b03`, which equals `1` for `MALE` and `2` for `FEMALE`).
+
+Here is the code, which I will explain below:
+
+```{r}
+#| echo: true
+df <- df |>
+  mutate(adultman = (hh_b03==1 & hh_b05a>=15),
+    adultwoman = (hh_b03==2 & hh_b05a>=15),
+    boy = (hh_b03==1 & hh_b05a<15),
+    girl = (hh_b03==2 & hh_b05a<15))
+```
+
+The best way to read the pipe is as "and then." Here, we take the `df` object *and then* we `mutate()` it. `mutate()` will create four new variables in this example (you can also use it to replace variables): `adultman`, `adultwoman`, `boy`, and `girl`. Each of these is defined as a logical variable (i.e. `TRUE` or `FALSE`) based on the conditions in the parentheses. For example, `adultman` is `TRUE` if and only if an individual is `MALE` with an age greater than or equal to `15`. It is `FALSE` otherwise.
+
+All four variables will be `TRUE` or `FALSE`, which we can see here:
+
+```{r}
+#| echo: true
+#| eval: false
+df[, c("hh_b03", "hh_b05a", "adultman", "adultwoman", "boy", "girl")]
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+df[, c("hh_b03", "hh_b05a", "adultman", "adultwoman", "boy", "girl")]
+```
+
+:::
+
+One nifty thing to keep in mind is that we can add together logical values in `R`. When we do this, `R` treats `TRUE` as `1` and `FALSE` as `0`. So when we calculate household-level values for these, we can just sum them at the household level. 
+
+The last variable we need is the age of the household head. We are going to create a new variable, called `headage`, that as a valid value for the household head *only*; in other words, it will be missing for all other household members. We can do this by using the `if_else()` function. Here is the code:
+
+```{r}
+#| echo: true
+df <- df |>
+  mutate(headage = if_else(hh_b04==1, hh_b05a, NA))
+```
+
+This code uses similar syntax as before (with the pipe and the `mutate()` function), but is of course creating a different variable. When I first started using `R`, I almost never used the `if_else()` function, but I find myself using it more and more often. You can read the function on line 2 in the code snippet above as something like, "if `hh_b04` equals `1`, then `headage` equals `hh_b05a`; otherwise, `headage` equals `NA`." Where does `hh_b04` come from? The household questionnaire! It is the variable that defines each member's relationship to the household head. We now have everything we need:
+
+```{r}
+#| echo: true
+#| eval: false
+df[, c("adultman", "adultwoman", "boy", "girl", "headage")]
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+df[, c("adultman", "adultwoman", "boy", "girl", "headage")]
+```
+
+:::
+
+Now we need to aggregate these variables to the household level. For those of you who are familiar with Stata, this is similar to using the `collapse` command. We need to tell `R` the level at which we want to aggregate (in this case, the household level) and how we want to aggregate. How we aggregate depends on the individual variables. For example, we want to sum the individual demographics to get counts at the household level, but we do not need to do that for the head's age, since there is *only one non-missing value per household*. We can use the `group_by()` and `summarize()` functions to do this. In this dataset, the relevant household identifier is `case_id`. Here is the code:
+
+```{r}
+#| echo: true
+#| eval: false
+df <- df |>
+  group_by(case_id) |>
+  summarize(hhsize = n(),
+    adultmen = sum(adultman),
+    adultwomen = sum(adultwoman),
+    boys = sum(boy),
+    girls = sum(girl),
+    headage = first(na.omit(headage))) |>
+  ungroup()
+```
+
+The `summarize()` function is incredibly useful, especially when combined with `group_by()`. Here, we are telling `R` to group the data by `case_id` (the household identifier) and then to summarize the data *to the level of `case_id`*. The `n()` function counts the number of observations in the group, while `sum()` sums the values. The `first()` function gets the first value for each group, but importantly, we only want the first *non-missing* value; the `na.omit(headage)` function removes all missing values for `headage`, which in this case leaves us just the one value for each household that we defined above. Note that you could also use other summary functions for `headage`, which will give us the same result, since there is only one non-missing value per household. For example, this will yield the exact same results:
+
+```{r}
+#| echo: true
+#| eval: false
+df <- df |>
+  group_by(case_id) |>
+  summarize(hhsize = n(),
+    adultmen = sum(adultman),
+    adultwomen = sum(adultwoman),
+    boys = sum(boy),
+    girls = sum(girl),
+    headage = max(headage, na.rm = TRUE)) |>
+  ungroup()
+```
+
+There is a very important point in this code, though: `R`, by default, *does not ignore missing values*. This means that if you summarize a variable that has missing values, the result will be `NA`. This is very different from how Stata does it, as Stata by default will ignore missing values. We need to explicitly tell `R` "hey, I know there are missings, that's okay, please ignore them." We do this by adding the `na.rm = TRUE` argument to the `max()` function. Most summary functions in `R` have this same argument, so keep that in mind when you are cleaning data.
+
+A final, important note: I always add `ungroup()` after any function on grouped data. Why? Because if I am not careful, I might accidentally use the grouped data in a subsequent function, which can lead to unexpected results. Ungrouping makes sure that does not happen. I always specify `group_by()` and `ungroup()` in my code, even when not strictly necessary.^[I also do something similar when calculating logical values with "and" (`&`) or "or" (`|`) statements, making sure to always use parentheses so that results are exactly what I want.]
+
+Here is the final result of this code:
+
+```{r}
+#| echo: true
+#| eval: false
+head(df)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+originalrows <- nrow(df)
+df <- df |>
+  group_by(case_id) |>
+  summarize(hhsize = n(),
+    adultmen = sum(adultman),
+    adultwomen = sum(adultwoman),
+    boys = sum(boy),
+    girls = sum(girl),
+    headage = max(headage, na.rm = TRUE)) |>
+  ungroup()
+head(df)
+```
+
+:::
+
+The original dataset had `r format(originalrows, big.mark = ",")` while this final dataset we created has `r format(nrow(df), big.mark = ",")` rows. Why the reduction? Remember, the original data was at the *individual* level but the `summarize()` function collapsed the data to the same level as the variable specified in `group_by()`, in this case, the household.
+
+
+# Cleaning assets
+
+Along with demographic information, we are also going to use household assets to predict household expenditures. The IHS5 has a module on household assets, which we will use. Looking through the household questionnaire, can you figure out which module we need to use?
+
+In the IHS5, household assets are in Module L: Durable Goods. We could also clean variables like the walls of the house, the roof, floor, etc., but let's just stick with durable goods for now. Let's load the data and take a look at it:
+
+```{r}
+#| echo: true
+#| eval: false
+assets <- read_dta("datawranglingfiles/HH_MOD_L.dta")
+glimpse(assets)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+assets <- read_dta("datawranglingfiles/HH_MOD_L.dta")
+glimpse(assets)
+```
+
+:::
+
+The household questionnaire is quite important here. The asset module is on pages 51 and 52, and, there, we can see how the module is coded. Here are both pages of the module:
+
+::: {#fig-assets layout-ncol=2}
+
+![Page 1](datawranglingfiles/Documentation/assets1.png){#fig-assets-p1}
+
+![Page 2](datawranglingfiles/Documentation/assets2.png){#fig-assets-p2}
+
+Assets - Module L
+:::
+
+
+We are not going to clean ALL of the assets, so let's just just clean the assets on page 1 (@fig-assets-p1). To create individual asset variables, we need to match the item code (`hh_l02` in the questionnaire) to the item name (left column). Here is the code (ignoring item code 5801):
+
+```{r}
+#| echo: true
+#| eval: true
+assets <- assets |>
+  mutate(assetsmortar = if_else(hh_l02==501, hh_l03, NA),
+    assetsbed = if_else(hh_l02==502, hh_l03, NA),
+    assetstable = if_else(hh_l02==503, hh_l03, NA),
+    assetschair = if_else(hh_l02==504, hh_l03, NA),
+    assetsfan = if_else(hh_l02==505, hh_l03, NA),
+    assetsac = if_else(hh_l02==506, hh_l03, NA),
+    assetsradio = if_else(hh_l02==507, hh_l03, NA),
+    assetscddvd = if_else(hh_l02==508, hh_l03, NA),
+    assetstv = if_else(hh_l02==509, hh_l03, NA),
+    assetsvcr = if_else(hh_l02==510, hh_l03, NA),
+    assetssewing = if_else(hh_l02==511, hh_l03, NA),
+    assetstradstove = if_else(hh_l02==512, hh_l03, NA),
+    assetsmodernstove = if_else(hh_l02==513, hh_l03, NA),
+    assetsfridge = if_else(hh_l02==514, hh_l03, NA),
+    assetswashing = if_else(hh_l02==515, hh_l03, NA),
+    assetsbike = if_else(hh_l02==516, hh_l03, NA)
+  )
+```
+
+This code is similar to the code we used for the demographic variables. We are going to create new asset variables using `if_else()`, defining new names for each of the assets. Let's now set all of the missing values to zero (since we are going to sum them, having them all as zero should work fine):
+
+```{r}
+#| echo: true
+#| eval: true
+assets <- assets |>
+  mutate(across(starts_with("assets"), ~replace_na(., 0)))
+```
+
+This is a nifty way to very quickly replace all missings with zeros. Here is the breakdown of the code:
+
+- `across()` is a function that allows us to apply a function to multiple columns. The function we are going to use is `replace_na()`, which does exactly what it sounds like.
+- `replace_na()` takes two arguments: the first is the variable we want to replace missings in, and the second is the value we want to replace them with. We use `.` to refer to all of the variables we selected with `across()`.
+- `starts_with()` does exactly what it sounds like, too: it selects all variables that start with the string in parentheses, in this case `"assets"`. Note that it only works with "selecting" functions, of which `across()` is one.
+
+Importantly, this module is not at the household level! Instead, it is at the household-asset level, which each observation being a different asset. Since we know all of the values are zero for the observations that do not pertain to a specific asset, we can simply take the sum across all of the observations to get our final dataset:
+
+
+```{r}
+#| echo: true
+#| eval: false
+assets <- assets |>
+  group_by(case_id) |>
+  summarize(across(starts_with("assets"), sum)) |>
+  ungroup()
+head(assets)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+options(width = 5000)
+assets <- assets |>
+  group_by(case_id) |>
+  summarize(across(starts_with("assets"), sum)) |>
+  ungroup()
+head(assets)
+```
+
+:::
+
+# Expenditures per capita
+
+Now let's get the final piece of the puzzle: expenditures per capita. Thankfully, this version of the IHS5 data already has an expenditure module that has been cleaned for us. The name of the relevant dataset is `ihs5_consumption_aggregate.dta`, which we now want to load:
+
+```{r}
+#| echo: true
+#| eval: false
+exp <- read_dta("datawranglingfiles/ihs5_consumption_aggregate.dta")
+glimpse(exp)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+exp <- read_dta("datawranglingfiles/ihs5_consumption_aggregate.dta")
+glimpse(exp)
+```
+
+:::
+
+There are quite a few variables here! What do we want to keep?
+
+- `case_id`: the household identifier
+- `hh_wgt`: the household survey weight
+- `rexpaggpc`: total (real) household expenditures per capita
+ 
+This part is a bit easier since we do not need to aggreagate; the data is already at the household level, with just one observation per household. We do, however, want to select just some of the variables, which we do using the `select()` function from `dplyr`:
+
+```{r}
+#| echo: true
+#| eval: true
+exp <- exp |>
+  select(case_id, hh_wgt, exppc = rexpaggpc)
+```
+
+As a small note, I renamed the expenditure variable to something that is a bit easier to type. One of the nice things about the `select()` function is that we can rename variables within it!
+
+
+# Joining
+
+We now have everything we need. However, we need to join these together. I am going to do this by starting with the expenditures data, and joining the other two datasets *into* it using `inner_join()`. Here is the code, which I will explain more below:
+
+```{r}
+#| echo: true
+#| eval: false
+final <- exp |>
+  inner_join(df, by = "case_id") |>
+  inner_join(assets, by = "case_id")
+head(final)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+options(width = 5000)
+final <- exp |>
+  inner_join(df, by = "case_id") |>
+  inner_join(assets, by = "case_id")
+head(final)
+```
+
+:::
+
+There are many types of joins in `dplyr`. The one I have chosen, `inner_join()`, keeps only observations that are in *both* datasets. The `by` argument specifies the variable(s) to join on.^[If you want to join on multiple variables (for example, you might in some cases need to join on `case_id` and `year`), you need to wrap them as follows: `by = c("case_id", "year")`.] Another common join is `left_join()`, which will keep *all* observations in the initial object (in this case, `exp`), regardless of whether that household exists in the other two datasets (`df` and `assets`). Since we are going to estimate a regression, we only want households that have all of the data we need, so `inner_join()` seems reasonable here. As a note of caution, however, is that you should always make sure you know *why* households are not there. In this case, since I am just introducing some data wrangling functions, I am going to ignore that step.
+
+
+
+# Regressions with `fixest`
+
+Base `R` has a linear regression function, which you can call with `lm()`. However, I never use `lm()` nowadays. Instead, I have fallen in love with the package `fixest`, which you can read more about [here](https://lrberge.github.io/fixest/).^[Laurent Berge, the author of `fixest`, is both a gentleman and a scholar.] There are many reasons I always use `fixest`, but the biggest reasons are that it: 1. makes calculating alternative standard errors easy, and 2. makes adding fixed effects easy. We are not going to do the latter here, but I will show you how to do the former.
+
+Most regression functions in `R` have a very specific syntax, that looks like this:
+
+$$ y \sim x_1 + x_2 + \cdots + x_N, $$
+
+where $y$ is the name of our outcome variable (in our case, `exppc`), and the `x_i` are the *names* of the predictors (e.g. `assetstv`). Now, we could do this by hand, like this:
+
+```{r}
+#| echo: true
+#| eval: false
+olsformula <- as.formula("log(exppc) ~ adultmen + adultwomen + boys + girls + headage + assetsmortar + assetsbed + assetstable + assetschair + assetsfan + assetsac + assetsradio + assetscddvd + assetstv + assetsvcr + assetssewing + assetstradstove + assetsmodernstove + assetsfridge + assetswashing + assetsbike")
+olsformula
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+olsformula <- as.formula("log(exppc) ~ adultmen + adultwomen + boys + girls + headage + assetsmortar + assetsbed + assetstable + assetschair + assetsfan + assetsac + assetsradio + assetscddvd + assetstv + assetsvcr + assetssewing + assetstradstove + assetsmodernstove + assetsfridge + assetswashing + assetsbike")
+olsformula
+```
+
+:::
+
+
+But that is quite tedious! Let's do it a different way, by finding the column names we want to use and then pasting them together. Here is the code:
+
+```{r}
+#| echo: true
+#| eval: false
+colnames(final)
+olsformula <- as.formula(paste0("log(exppc) ~ ", paste0(colnames(final)[5:ncol(final)], collapse = " + ")))
+olsformula
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+colnames(final)
+olsformula <- as.formula(paste0("log(exppc) ~ ", paste0(colnames(final)[5:ncol(final)], collapse = " + ")))
+olsformula
+```
+
+:::
+
+So much easier! There are a few things to note:
+
+- `paste0()` puts together strings, with the `collapse` argument specifying what we want to put *between* the individual arguments.
+- `as.formula()` tells `R` that we are going to use this as a formula in a regression function.
+- I used `colnames(final)` to find out the *location* of the variable names we want to use. I then subset them using `5:ncol(final)`, which selects all columns from the fourth to the last column. The first three columns are not explanatory variables in our example (and `hhsize` is perfectly collinear with the other demographic variables, so we remove that, as well).
+- We can simply wrap a variable in `log()` if we want to log it; we do not have to create a new variable! So in this example, we will be regression *log* of per capita expenditures on the other variables.
+
+Now let's estimate our regression using the `feols` function from the `fixest` package (make sure to install it if you haven't yet):
+
+```{r}
+#| echo: true
+#| eval: false
+library(fixest)
+results <- feols(olsformula, data = final)
+summary(results)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+library(fixest)
+results <- feols(olsformula, data = final)
+summary(results)
+```
+
+:::
+
+Using homoskedastic variance estimates does not seem wise. What if we want to use robust standard errors, instead?
+
+```{r}
+#| echo: true
+#| eval: false
+results <- feols(olsformula, data = final, vcov = "HC1")
+summary(results)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+results <- feols(olsformula, data = final, vcov = "HC1")
+summary(results)
+```
+
+:::
+
+Finally, what if we want to also use household weights?
+
+```{r}
+#| echo: true
+#| eval: false
+results <- feols(olsformula, data = final, vcov = "HC1", weights = ~hh_wgt)
+summary(results)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+results <- feols(olsformula, data = final, vcov = "HC1", weights = ~hh_wgt)
+summary(results)
+```
+
+:::
+
+Note that we added the weight using a "formula"-like object. You can also add it as a vector, instead, but this is safer since any missings will automatically be removed.
+
+One of the nice things about working with `R` is that we can make changes more or less on the fly. For example, what if we want to estimate this regression only for households that have more than one child? We can do this with the `filter()` function, making sure to only keep households where `boys + girls > 1`:
+
+```{r}
+#| echo: true
+#| eval: false
+results <- feols(olsformula, data = final |> filter(boys + girls > 1), vcov = "HC1", weights = ~hh_wgt)
+summary(results)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+results <- feols(olsformula, data = final |> filter(boys + girls > 1), vcov = "HC1", weights = ~hh_wgt)
+summary(results)
+```
+
+:::
+
+The `filter()` function is incredibly useful, as it allows us to very quickly select rows based on some condition (across columns). 
+
+
+
+# Wrapping up
+
+We have seen many different, common data wrangling tasks in this example. We have used:
+
+- `mutate()` to create new variables.
+- `group_by()` and `summarize()` to aggregate data.
+- `select()` to select just some variables and/or to rename variable.
+- `inner_join()` to merge datasets.
+- `filter()` to select rows based on some condition.
+
+There are of course a *lot* more functions that we did not cover, some of which you might need if you have different tasks to accomplish. For example, `arrange()` allows you to order the data by the value of a column (from lowest to highest), while `arrange(desc())` allows you to order the data by the value of a column, from highest to lowest. What does the household with the lowest expenditure per capita look like?
+
+```{r}
+#| echo: true
+#| eval: false
+final |> arrange(exppc) |> head(1)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+final |> arrange(exppc) |> head(1)
+```
+
+:::
+
+And the highest?
+
+```{r}
+#| echo: true
+#| eval: false
+final |> arrange(desc(exppc)) |> head(1)
+```
+
+:::{.scrolling}
+
+```{r}
+#| echo: false
+#| classes: styled-output
+final |> arrange(desc(exppc)) |> head(1)
+```
+
+:::
+
+
+You can find a nice summary of all of the functions for data wrangling/transformation on "cheat sheets." [Here is one example.](https://nyu-cdsc.github.io/learningr/assets/data-transformation.pdf).
+
+Over the last couple of years, I have seen a lot of common issues that people face when transitioning to `R`. One of the most common is working with missing values. As a reminder:
+
+- In `R`, missing values are coded as `NA`. If you want to check for whether something is missing, you have to use `is.na()`, NOT `== NA`. For example, `is.na(x)` will return `TRUE` if `x` is missing, while `x==NA` will not.
+- Make sure to remember the `na.rm = TRUE` argument. Many functions have it as `FALSE` by default. If you are working with a variable that has missing values, you need to set it to `TRUE` (if you want to ignore the missings, that is).
+  
+ 
+
+
+
+
+
+
+
 
 
 

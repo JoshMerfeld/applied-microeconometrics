@@ -55,6 +55,8 @@ You can find the slides (and any data we will be using) for each week under thei
   - You can find the data for the class in the [week 7 folder](week7files).
 - Week 9: You can find the slides for the the week here: [Day 9 slides](https://joshmerfeld.github.io/applied-microeconometrics/week9.html).
   - You can find the data for the class in the [week 9 folder](week9files).
+  
+Finally, I put together a short write-up of some common data wrangling tasks in `R`. You can find it [here](https://joshmerfeld.github.io/applied-microeconometrics/datawrangling.html).
 
 ## Assignments
 
