@@ -626,6 +626,7 @@ summary(results)
 
 The `filter()` function is incredibly useful, as it allows us to very quickly select rows based on some condition (across columns). 
 
+As a final note, this is household survey data that has a complex survey design, with strata and clusters. If we wanted to properly analyze this data, we would need to add the strata (as fixed effects) and cluster at the enumeration area (the primary sampling unit, or PSU). I have note done that here out of simplicity.
 
 
 # Wrapping up
