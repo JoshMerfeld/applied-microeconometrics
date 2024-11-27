@@ -56,8 +56,8 @@ You can find the slides (and any data we will be using) for each week under thei
 - Week 9: You can find the slides for the the week here: [Day 9 slides](https://joshmerfeld.github.io/applied-microeconometrics/week9.html).
   - You can find the data for the class in the [week 9 folder](week9files).
   
-Finally, I put together a short write-up of some common data wrangling tasks in `R`. You can find it [here](https://joshmerfeld.github.io/applied-microeconometrics/datawrangling.html).
-- You can download a `.zip` file of the data in the write-up [here](https://www.dropbox.com/scl/fi/s9f8xm0o8yv6ejnz3ljdj/ihs5.zip?rlkey=iydode1k1mgezc0acbw5rt1sr&dl=0).
+Finally, I put together a short write-up of some common data wrangling tasks in `R`. You can find it [here](https://joshmerfeld.github.io/rintro/datawrangling.html).
+- You can download a `.zip` file of the data in the write-up [here](https://www.dropbox.com/scl/fi/6nv737pv60u7941kbzlql/ihs5.zip?rlkey=95bglhhqunc059zqpvpcmobbk&dl=0).
 
 ## Assignments
 
